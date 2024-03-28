@@ -13,19 +13,12 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Model" class="control-label"></label>
-                <input asp-for="Model" class="form-control" />
-                <span asp-validation-for="Model" class="text-danger"></span>
+                <label asp-for="CarBrandId" class="control-label"></label>
+                <select asp-for="CarBrandId" class ="form-control" asp-items="ViewBag.CarBrandId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="Brand" class="control-label"></label>
-                <input asp-for="Brand" class="form-control" />
-                <span asp-validation-for="Brand" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Trim" class="control-label"></label>
-                <input asp-for="Trim" class="form-control" />
-                <span asp-validation-for="Trim" class="text-danger"></span>
+                <label asp-for="CarModelId" class="control-label"></label>
+                <select asp-for="CarModelId" class ="form-control" asp-items="ViewBag.CarModelId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Year" class="control-label"></label>
@@ -36,16 +29,6 @@
                 <label asp-for="Mileage" class="control-label"></label>
                 <input asp-for="Mileage" class="form-control" />
                 <span asp-validation-for="Mileage" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RepairCost" class="control-label"></label>
-                <input asp-for="RepairCost" class="form-control" />
-                <span asp-validation-for="RepairCost" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RepairDescription" class="control-label"></label>
-                <input asp-for="RepairDescription" class="form-control" />
-                <span asp-validation-for="RepairDescription" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="PurchasePrice" class="control-label"></label>
@@ -59,7 +42,7 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Available" /> @Html.DisplayNameFor(model => model.Available)
+                    <input class="form-check-input" asp-for="IsAvailable" /> @Html.DisplayNameFor(model => model.IsAvailable)
                 </label>
             </div>
             <div class="form-group">

@@ -9,23 +9,22 @@ using ExpressVoitures.Data;
 
 namespace ExpressVoitures.Controllers
 {
-    public class CarsController : Controller
+    public class CarModelsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public CarsController(ApplicationDbContext context)
+        public CarModelsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Cars
+        // GET: CarModels
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Car.Include(c => c.CarBrand).Include(c => c.CarModel);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await _context.CarModel.ToListAsync());
         }
 
-        // GET: Cars/Details/5
+        // GET: CarModels/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,45 +32,39 @@ namespace ExpressVoitures.Controllers
                 return NotFound();
             }
 
-            var car = await _context.Car
-                .Include(c => c.CarBrand)
-                .Include(c => c.CarModel)
+            var carModel = await _context.CarModel
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (car == null)
+            if (carModel == null)
             {
                 return NotFound();
             }
 
-            return View(car);
+            return View(carModel);
         }
 
-        // GET: Cars/Create
+        // GET: CarModels/Create
         public IActionResult Create()
         {
-            ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "Brand");
-            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "Model");
             return View();
         }
 
-        // POST: Cars/Create
+        // POST: CarModels/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CarBrandId,CarModelId,Year,Mileage,PurchasePrice,SellingPrice,IsAvailable,PurchaseDate,DateOfAvailability,SaleDate,Description,ImagePaths")] Car car)
+        public async Task<IActionResult> Create([Bind("Id,Model,Trim")] CarModel carModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(car);
+                _context.Add(carModel);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "Brand", car.CarBrandId);
-            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "Model", car.CarModelId);
-            return View(car);
+            return View(carModel);
         }
 
-        // GET: Cars/Edit/5
+        // GET: CarModels/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -79,24 +72,22 @@ namespace ExpressVoitures.Controllers
                 return NotFound();
             }
 
-            var car = await _context.Car.FindAsync(id);
-            if (car == null)
+            var carModel = await _context.CarModel.FindAsync(id);
+            if (carModel == null)
             {
                 return NotFound();
             }
-            ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "Brand", car.CarBrandId);
-            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "Model", car.CarModelId);
-            return View(car);
+            return View(carModel);
         }
 
-        // POST: Cars/Edit/5
+        // POST: CarModels/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CarBrandId,CarModelId,Year,Mileage,PurchasePrice,SellingPrice,IsAvailable,PurchaseDate,DateOfAvailability,SaleDate,Description,ImagePaths")] Car car)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Model,Trim")] CarModel carModel)
         {
-            if (id != car.Id)
+            if (id != carModel.Id)
             {
                 return NotFound();
             }
@@ -105,12 +96,12 @@ namespace ExpressVoitures.Controllers
             {
                 try
                 {
-                    _context.Update(car);
+                    _context.Update(carModel);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CarExists(car.Id))
+                    if (!CarModelExists(carModel.Id))
                     {
                         return NotFound();
                     }
@@ -121,12 +112,10 @@ namespace ExpressVoitures.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "Brand", car.CarBrandId);
-            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "Model", car.CarModelId);
-            return View(car);
+            return View(carModel);
         }
 
-        // GET: Cars/Delete/5
+        // GET: CarModels/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,36 +123,34 @@ namespace ExpressVoitures.Controllers
                 return NotFound();
             }
 
-            var car = await _context.Car
-                .Include(c => c.CarBrand)
-                .Include(c => c.CarModel)
+            var carModel = await _context.CarModel
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (car == null)
+            if (carModel == null)
             {
                 return NotFound();
             }
 
-            return View(car);
+            return View(carModel);
         }
 
-        // POST: Cars/Delete/5
+        // POST: CarModels/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var car = await _context.Car.FindAsync(id);
-            if (car != null)
+            var carModel = await _context.CarModel.FindAsync(id);
+            if (carModel != null)
             {
-                _context.Car.Remove(car);
+                _context.CarModel.Remove(carModel);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CarExists(int id)
+        private bool CarModelExists(int id)
         {
-            return _context.Car.Any(e => e.Id == id);
+            return _context.CarModel.Any(e => e.Id == id);
         }
     }
 }

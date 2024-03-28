@@ -13,13 +13,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Model)
+                @Html.DisplayNameFor(model => model.CarBrand)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Brand)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Trim)
+                @Html.DisplayNameFor(model => model.CarModel)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Year)
@@ -28,19 +25,13 @@
                 @Html.DisplayNameFor(model => model.Mileage)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RepairCost)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RepairDescription)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.PurchasePrice)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.SellingPrice)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Available)
+                @Html.DisplayNameFor(model => model.IsAvailable)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PurchaseDate)
@@ -64,13 +55,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Model)
+                @Html.DisplayFor(modelItem => item.CarBrand.Brand)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Brand)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Trim)
+                @Html.DisplayFor(modelItem => item.CarModel.Model)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Year)
@@ -79,19 +67,13 @@
                 @Html.DisplayFor(modelItem => item.Mileage)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.RepairCost)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RepairDescription)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.PurchasePrice)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.SellingPrice)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Available)
+                @Html.DisplayFor(modelItem => item.IsAvailable)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PurchaseDate)
