@@ -9,9 +9,11 @@ namespace ExpressVoitures.Models
         public int Id { get; set; }
         public int IdCar { get; set; }
 
-        public int IdCarBrand { get; set; }
+        public int CarBrandId { get; set; }
 
-        public int IdCarModel { get; set; }
+        public int CarModelId { get; set; }
+
+        public int CarTrimId { get; set; }
 
         public bool IsAvailable { get; set; }
 

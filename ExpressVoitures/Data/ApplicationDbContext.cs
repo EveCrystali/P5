@@ -20,6 +20,8 @@ namespace ExpressVoitures.Data
 
         public DbSet<ExpressVoitures.Data.CarRepair> CarRepair { get; set; } = default!;
 
+        public DbSet<ExpressVoitures.Data.CarTrim> CarTrim { get; set; } = default!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -36,28 +38,27 @@ namespace ExpressVoitures.Data
                 .Property(c => c.SellingPrice)
                 .HasPrecision(18, 2);
 
-            modelBuilder.Entity<ModelViewCar>()
-                .Property(c => c.SellingPrice)
-                .HasPrecision(18, 2);
-
-
-            //modelBuilder.Entity<Car>()
-            //   .HasOne<CarBrand>(c => c.CarBrand)
-            //   .WithMany() // Si nécessaire, spécifiez ici la collection inverse
-            //   .HasForeignKey(c => c.CarBrandId);
-
-            //modelBuilder.Entity<Car>()
-            //    .HasOne<CarModel>(c => c.CarModel)
-            //    .WithMany() // Si nécessaire, spécifiez ici la collection inverse
-            //    .HasForeignKey(c => c.CarModelId);
-
             modelBuilder.Entity<CarRepair>()
                 .HasOne<Car>(c => c.Car)
                 .WithMany(c => c.CarRepairs) // Collection inverse dans Car pour les réparations
-                .HasForeignKey(c => c.IdCar);
+                .HasForeignKey(c => c.CarId);
+
+            modelBuilder.Entity<Car>()
+                .HasOne(c => c.CarBrand)
+                .WithMany()
+                .HasForeignKey(c => c.CarBrandId)
+                .OnDelete(DeleteBehavior.Restrict); // ou DeleteBehavior.SetNull
+
+            modelBuilder.Entity<Car>()
+                .HasOne(c => c.CarModel)
+                .WithMany()
+                .HasForeignKey(c => c.CarModelId)
+                .OnDelete(DeleteBehavior.Restrict); // ou DeleteBehavior.SetNull
+
+
 
 
         }
-        public DbSet<ExpressVoitures.Models.ModelViewCar> ModelViewCar { get; set; } = default!;
+
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ExpressVoitures.Data;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ExpressVoitures.Controllers
 {
@@ -49,7 +50,7 @@ namespace ExpressVoitures.Controllers
         public IActionResult Create()
         {
             ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "Brand");
-            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "Model");
+            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "ModelName");
             return View();
         }
 
@@ -60,14 +61,25 @@ namespace ExpressVoitures.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,CarBrandId,CarModelId,Year,Mileage,PurchasePrice,SellingPrice,IsAvailable,PurchaseDate,DateOfAvailability,SaleDate,Description,ImagePaths")] Car car)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+            {
+                foreach (var modelState in ViewData.ModelState.Values)
+                {
+                    foreach (ModelError error in modelState.Errors)
+                    {
+                        // Log or print the error
+                        Console.WriteLine(error.ErrorMessage);
+                    }
+                }
+            }
+            else if (ModelState.IsValid)
             {
                 _context.Add(car);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "Brand", car.CarBrandId);
-            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "Model", car.CarModelId);
+            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "ModelName", car.CarModelId);
             return View(car);
         }
 
@@ -85,7 +97,7 @@ namespace ExpressVoitures.Controllers
                 return NotFound();
             }
             ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "Brand", car.CarBrandId);
-            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "Model", car.CarModelId);
+            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "ModelName", car.CarModelId);
             return View(car);
         }
 
@@ -122,7 +134,7 @@ namespace ExpressVoitures.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "Brand", car.CarBrandId);
-            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "Model", car.CarModelId);
+            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "ModelName", car.CarModelId);
             return View(car);
         }
 

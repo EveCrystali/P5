@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExpressVoitures.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240328173225_migration1")]
+    [Migration("20240329163617_migration1")]
     partial class migration1
     {
         /// <inheritdoc />
@@ -106,14 +106,16 @@ namespace ExpressVoitures.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Model")
+                    b.Property<int>("CarBrandId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ModelName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Trim")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("CarBrandId");
 
                     b.ToTable("CarModel");
                 });
@@ -126,7 +128,7 @@ namespace ExpressVoitures.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("IdCar")
+                    b.Property<int>("CarId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("RepairCost")
@@ -138,12 +140,12 @@ namespace ExpressVoitures.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdCar");
+                    b.HasIndex("CarId");
 
                     b.ToTable("CarRepair");
                 });
 
-            modelBuilder.Entity("ExpressVoitures.Models.ModelViewCar", b =>
+            modelBuilder.Entity("ExpressVoitures.Data.CarTrim", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -151,45 +153,18 @@ namespace ExpressVoitures.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CarBrand")
+                    b.Property<int>("CarModelId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TrimName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CarModel")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateOnly>("DateOfAvailability")
-                        .HasColumnType("date");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("IdCar")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdCarBrand")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdCarModel")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsAvailable")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Mileage")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("SellingPrice")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("Year")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("ModelViewCar");
+                    b.HasIndex("CarModelId");
+
+                    b.ToTable("CarTrim");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -399,13 +374,13 @@ namespace ExpressVoitures.Data.Migrations
                     b.HasOne("ExpressVoitures.Data.CarBrand", "CarBrand")
                         .WithMany()
                         .HasForeignKey("CarBrandId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("ExpressVoitures.Data.CarModel", "CarModel")
                         .WithMany()
                         .HasForeignKey("CarModelId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("CarBrand");
@@ -413,15 +388,37 @@ namespace ExpressVoitures.Data.Migrations
                     b.Navigation("CarModel");
                 });
 
+            modelBuilder.Entity("ExpressVoitures.Data.CarModel", b =>
+                {
+                    b.HasOne("ExpressVoitures.Data.CarBrand", "CarBrand")
+                        .WithMany("CarModels")
+                        .HasForeignKey("CarBrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CarBrand");
+                });
+
             modelBuilder.Entity("ExpressVoitures.Data.CarRepair", b =>
                 {
                     b.HasOne("ExpressVoitures.Data.Car", "Car")
                         .WithMany("CarRepairs")
-                        .HasForeignKey("IdCar")
+                        .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Car");
+                });
+
+            modelBuilder.Entity("ExpressVoitures.Data.CarTrim", b =>
+                {
+                    b.HasOne("ExpressVoitures.Data.CarModel", "CarModel")
+                        .WithMany("Trims")
+                        .HasForeignKey("CarModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CarModel");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -478,6 +475,16 @@ namespace ExpressVoitures.Data.Migrations
             modelBuilder.Entity("ExpressVoitures.Data.Car", b =>
                 {
                     b.Navigation("CarRepairs");
+                });
+
+            modelBuilder.Entity("ExpressVoitures.Data.CarBrand", b =>
+                {
+                    b.Navigation("CarModels");
+                });
+
+            modelBuilder.Entity("ExpressVoitures.Data.CarModel", b =>
+                {
+                    b.Navigation("Trims");
                 });
 #pragma warning restore 612, 618
         }
