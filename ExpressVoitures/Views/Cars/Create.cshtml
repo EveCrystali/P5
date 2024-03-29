@@ -13,12 +13,19 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="CarBrandId" class="control-label"></label>
-                <select asp-for="CarBrandId" class ="form-control" asp-items="ViewBag.CarBrandId"></select>
+                @Html.LabelFor(model => model.CarBrandId, "Car Brand", new { @class = "control-label" })
+                @Html.DropDownList("CarBrandId", null, "Choose a brand", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CarBrandId)
+                <button type="button" onclick="location.href='@Url.Action("Create", "CarBrands")'">Add New Brand</button>
+
             </div>
+
             <div class="form-group">
-                <label asp-for="CarModelId" class="control-label"></label>
-                <select asp-for="CarModelId" class ="form-control" asp-items="ViewBag.CarModelId"></select>
+                @Html.LabelFor(model => model.CarModelId, "Car Model", new { @class = "control-label" })
+                @Html.DropDownList("CarModelId", null, "Choose a model", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CarModelId)
+                <button type="button" onclick="location.href='@Url.Action("Create", "CarModels")'">Add New Brand</button>
+
             </div>
             <div class="form-group">
                 <label asp-for="Year" class="control-label"></label>

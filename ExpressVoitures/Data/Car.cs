@@ -9,11 +9,9 @@ namespace ExpressVoitures.Data
         public int Id { get; set; }
 
         public int CarBrandId { get; set; }
-
         public CarBrand CarBrand { get; set; }
 
         public int CarModelId { get; set; }
-
         public CarModel CarModel { get; set; }
 
         public List<CarRepair> CarRepairs { get; set; }

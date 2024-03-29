@@ -41,15 +41,15 @@ namespace ExpressVoitures.Data
                 .HasPrecision(18, 2);
 
 
-            modelBuilder.Entity<Car>()
-               .HasOne<CarBrand>(c => c.CarBrand)
-               .WithMany() // Si nécessaire, spécifiez ici la collection inverse
-               .HasForeignKey(c => c.CarBrandId);
+            //modelBuilder.Entity<Car>()
+            //   .HasOne<CarBrand>(c => c.CarBrand)
+            //   .WithMany() // Si nécessaire, spécifiez ici la collection inverse
+            //   .HasForeignKey(c => c.CarBrandId);
 
-            modelBuilder.Entity<Car>()
-                .HasOne<CarModel>(c => c.CarModel)
-                .WithMany() // Si nécessaire, spécifiez ici la collection inverse
-                .HasForeignKey(c => c.CarModelId);
+            //modelBuilder.Entity<Car>()
+            //    .HasOne<CarModel>(c => c.CarModel)
+            //    .WithMany() // Si nécessaire, spécifiez ici la collection inverse
+            //    .HasForeignKey(c => c.CarModelId);
 
             modelBuilder.Entity<CarRepair>()
                 .HasOne<Car>(c => c.Car)
@@ -58,5 +58,6 @@ namespace ExpressVoitures.Data
 
 
         }
+        public DbSet<ExpressVoitures.Models.ModelViewCar> ModelViewCar { get; set; } = default!;
     }
 }
