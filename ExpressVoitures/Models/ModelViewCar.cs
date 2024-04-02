@@ -25,6 +25,7 @@ namespace ExpressVoitures.Models
 
         [DisplayName("Année")]
         public int Year { get; set; }
+
         [DisplayName("Kilométrage")]
         public int Mileage { get; set; }
 

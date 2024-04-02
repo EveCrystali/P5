@@ -133,6 +133,10 @@ namespace ExpressVoitures.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            var carBrands = _context.CarBrand ?? Enumerable.Empty<CarBrand>();
+            var carModels = _context.CarModel ?? Enumerable.Empty<CarModel>();
+
             ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "Brand", car.CarBrandId);
             ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "ModelName", car.CarModelId);
             return View(car);
@@ -176,6 +180,16 @@ namespace ExpressVoitures.Controllers
         private bool CarExists(int id)
         {
             return _context.Car.Any(e => e.Id == id);
+        }
+
+        public IActionResult GetModelsByBrand(int brandId)
+        {
+            var models = _context.CarModel
+                .Where(m => m.CarBrandId == brandId)
+                .Select(m => new { m.Id, m.ModelName })
+                .ToList();
+
+            return Json(models);
         }
     }
 }

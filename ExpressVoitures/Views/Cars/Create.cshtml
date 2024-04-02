@@ -15,7 +15,9 @@
 
             <div class="form-group">
                 @Html.LabelFor(model => model.CarBrandId, "Car Brand", new { @class = "control-label" })
-                @Html.DropDownList("CarBrandId", null, "Choose a brand", new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.CarBrandId, (SelectList)ViewData["CarBrandId"], "Choose a Brand", new { id = "CarBrandId", @class = "form-control" })
+
+
                 @Html.ValidationMessageFor(model => model.CarBrandId)
                 <div class="col-md-4" style="display: flex; align-items: flex-end;">
                     <button type="button" class="btn btn-primary btn-sm" onclick="location.href='@Url.Action("Create", "CarBrands")'" style="height: 75%; width: 75%;">Nouvelle Marque</button>
@@ -24,7 +26,8 @@
 
             <div class="form-group">
                 @Html.LabelFor(model => model.CarModelId, "Car Model", new { @class = "control-label" })
-                @Html.DropDownList("CarModelId", null, "Choose a model", new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.CarModelId, (SelectList)ViewData["CarModelId"], "Choose a Model", new { id = "CarModelId", @class = "form-control" })
+
                 @Html.ValidationMessageFor(model => model.CarModelId)
                 <div class="col-md-4" style="display: flex; align-items: flex-end;">
                     <button type="button" class="btn btn-primary btn-sm" onclick="location.href='@Url.Action("Create", "CarModels")'" style="height: 75%; width: 75%;">Nouveau Modèle</button>
@@ -95,4 +98,28 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+            $("#CarBrandId").change(function () {
+                var carBrandId = $(this).val();
+                $.ajax({
+                    url: '@Url.Action("GetModelsByBrand", "Cars")',
+                    type: "GET",
+                    data: { brandId: carBrandId },
+                    success: function (models) {
+                        var modelSelect = $("#CarModelId");
+                        modelSelect.empty();
+
+                        $.each(models, function (index, model) {
+                            modelSelect.append($("<option>", {
+                                value: model.Id,
+                                text: model.modelName
+                            }));
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
 }
