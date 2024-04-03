@@ -14,6 +14,10 @@ namespace ExpressVoitures.Data
         public int CarModelId { get; set; }
         public CarModel? CarModel { get; set; }
 
+        public int CarTrimId { get; set; }
+
+        public CarTrim? CarTrim { get; set; }
+
         public List<CarRepair>? CarRepairs { get; set; }
 
         [DisplayName("Année")]
@@ -50,7 +54,5 @@ namespace ExpressVoitures.Data
 
         [DisplayName("Chemin des images")]
         public List<String>? ImagePaths { get; set; }
-
-
     }
 }

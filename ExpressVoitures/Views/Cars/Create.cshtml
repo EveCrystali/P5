@@ -16,8 +16,6 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.CarBrandId, "Car Brand", new { @class = "control-label" })
                 @Html.DropDownListFor(model => model.CarBrandId, (SelectList)ViewData["CarBrandId"], "Choose a Brand", new { id = "CarBrandId", @class = "form-control" })
-
-
                 @Html.ValidationMessageFor(model => model.CarBrandId)
                 <div class="col-md-4" style="display: flex; align-items: flex-end;">
                     <button type="button" class="btn btn-primary btn-sm" onclick="location.href='@Url.Action("Create", "CarBrands")'" style="height: 75%; width: 75%;">Nouvelle Marque</button>
@@ -27,10 +25,19 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.CarModelId, "Car Model", new { @class = "control-label" })
                 @Html.DropDownListFor(model => model.CarModelId, (SelectList)ViewData["CarModelId"], "Choose a Model", new { id = "CarModelId", @class = "form-control" })
-
                 @Html.ValidationMessageFor(model => model.CarModelId)
                 <div class="col-md-4" style="display: flex; align-items: flex-end;">
                     <button type="button" class="btn btn-primary btn-sm" onclick="location.href='@Url.Action("Create", "CarModels")'" style="height: 75%; width: 75%;">Nouveau Modèle</button>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CarTrimId, "Car Trim", new { @class = "control-label" })
+                @Html.DropDownListFor(model => model.CarTrimId, (SelectList)ViewData["CarTrimId"], "Choose a Finition", new { id = "CarTrimId", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CarTrimId)
+                <div class="col-md-4" style="display: flex; align-items: flex-end;">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="location.href='@Url.Action("Create", "CarTrims")'" style="height: 75%; width: 75%;">Nouvelle Finition</button>
                 </div>
             </div>
 
@@ -99,27 +106,61 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
-        $(document).ready(function () {
-            $("#CarBrandId").change(function () {
-                var carBrandId = $(this).val();
-                $.ajax({
-                    url: '@Url.Action("GetModelsByBrand", "Cars")',
-                    type: "GET",
-                    data: { brandId: carBrandId },
-                    success: function (models) {
-                        var modelSelect = $("#CarModelId");
-                        modelSelect.empty();
+    jQuery(document).ready(function () 
+    {
+        var carBrandSelect = $("#CarBrandId");
+        var carModelSelect = $("#CarModelId");
+        var carTrimSelect = $("#CarTrimId");
 
-                        $.each(models, function (index, model) {
-                            modelSelect.append($("<option>", {
-                                value: model.Id,
+        carBrandSelect.change(function () 
+        {
+            var carBrandId = $(this).val();
+            $.ajax(
+            {
+                url: '@Url.Action("GetModelsByBrand", "Cars")',
+                type: "GET",
+                data: { brandId: carBrandId },
+                success: function (models) {
+                        console.log(models);
+                        carModelSelect.empty().append('<option value="0" disabled selected>Select a model</option>');
+                        $.each(models, function (index, model) 
+                        {
+                            carModelSelect.append($('<option>', 
+                            {
+                                value: model.id,
                                 text: model.modelName
                             }));
                         });
-                    }
-                });
+                    
+                }
             });
         });
-    </script>
 
+        carModelSelect.change(function () 
+        {
+            var carModelId = $(this).val();
+            console.log("Modèle sélectionné val(): ", carModelId);
+            $.ajax(
+            {
+                url: '@Url.Action("GetTrimsByModel", "Cars")',
+                type: "GET",
+                data: { modelId: carModelId },
+                success: function (trims) 
+                {
+                    console.log(trims);
+                    carTrimSelect.empty().append('<option value="0" disabled selected>Select a trim</option>');
+                    $.each(trims, function (index, trim) 
+                    {
+                        carTrimSelect.append($('<option>', 
+                        {
+                            value: trim.id,
+                            text: trim.trimName
+                        }));
+                    });
+
+                }
+            });
+        });
+    });
+</script>
 }

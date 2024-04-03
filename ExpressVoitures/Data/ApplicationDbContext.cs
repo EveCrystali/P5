@@ -55,8 +55,11 @@ namespace ExpressVoitures.Data
                 .HasForeignKey(c => c.CarModelId)
                 .OnDelete(DeleteBehavior.Restrict); // ou DeleteBehavior.SetNull
 
-
-
+            modelBuilder.Entity<Car>()
+               .HasOne(c => c.CarTrim)
+               .WithMany()
+               .HasForeignKey(c => c.CarTrimId)
+               .OnDelete(DeleteBehavior.Restrict); // ou DeleteBehavior.SetNull
 
         }
 
