@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace ExpressVoitures.Controllers
 {
@@ -59,10 +60,10 @@ namespace ExpressVoitures.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CarBrandId,CarModelId,CarTrimId,Year,Mileage,PurchasePrice,SellingPrice,IsAvailable,PurchaseDate,DateOfAvailability,SaleDate,Description,ImagePaths")] Car car)
+        public async Task<IActionResult> Create([Bind("Id,CarBrandId, CarBrandName,CarModelId,CarTrimId,Year,Mileage,PurchasePrice,SellingPrice,IsAvailable,PurchaseDate,DateOfAvailability,SaleDate,Description,ImagePaths, Images")] Car car)
         {
             _logger.LogInformation("Create is called");
-            ModelState.Remove("Images");
+            //ModelState.Remove("Images");
             if (!ModelState.IsValid)
             {
                 _logger.LogInformation("ModelState is NOT valid");
@@ -78,43 +79,61 @@ namespace ExpressVoitures.Controllers
             else if (ModelState.IsValid)
             {
                 _logger.LogInformation("ModelState is valid");
+
+                _context.Add(car);
+                await _context.SaveChangesAsync();
+
+                var i = 0;
+
                 foreach (var image in car.Images)
                 {
+                    
                     if (image != null && image.Length > 0)
                     {
                         _logger.LogInformation("image != null");
+                        var fileExtension = Path.GetExtension(image.FileName);
+                        var fileName = Path.GetFileName(image.FileName);
 
-                       var fileName = Path.GetFileName(image.FileName);
-                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+                        var folderDestinationName = car.Id.ToString() + "_" + car.CarModel.ModelName + "_" + car.CarTrim.TrimName;
+                        var fileNewName = "_NoImg" + i.ToString() + fileExtension; // New file name
+                        var folderDestinationPath = Path.Combine(Directory.GetCurrentDirectory(), folderDestinationName);
+
+                        if (!Directory.Exists(folderDestinationPath))
+                        {
+                            Directory.CreateDirectory(folderDestinationPath);
+                        }
+
+                        var fullNewFilePath = Path.Combine(folderDestinationPath, "wwwroot/images", fileNewName); // Full path for the new file
 
                         _logger.LogInformation("fileName = " + fileName);
-                        _logger.LogInformation("filePath = " + filePath);
+                        _logger.LogInformation("folderDestinationPath = " + folderDestinationPath);
+                        _logger.LogInformation("fullNewFilePath = " + fullNewFilePath);
 
-                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        using (var stream = new FileStream(fullNewFilePath, FileMode.Create))
                         {
                             await image.CopyToAsync(stream);
+                            i++;
                         }
+
                         try
                         {
                             if (car.ImagePaths == null)
                             {
                                 car.ImagePaths = new List<string>();
                             }
-                            if (filePath != null)
+                            if (fullNewFilePath != null)
                             {
-                                car.ImagePaths.Add(filePath);
-
+                                car.ImagePaths.Add(fullNewFilePath); // Store the full path of the new file
                             }
                         }
                         catch (Exception ex)
                         {
-                            // Log l'erreur ou effectuez une autre action
-                            _logger.LogError(ex, "Erreur lors de l'ajout du chemin de l'image à la liste.");
+                            _logger.LogError(ex, "Error while adding the image path to the list.");
                         }
                     }
-                }
+                }   
 
-                _context.Add(car);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
