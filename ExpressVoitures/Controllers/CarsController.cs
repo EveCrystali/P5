@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ExpressVoitures.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ExpressVoitures.Data;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.Runtime.ConstrainedExecution;
 
 namespace ExpressVoitures.Controllers
 {
@@ -66,8 +61,11 @@ namespace ExpressVoitures.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,CarBrandId,CarModelId,CarTrimId,Year,Mileage,PurchasePrice,SellingPrice,IsAvailable,PurchaseDate,DateOfAvailability,SaleDate,Description,ImagePaths")] Car car)
         {
+            _logger.LogInformation("Create is called");
+            ModelState.Remove("Images");
             if (!ModelState.IsValid)
             {
+                _logger.LogInformation("ModelState is NOT valid");
                 foreach (var modelState in ViewData.ModelState.Values)
                 {
                     foreach (ModelError error in modelState.Errors)
@@ -79,6 +77,43 @@ namespace ExpressVoitures.Controllers
             }
             else if (ModelState.IsValid)
             {
+                _logger.LogInformation("ModelState is valid");
+                foreach (var image in car.Images)
+                {
+                    if (image != null && image.Length > 0)
+                    {
+                        _logger.LogInformation("image != null");
+
+                       var fileName = Path.GetFileName(image.FileName);
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                        _logger.LogInformation("fileName = " + fileName);
+                        _logger.LogInformation("filePath = " + filePath);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await image.CopyToAsync(stream);
+                        }
+                        try
+                        {
+                            if (car.ImagePaths == null)
+                            {
+                                car.ImagePaths = new List<string>();
+                            }
+                            if (filePath != null)
+                            {
+                                car.ImagePaths.Add(filePath);
+
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            // Log l'erreur ou effectuez une autre action
+                            _logger.LogError(ex, "Erreur lors de l'ajout du chemin de l'image à la liste.");
+                        }
+                    }
+                }
+
                 _context.Add(car);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

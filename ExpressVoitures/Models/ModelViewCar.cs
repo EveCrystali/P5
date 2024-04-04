@@ -36,5 +36,7 @@ namespace ExpressVoitures.Models
         public DateOnly DateOfAvailability { get; set; }
 
         public string? Description { get; set; }
+
+        public List<String>? ImagePaths { get; set; }
     }
 }

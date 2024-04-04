@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using ExpressVoitures.Data;
 
 namespace ExpressVoitures.Data
@@ -38,7 +39,7 @@ namespace ExpressVoitures.Data
 
         [DisplayName("Disponibile")]
         [Required(ErrorMessage = "La disponibilité du vehicule est obligatoire.")]
-        public bool? IsAvailable { get; set; }
+        public bool IsAvailable { get; set; }
 
         [DisplayName("Date d'achat")]
         public DateOnly? PurchaseDate { get; set; }
@@ -54,5 +55,8 @@ namespace ExpressVoitures.Data
 
         [DisplayName("Chemin des images")]
         public List<String>? ImagePaths { get; set; }
+
+        [NotMapped]
+        public List<IFormFile>? Images { get; set; }
     }
 }
