@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ExpressVoitures.Data;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ExpressVoitures.Controllers
 {
@@ -21,7 +22,8 @@ namespace ExpressVoitures.Controllers
         // GET: CarModels
         public async Task<IActionResult> Index()
         {
-            return View(await _context.CarModel.ToListAsync());
+            var applicationDbContext = _context.CarModel.Include(c => c.CarBrand);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: CarModels/Details/5
@@ -33,6 +35,7 @@ namespace ExpressVoitures.Controllers
             }
 
             var carModel = await _context.CarModel
+                .Include(c => c.CarBrand)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (carModel == null)
             {
@@ -45,6 +48,7 @@ namespace ExpressVoitures.Controllers
         // GET: CarModels/Create
         public IActionResult Create()
         {
+            ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "Brand");
             return View();
         }
 
@@ -53,14 +57,26 @@ namespace ExpressVoitures.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Model,Trim")] CarModel carModel)
+        public async Task<IActionResult> Create([Bind("Id,CarBrandId,ModelName")] CarModel carModel)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+            {
+                foreach (var modelState in ViewData.ModelState.Values)
+                {
+                    foreach (ModelError error in modelState.Errors)
+                    {
+                        // Log or print the error
+                        Console.WriteLine(error.ErrorMessage);
+                    }
+                }
+            }
+            else if (ModelState.IsValid)
             {
                 _context.Add(carModel);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "Brand", carModel.CarBrandId);
             return View(carModel);
         }
 
@@ -77,6 +93,7 @@ namespace ExpressVoitures.Controllers
             {
                 return NotFound();
             }
+            ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "Brand", carModel.CarBrandId);
             return View(carModel);
         }
 
@@ -85,7 +102,7 @@ namespace ExpressVoitures.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Model,Trim")] CarModel carModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CarBrandId,ModelName")] CarModel carModel)
         {
             if (id != carModel.Id)
             {
@@ -112,6 +129,7 @@ namespace ExpressVoitures.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "Brand", carModel.CarBrandId);
             return View(carModel);
         }
 
@@ -124,6 +142,7 @@ namespace ExpressVoitures.Controllers
             }
 
             var carModel = await _context.CarModel
+                .Include(c => c.CarBrand)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (carModel == null)
             {

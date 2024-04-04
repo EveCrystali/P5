@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ExpressVoitures.Data.CarModel>
+﻿@model IEnumerable<ExpressVoitures.Data.CarTrim>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,10 +13,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.CarBrand)
+                @Html.DisplayNameFor(model => model.TrimName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ModelName)
+                @Html.DisplayNameFor(model => model.CarModel)
             </th>
             <th></th>
         </tr>
@@ -25,10 +25,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.CarBrand.Brand)
+                @Html.DisplayFor(modelItem => item.TrimName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ModelName)
+                @Html.DisplayFor(modelItem => item.CarModel.ModelName)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

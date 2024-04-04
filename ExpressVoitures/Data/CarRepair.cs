@@ -8,13 +8,13 @@ namespace ExpressVoitures.Data
     {
         public int Id { get; set; }
 
-        public int IdCar { get; set; }
+        public int CarId { get; set; }
 
         public Car Car { get; set; }
 
         [DisplayName("Coût de la réparation")]
         [Range(0.01, Double.MaxValue, ErrorMessage = "La valeur doit être positive.")]
-        public decimal RepairCost { get; set; }
+        public decimal? RepairCost { get; set; }
 
         [DisplayName("Description de la réparation")]
         public string? RepairDescription { get; set; }

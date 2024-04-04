@@ -4,6 +4,7 @@ using ExpressVoitures.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExpressVoitures.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240329163617_migration1")]
+    partial class migration1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,42 +39,37 @@ namespace ExpressVoitures.Data.Migrations
                     b.Property<int>("CarModelId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CarTrimId")
-                        .HasColumnType("int");
-
-                    b.Property<DateOnly?>("DateOfAvailability")
+                    b.Property<DateOnly>("DateOfAvailability")
                         .HasColumnType("date");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImagePaths")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool?>("IsAvailable")
-                        .IsRequired()
+                    b.Property<bool>("IsAvailable")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("Mileage")
+                    b.Property<int>("Mileage")
                         .HasColumnType("int");
 
-                    b.Property<DateOnly?>("PurchaseDate")
+                    b.Property<DateOnly>("PurchaseDate")
                         .HasColumnType("date");
 
-                    b.Property<decimal?>("PurchasePrice")
-                        .IsRequired()
+                    b.Property<decimal>("PurchasePrice")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateOnly?>("SaleDate")
                         .HasColumnType("date");
 
-                    b.Property<decimal?>("SellingPrice")
+                    b.Property<decimal>("SellingPrice")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("Year")
-                        .IsRequired()
+                    b.Property<int>("Year")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -79,8 +77,6 @@ namespace ExpressVoitures.Data.Migrations
                     b.HasIndex("CarBrandId");
 
                     b.HasIndex("CarModelId");
-
-                    b.HasIndex("CarTrimId");
 
                     b.ToTable("Car");
                 });
@@ -135,7 +131,7 @@ namespace ExpressVoitures.Data.Migrations
                     b.Property<int>("CarId")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("RepairCost")
+                    b.Property<decimal>("RepairCost")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
@@ -161,6 +157,7 @@ namespace ExpressVoitures.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("TrimName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -386,17 +383,9 @@ namespace ExpressVoitures.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ExpressVoitures.Data.CarTrim", "CarTrim")
-                        .WithMany()
-                        .HasForeignKey("CarTrimId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("CarBrand");
 
                     b.Navigation("CarModel");
-
-                    b.Navigation("CarTrim");
                 });
 
             modelBuilder.Entity("ExpressVoitures.Data.CarModel", b =>

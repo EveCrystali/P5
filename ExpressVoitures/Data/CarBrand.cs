@@ -8,10 +8,11 @@ namespace ExpressVoitures.Data
     {
         public int Id { get; set; }
 
-
         [DisplayName("Marque")]
         [Required(ErrorMessage = "La marque est obligatoire.")]
-        public string Brand { get; set; }
+        public string? Brand { get; set; }
+
+        public virtual ICollection<CarModel>? CarModels { get; set; }
 
     }
 }
