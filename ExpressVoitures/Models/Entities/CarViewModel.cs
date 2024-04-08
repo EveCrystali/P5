@@ -10,9 +10,13 @@ namespace ExpressVoitures.Models.Entities
 
         public CarBrand? CarBrand { get; set; }
 
+        public string? CarBrandName { get; set; }
+
         public CarModel? CarModel { get; set; }
 
-        public CarTrim? CarTrim { get; set; }
+        public string? CarModelName { get; set; }
+
+        public CarTrim CarTrim { get; set; }
 
         public List<CarRepair>? CarRepairs { get; set; }
 

@@ -1,7 +1,5 @@
 ﻿using ExpressVoitures.Data;
 using ExpressVoitures.Models.Entities;
-using ExpressVoitures.Models.Repositories;
-using ExpressVoitures.Models.Services;
 
 namespace ExpressVoitures.Models.Services
 {

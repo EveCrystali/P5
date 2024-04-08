@@ -4,7 +4,7 @@ using ExpressVoitures.Models.Repositories;
 
 namespace ExpressVoitures.Models.Services
 {
-    public class CarService
+    public class CarService : ICarService
     {
         private readonly ICarRepository _carRepository;
 
@@ -28,7 +28,13 @@ namespace ExpressVoitures.Models.Services
                 {
                     Id = car.Id,
                     CarBrand = car.CarBrand,
+
+                    CarBrandName = car.CarModel?.ModelName ?? "Marque inconnu",
+
                     CarModel = car.CarModel,
+                    
+                    CarModelName = car.CarModel?.ModelName ?? "Modèle inconnu",
+
                     CarTrim = car.CarTrim,
                     CarRepairs = car.CarRepairs,
                     Year = car.Year,

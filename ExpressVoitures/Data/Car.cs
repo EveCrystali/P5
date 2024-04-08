@@ -10,9 +10,11 @@ namespace ExpressVoitures.Data
         public int Id { get; set; }
 
         public int CarBrandId { get; set; }
+        [ForeignKey("CarBrandId")]
         public CarBrand? CarBrand { get; set; }
 
         public int CarModelId { get; set; }
+        [ForeignKey("CarModelId")]
         public CarModel? CarModel { get; set; }
 
         public int CarTrimId { get; set; }

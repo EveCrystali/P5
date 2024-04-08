@@ -1,4 +1,9 @@
-﻿@model IEnumerable<ExpressVoitures.Models.ModelViewCar>
+﻿@using ExpressVoitures.Controllers
+@using ExpressVoitures.Models.Entities
+@using ExpressVoitures.Data 
+@* @inject HomeController homeController *@
+
+@model IEnumerable<ExpressVoitures.Models.Entities.CarViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,10 +18,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.CarModel)
+                @Html.DisplayNameFor(model => model.CarModel.ModelName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CarBrand)
+                @Html.DisplayNameFor(model => model.CarBrand.Brand)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Year)
@@ -36,33 +41,34 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (CarViewModel carViewModel in Model) {
         <tr>
+
             <td>
-                @Html.DisplayFor(modelItem => item.CarModel)
+                    @Html.DisplayFor(modelItem => carViewModel.CarModelName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CarBrand)
+                    @Html.DisplayFor(modelItem => carViewModel.CarBrandName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Year)
+                    @Html.DisplayFor(modelItem => carViewModel.Year)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Mileage)
+                    @Html.DisplayFor(modelItem => carViewModel.Mileage)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SellingPrice)
+                    @Html.DisplayFor(modelItem => carViewModel.SellingPrice)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DateOfAvailability)
+                    @Html.DisplayFor(modelItem => carViewModel.DateOfAvailability)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Description)
+                    @Html.DisplayFor(modelItem => carViewModel.Description)
             </td>
             <td>
-                <a asp-controller="Cars" asp-action="Edit" asp-route-id="@item.IdCar">Edit</a> |
-                    <a asp-controller="Cars" asp-action="Details" asp-route-id="@item.IdCar">Details</a>
-                    <a asp-controller="Cars" asp-action="Delete" asp-route-id="@item.IdCar">Delete</a>
+                    <a asp-controller="Cars" asp-action="Edit" asp-route-id="@carViewModel.Id">Edit</a> |
+                    <a asp-controller="Cars" asp-action="Details" asp-route-id="@carViewModel.Id">Details</a>
+                    <a asp-controller="Cars" asp-action="Delete" asp-route-id="@carViewModel.Id">Delete</a>
             </td>
         </tr>
 }
