@@ -9,13 +9,15 @@ namespace ExpressVoitures.Data
     {
         public int Id { get; set; }
 
+        public int CarModelId { get; set; }
+
         public int CarBrandId { get; set; }
         public virtual CarBrand? CarBrand { get; set; }
 
 
         [DisplayName("Modèle")]
         [Required(ErrorMessage = "Le nom du modèle est obligatoire.")]
-        public string? ModelName { get; set; }
+        public string? CarModelName { get; set; }
 
         public virtual ICollection<CarTrim>? Trims { get; set; }
 

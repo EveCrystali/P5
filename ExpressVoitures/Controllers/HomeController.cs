@@ -2,6 +2,8 @@ using System;
 using System.Diagnostics;
 using ExpressVoitures.Data;
 using ExpressVoitures.Models;
+using ExpressVoitures.Models.Entities;
+using ExpressVoitures.Models.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,25 +13,26 @@ namespace ExpressVoitures.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
+        private readonly ICarService _carService;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, ICarService carService)
         {
             _logger = logger;
             _context = context;
+            _carService = carService;
         }
 
-
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            //var applicationDbContext = _context.Car.Include(c => c.CarBrand).Include(c => c.CarModel);
-            //return View(await applicationDbContext.ToListAsync());
 
-            var cars = await _context.Car.ToListAsync();
-            var modelViewCar = cars.Select(x => new ModelViewCar
-            {
-                IdCar = x.Id,
-            }).ToList();
-            return View(modelViewCar);
+            var cars = _context.Car
+                .Include(c => c.CarModel) // Eager loading CarModel
+                .Include(c => c.CarBrand); // Eager loading CarBrand
+
+            IEnumerable<CarViewModel> carViewModels = _carService.GetAllCarsViewModel();
+
+            return View(carViewModels);
+
         }
 
         public IActionResult Privacy()

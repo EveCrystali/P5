@@ -55,10 +55,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.CarBrand.Brand)
+                @Html.DisplayFor(modelItem => item.CarBrand.CarBrandName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CarModel.ModelName)
+                    @Html.DisplayFor(modelItem => item.CarModel.CarModelName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Year)

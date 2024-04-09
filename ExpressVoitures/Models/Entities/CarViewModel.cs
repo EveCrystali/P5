@@ -1,25 +1,28 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using ExpressVoitures.Data;
 
-namespace ExpressVoitures.Data
+namespace ExpressVoitures.Models.Entities
 {
-    public class Car
+    public class CarViewModel
     {
         public int Id { get; set; }
 
-        public int CarBrandId { get; set; }
-        
+        public int? CarBrandId { get; set; }
+
+        public int? CarModelId { get; set; }
         public CarBrand? CarBrand { get; set; }
 
-        public int CarModelId { get; set; }
-        
+        public string? CarBrandName { get; set; }
+
         public CarModel? CarModel { get; set; }
 
-        public int CarTrimId { get; set; }
+        public string? CarModelName { get; set; }
 
+        public int? CarTrimId { get; set; }
         public CarTrim? CarTrim { get; set; }
+
+        public string? CarTrimName { get; set; }
 
         public List<CarRepair>? CarRepairs { get; set; }
 
@@ -58,7 +61,6 @@ namespace ExpressVoitures.Data
         [DisplayName("Chemin des images")]
         public List<String>? ImagePaths { get; set; }
 
-        [NotMapped]
         public List<IFormFile>? Images { get; set; }
     }
 }

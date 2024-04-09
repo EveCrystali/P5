@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
+using ExpressVoitures.Data;
+using ExpressVoitures.Models.Entities;
+using ExpressVoitures.Models.Repositories;
+using ExpressVoitures.Models.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ExpressVoitures.Data;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.Runtime.ConstrainedExecution;
+using Microsoft.Extensions.Logging;
 
 namespace ExpressVoitures.Controllers
 {
@@ -16,11 +16,18 @@ namespace ExpressVoitures.Controllers
         private readonly ApplicationDbContext _context;
         private readonly ILogger<CarsController> _logger;
 
-        public CarsController(ApplicationDbContext context, ILogger<CarsController> Logger)
+        private readonly ICarService _carService;
+
+        private readonly ICarRepository _carRepository;
+
+        public CarsController(ApplicationDbContext context, ILogger<CarsController> Logger, ICarService carService, ICarRepository carRepository)
         {
             _context = context;
             _logger = Logger;
+            _carService = carService;
+            _carRepository = carRepository;
         }
+
 
         // GET: Cars
         public async Task<IActionResult> Index()
@@ -53,40 +60,105 @@ namespace ExpressVoitures.Controllers
         // GET: Cars/Create
         public IActionResult Create()
         {
-            ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "Brand");
-            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "ModelName");
-            ViewData["CarTrimId"] = new SelectList(_context.CarTrim, "Id", "TrimName");
+            ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "CarBrandName");
+            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "CarModelName");
+            ViewData["CarTrimId"] = new SelectList(_context.CarTrim, "Id", "CarTrimName");
             return View();
         }
 
         // POST: Cars/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CarBrandId,CarModelId,CarTrimId,Year,Mileage,PurchasePrice,SellingPrice,IsAvailable,PurchaseDate,DateOfAvailability,SaleDate,Description,ImagePaths")] Car car)
+        public async Task<IActionResult> Create(CarViewModel carViewModel)
         {
+
             if (!ModelState.IsValid)
             {
+                _logger.LogInformation("ModelState is NOT valid");
                 foreach (var modelState in ViewData.ModelState.Values)
                 {
                     foreach (ModelError error in modelState.Errors)
                     {
-                        // Log or print the error
                         Console.WriteLine(error.ErrorMessage);
                     }
                 }
+                ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "CarBrandName", carViewModel.CarBrand.Id);
+                ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "CarModelName", carViewModel.CarModel.Id);
+                ViewData["CarTrimId"] = new SelectList(_context.CarTrim, "Id", "CarTrimName", carViewModel.CarTrim.Id);
+                return View(carViewModel);
             }
-            else if (ModelState.IsValid)
+            else
             {
-                _context.Add(car);
-                await _context.SaveChangesAsync();
+                _logger.LogInformation("ModelState is valid");
+
+                Car car = _carService.MapToCarEntity(carViewModel);
+                _context.Car.Add(car);
+                _context.SaveChanges();
+                carViewModel.Id = car.Id;
+
+                await UploadCarImages(carViewModel);
+
+                var carFromDb = await _context.Car.FindAsync(carViewModel.Id);
+                if (carFromDb != null)
+                {
+                    carFromDb.ImagePaths = new List<string>();
+                    foreach (var imagePath in carViewModel.ImagePaths)
+                    {
+                        carFromDb.ImagePaths.Add(imagePath);
+                    }
+
+                    _context.Car.Update(carFromDb);
+                    await _context.SaveChangesAsync();
+                }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "Brand", car.CarBrandId);
-            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "ModelName", car.CarModelId);
-            ViewData["CarTrimId"] = new SelectList(_context.CarTrim, "Id", "TrimName", car.CarTrimId);
-            return View(car);
+
+        }
+
+        private async Task UploadCarImages(CarViewModel carViewModel)
+        {
+            string brand = _context.CarBrand
+                .FirstOrDefault(b => b.Id == carViewModel.CarBrandId)?.CarBrandName;
+
+            string model = _context.CarModel
+                .FirstOrDefault(m => m.Id == carViewModel.CarModelId)?.CarModelName;
+
+            string trim = _context.CarTrim
+                .FirstOrDefault(m => m.Id == carViewModel.CarTrimId)?.CarTrimName;
+
+            var i = 1;
+            foreach (var image in carViewModel.Images)
+            {
+                if (image != null && image.Length > 0)
+                {
+                    var fileExtension = Path.GetExtension(image.FileName);
+                    var fileNewName = Path.GetFileName(image.FileName);
+
+                    var folderName = $"{carViewModel.Id}_{brand}_{model}_{trim}";
+                    var fileName = $"Img{i}{fileExtension}";
+
+                    var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", folderName);
+                    if (!Directory.Exists(folderPath))
+                    {
+                        Directory.CreateDirectory(folderPath);
+                    }
+
+                    var fullPath = Path.Combine(folderPath, fileName);
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await image.CopyToAsync(stream);
+                        i++;
+                    }
+
+                    if (carViewModel.ImagePaths == null)
+                    {
+                        carViewModel.ImagePaths = new List<string>();
+                    }
+
+                    carViewModel.ImagePaths.Add(fullPath); 
+                }
+            }
+
         }
 
         // GET: Cars/Edit/5
@@ -98,19 +170,18 @@ namespace ExpressVoitures.Controllers
             }
 
             var car = await _context.Car.FindAsync(id);
-            if (car == null)
-            {
-                return NotFound();
-            }
-            ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "Brand", car.CarBrandId);
-            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "ModelName", car.CarModelId);
-            ViewData["CarTrimId"] = new SelectList(_context.CarTrim, "Id", "TrimName", car.CarTrimId);
+            var carViewModel = _carService.GetCarViewModelById(car.Id);
+
+            ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "CarBrandName", carViewModel.CarBrand.Id);
+            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "CarModelName", carViewModel.CarModel.Id);
+            ViewData["CarTrimId"] = new SelectList(_context.CarTrim, "Id", "CarTrimName", carViewModel.CarTrim.Id);
+
+
             return View(car);
         }
 
         // POST: Cars/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,CarBrandId,CarModelId,CarTrimId,Year,Mileage,PurchasePrice,SellingPrice,IsAvailable,PurchaseDate,DateOfAvailability,SaleDate,Description,ImagePaths")] Car car)
@@ -145,9 +216,9 @@ namespace ExpressVoitures.Controllers
             var carModels = _context.CarModel ?? Enumerable.Empty<CarModel>();
             var carTrims = _context.CarTrim ?? Enumerable.Empty<CarTrim>();
 
-            ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "Brand", car.CarBrandId);
-            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "ModelName", car.CarModelId);
-            ViewData["CarTrimId"] = new SelectList(_context.CarTrim, "Id", "TrimName", car.CarTrimId);
+            ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "CarBrandName", car.CarBrandId);
+            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "CarModelName", car.CarModelId);
+            ViewData["CarTrimId"] = new SelectList(_context.CarTrim, "Id", "CarTrimeName", car.CarTrimId);
             return View(car);
         }
 
@@ -197,7 +268,7 @@ namespace ExpressVoitures.Controllers
             _logger.LogInformation("GetModelsByBrand : Recherche des Models pour le modèle avec l'ID : " + brandId);
             var models = _context.CarModel
                 .Where(m => m.CarBrandId == brandId)
-                .Select(m => new { m.Id, m.ModelName })
+                .Select(m => new { m.Id, m.CarModelName })
                 .ToList();
             if (!models.Any())
             {
@@ -207,7 +278,7 @@ namespace ExpressVoitures.Controllers
             {
                 foreach (var model in models)
                 {
-                    _logger.LogInformation("Modeles trouvés Id : " + model.Id + " Nom : " + model.ModelName);
+                    _logger.LogInformation("Modeles trouvés Id : " + model.Id + " Nom : " + model.CarModelName);
                 }
             }
             return Json(models);
@@ -218,7 +289,7 @@ namespace ExpressVoitures.Controllers
             _logger.LogInformation("GetTrimsByModel : Recherche des finitions pour le modèle avec l'Id : " + modelId);
             var trims = _context.CarTrim
                 .Where(t => t.CarModelId == modelId)
-                .Select(t => new { t.Id, t.TrimName })
+                .Select(t => new { t.Id, t.CarTrimName })
                 .ToList();
 
             if (!trims.Any())
@@ -229,7 +300,7 @@ namespace ExpressVoitures.Controllers
             {
                 foreach (var trim in trims)
                 {
-                    _logger.LogInformation("Finitions trouvés Id : " + trim.Id + " Nom : " + trim.TrimName);
+                    _logger.LogInformation("Finitions trouvés Id : " + trim.Id + " Nom : " + trim.CarTrimName);
                 }
             }
 

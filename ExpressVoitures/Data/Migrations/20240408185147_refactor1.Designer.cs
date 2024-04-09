@@ -4,6 +4,7 @@ using ExpressVoitures.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExpressVoitures.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240408185147_refactor1")]
+    partial class refactor1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,9 +95,6 @@ namespace ExpressVoitures.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CarBrandId")
-                        .HasColumnType("int");
-
                     b.Property<string>("CarBrandName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -113,9 +113,6 @@ namespace ExpressVoitures.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CarBrandId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CarModelId")
                         .HasColumnType("int");
 
                     b.Property<string>("CarModelName")
@@ -165,7 +162,7 @@ namespace ExpressVoitures.Data.Migrations
                     b.Property<int>("CarModelId")
                         .HasColumnType("int");
 
-                    b.Property<string>("CarTrimName")
+                    b.Property<string>("TrimName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
