@@ -1,4 +1,8 @@
-﻿@model ExpressVoitures.Data.Car
+﻿@using ExpressVoitures.Controllers
+@using ExpressVoitures.Models.Entities
+@using ExpressVoitures.Data 
+
+@model ExpressVoitures.Models.Entities.CarViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -10,9 +14,8 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+        <form method="post" enctype="multipart/form-data" asp-controller="Cars" asp-action="Edit">
+                 <input type="hidden" asp-for="Id" /> 
             <div class="form-group">
                 <label asp-for="CarBrandId" class="control-label"></label>
                 <select asp-for="CarBrandId" class="form-control" asp-items="ViewBag.CarBrandId"></select>
@@ -22,6 +25,11 @@
                 <label asp-for="CarModelId" class="control-label"></label>
                 <select asp-for="CarModelId" class="form-control" asp-items="ViewBag.CarModelId"></select>
                 <span asp-validation-for="CarModelId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CarTrimId" class="control-label"></label>
+                <select asp-for="CarTrimId" class="form-control" asp-items="ViewBag.CarTrimId"></select>
+                <span asp-validation-for="CarTrimId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Year" class="control-label"></label>
@@ -68,11 +76,27 @@
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ImagePaths" class="control-label"></label>
-                <input asp-for="ImagePaths" class="form-control" />
-                <span asp-validation-for="ImagePaths" class="text-danger"></span>
+
+            <!-- Affichage des images existantes -->
+            @if (Model.ImagePaths != null && Model.ImagePaths.Any())
+            {
+                <div class="form-group">
+                    <label>Existing Images</label>
+                    <ul>
+                        @foreach (var imagePath in Model.ImagePaths)
+                        {
+                            <li>@imagePath</li>
+                        }
+                    </ul>
+                </div>
+            }
+
+
+            <div class ="form-group">
+                <label for="Images">Upload New Images</label>
+                <input type="file" name="Images" multiple />
             </div>
+            
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -86,4 +110,62 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+    jQuery(document).ready(function () 
+    {
+        var carBrandSelect = $("#CarBrandId");
+        var carModelSelect = $("#CarModelId");
+        var carTrimSelect = $("#CarTrimId");
+
+        carBrandSelect.change(function () 
+        {
+            var carBrandId = $(this).val();
+            $.ajax(
+            {
+                url: '@Url.Action("GetModelsByBrand", "Cars")',
+                type: "GET",
+                data: { brandId: carBrandId },
+                success: function (models) {
+                        console.log(models);
+                        carModelSelect.empty().append('<option value="0" disabled selected>Select a model</option>');
+                        $.each(models, function (index, model) 
+                        {
+                            carModelSelect.append($('<option>', 
+                            {
+                                value: model.id,
+                                text: model.carModelName
+                            }));
+                        });
+                    
+                }
+            });
+        });
+
+        carModelSelect.change(function () 
+        {
+            var carModelId = $(this).val();
+            console.log("Modèle sélectionné val(): ", carModelId);
+            $.ajax(
+            {
+                url: '@Url.Action("GetTrimsByModel", "Cars")',
+                type: "GET",
+                data: { modelId: carModelId },
+                success: function (trims) 
+                {
+                    console.log(trims);
+                    carTrimSelect.empty().append('<option value="0" disabled selected>Select a trim</option>');
+                    $.each(trims, function (index, trim) 
+                    {
+                        carTrimSelect.append($('<option>', 
+                        {
+                            value: trim.id,
+                            text: trim.carTrimName
+                        }));
+                    });
+
+                }
+            });
+        });
+    });
+</script>
 }
