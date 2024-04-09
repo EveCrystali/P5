@@ -11,6 +11,14 @@ namespace ExpressVoitures.Models.Repositories
 
         IEnumerable<Car> GetAllCars();
 
+        IEnumerable<CarBrand> GetAllCarBrands();
+
+        Task<CarBrand> GetCarBrandById(int id);
+
+        IEnumerable<CarModel> GetAllCarModels();
+        
+        Task<CarModel> GetCarModelById(int id);
+
         void SaveCar(Car car);
 
         void DeleteCar(int id);

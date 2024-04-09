@@ -19,7 +19,7 @@ namespace ExpressVoitures.Models.Services
             return MapToCarViewModel(carEntities);
         }
 
-        private List<CarViewModel> MapToCarViewModel(IEnumerable<Car> carEntities)
+        public List<CarViewModel> MapToCarViewModel(IEnumerable<Car> carEntities)
         {
             List<CarViewModel> carsViewModel = new();
             foreach (Car car in carEntities)
@@ -27,22 +27,15 @@ namespace ExpressVoitures.Models.Services
                 carsViewModel.Add(new CarViewModel
                 {
                     Id = car.Id,
-
                     CarBrandId = car.CarBrandId,
                     CarBrand = car.CarBrand,
-
                     CarBrandName = car.CarModel?.CarModelName ?? "Marque inconnu",
-
                     CarModelId = car.CarModelId,
                     CarModel = car.CarModel,
-                    
                     CarModelName = car.CarModel?.CarModelName ?? "Modèle inconnu",
-
                     CarTrimId = car.CarTrimId,
                     CarTrim = car.CarTrim,
-
                     CarTrimName = car.CarTrim?.CarTrimName ?? "Version inconnue",
-
                     CarRepairs = car.CarRepairs,
                     Year = car.Year,
                     Mileage = car.Mileage,
@@ -78,6 +71,20 @@ namespace ExpressVoitures.Models.Services
             return cars.Find(c => c.Id == id);
         }
 
+        public List<CarBrand> GetAllCarBrands()
+        {
+            IEnumerable<CarBrand> carBrands = _carRepository.GetAllCarBrands();
+            return carBrands.ToList();
+        }
+
+        public CarBrand GetCarBrandById(int id)
+        {
+            List<CarBrand> carBrands = GetAllCarBrands().ToList();
+            return carBrands.Find(c => c.Id == id);
+        }
+
+
+
         public async Task<Car> GetCar(int id)
         {
             var cars = await _carRepository.GetCarById(id);
@@ -90,7 +97,7 @@ namespace ExpressVoitures.Models.Services
             return cars;
         }
 
-        private static Car MapToCarEntity(CarViewModel carViewModel)
+        public Car MapToCarEntity(CarViewModel carViewModel)
         {
             Car carEntity = new()
             {

@@ -26,6 +26,46 @@ namespace ExpressVoitures.Models.Repositories
             }
         }
 
+        public IEnumerable<CarBrand> GetAllCarBrands()
+        {
+            return _context.CarBrand.ToList();
+        }
+
+        public async Task<CarBrand> GetCarBrandById(int id)
+        {
+            Car? car = await _context.Car.SingleOrDefaultAsync(c => c.Id == id);
+            if (car != null)
+            {
+                return car.CarBrand;
+            }
+            else
+            {
+                // Handle the case when the car is not found
+                throw new Exception("CarBrand not found");
+            }
+        }
+
+
+        public IEnumerable<CarModel> GetAllCarModels()
+        {
+            return _context.CarModel.ToList();
+        }
+
+        public async Task<CarModel> GetCarModelById(int id)
+        {
+            Car? car = await _context.Car.SingleOrDefaultAsync(c => c.Id == id);
+            if (car != null)
+            {
+                return car.CarModel;
+            }
+            else
+            {
+                // Handle the case when the car is not found
+                throw new Exception("CarModel not found");
+            }
+        }
+
+
         public async Task<IList<Car>> GetCar()
         {
             var cars = await _context.Car.ToListAsync();
