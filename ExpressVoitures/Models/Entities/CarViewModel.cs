@@ -8,6 +8,9 @@ namespace ExpressVoitures.Models.Entities
     {
         public int Id { get; set; }
 
+        public int? CarBrandId { get; set; }
+
+        public int? CarModelId { get; set; }
         public CarBrand? CarBrand { get; set; }
 
         public string? CarBrandName { get; set; }
@@ -16,7 +19,10 @@ namespace ExpressVoitures.Models.Entities
 
         public string? CarModelName { get; set; }
 
-        public CarTrim CarTrim { get; set; }
+        public int? CarTrimId { get; set; }
+        public CarTrim? CarTrim { get; set; }
+
+        public string? CarTrimName { get; set; }
 
         public List<CarRepair>? CarRepairs { get; set; }
 

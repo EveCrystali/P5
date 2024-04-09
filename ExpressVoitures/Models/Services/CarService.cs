@@ -27,15 +27,22 @@ namespace ExpressVoitures.Models.Services
                 carsViewModel.Add(new CarViewModel
                 {
                     Id = car.Id,
+
+                    CarBrandId = car.CarBrandId,
                     CarBrand = car.CarBrand,
 
-                    CarBrandName = car.CarModel?.ModelName ?? "Marque inconnu",
+                    CarBrandName = car.CarModel?.CarModelName ?? "Marque inconnu",
 
+                    CarModelId = car.CarModelId,
                     CarModel = car.CarModel,
                     
-                    CarModelName = car.CarModel?.ModelName ?? "Modèle inconnu",
+                    CarModelName = car.CarModel?.CarModelName ?? "Modèle inconnu",
 
+                    CarTrimId = car.CarTrimId,
                     CarTrim = car.CarTrim,
+
+                    CarTrimName = car.CarTrim?.CarTrimName ?? "Version inconnue",
+
                     CarRepairs = car.CarRepairs,
                     Year = car.Year,
                     Mileage = car.Mileage,
@@ -87,7 +94,7 @@ namespace ExpressVoitures.Models.Services
         {
             Car carEntity = new()
             {
-                Id = carViewModel.Id,
+                // Id = carViewModel.Id,
                 CarBrand = carViewModel.CarBrand,
                 CarModel = carViewModel.CarModel,
                 CarTrim = carViewModel.CarTrim,

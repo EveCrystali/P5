@@ -15,7 +15,7 @@ namespace ExpressVoitures.Data
 
         [DisplayName("Modèle")]
         [Required(ErrorMessage = "Le nom du modèle est obligatoire.")]
-        public string? ModelName { get; set; }
+        public string? CarModelName { get; set; }
 
         public virtual ICollection<CarTrim>? Trims { get; set; }
 

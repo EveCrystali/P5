@@ -10,7 +10,7 @@ namespace ExpressVoitures.Data
 
         [DisplayName("Marque")]
         [Required(ErrorMessage = "La marque est obligatoire.")]
-        public string? Brand { get; set; }
+        public string? CarBrandName { get; set; }
 
         public virtual ICollection<CarModel>? CarModels { get; set; }
 
