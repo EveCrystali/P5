@@ -9,6 +9,8 @@ namespace ExpressVoitures.Data
     {
         public int Id { get; set; }
 
+        public int CarModelId { get; set; }
+
         public int CarBrandId { get; set; }
         public virtual CarBrand? CarBrand { get; set; }
 

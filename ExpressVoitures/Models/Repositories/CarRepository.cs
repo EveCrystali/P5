@@ -36,7 +36,8 @@ namespace ExpressVoitures.Models.Repositories
         {
             IEnumerable<Car> carEntities = _context.Car
                                                    .Include(c => c.CarBrand) // Eager loading for CarBrand
-                                                   .Include(c => c.CarModel); // Eager loading for CarModel
+                                                   .Include(c => c.CarModel) // Eager loading for CarModel
+                                                   .Include(c => c.CarTrim); // Eager loading for CarModel
             return carEntities.ToList();
         }
 
