@@ -1,4 +1,8 @@
-﻿using ExpressVoitures.Data;
+﻿
+using ExpressVoitures.Data;
+using ExpressVoitures.Models.Entities;
+using ExpressVoitures.Models.Repositories;
+using ExpressVoitures.Models.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,11 +16,15 @@ namespace ExpressVoitures.Controllers
         private readonly ApplicationDbContext _context;
         private readonly ILogger<CarsController> _logger;
 
-        public CarsController(ApplicationDbContext context, ILogger<CarsController> Logger)
+        private readonly ICarService _carService;
+
+        public CarsController(ApplicationDbContext context, ILogger<CarsController> Logger, ICarService carService)
         {
             _context = context;
             _logger = Logger;
+            _carService = carService;
         }
+
 
         // GET: Cars
         public async Task<IActionResult> Index()
@@ -49,9 +57,14 @@ namespace ExpressVoitures.Controllers
         // GET: Cars/Create
         public IActionResult Create()
         {
-            ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "Brand");
-            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "ModelName");
-            ViewData["CarTrimId"] = new SelectList(_context.CarTrim, "Id", "TrimName");
+            var car = _context.Car
+                .Include(c => c.CarBrand)
+                .Include(c => c.CarModel)
+                .Include(c => c.CarTrim);
+
+            ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "CarBrandName");
+            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "CarModelName");
+            ViewData["CarTrimId"] = new SelectList(_context.CarTrim, "Id", "CarTrimName");
             return View();
         }
 
@@ -60,9 +73,10 @@ namespace ExpressVoitures.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CarBrandId, CarBrandName,CarModelId,CarTrimId,Year,Mileage,PurchasePrice,SellingPrice,IsAvailable,PurchaseDate,DateOfAvailability,SaleDate,Description,ImagePaths, Images")] Car car)
+        // public async Task<IActionResult> Create([Bind("Id,CarBrandId, CarBrandName,CarModelId,CarTrimId,Year,Mileage,PurchasePrice,SellingPrice,IsAvailable,PurchaseDate,DateOfAvailability,SaleDate,Description,ImagePaths, Images")] Car car)
+        public async Task<IActionResult> Create(CarViewModel carViewModel)
         {
-            _logger.LogInformation("Create is called");
+            // _logger.LogInformation("Create is called");
             //ModelState.Remove("Images");
             if (!ModelState.IsValid)
             {
@@ -75,72 +89,80 @@ namespace ExpressVoitures.Controllers
                         Console.WriteLine(error.ErrorMessage);
                     }
                 }
+                // ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "Brand", carViewModel.CarBrand.Id);
+                // ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "ModelName",  carViewModel.CarModel.Id);
+                // ViewData["CarTrimId"] = new SelectList(_context.CarTrim, "Id", "TrimName", carViewModel.CarTrim.Id);
+                ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "CarBrandName", carViewModel.CarBrand.Id);
+                ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "CarModelName", carViewModel.CarModel.Id);
+                ViewData["CarTrimId"] = new SelectList(_context.CarTrim, "Id", "CarTrimName", carViewModel.CarTrim.Id);
+
+                return View(carViewModel);
             }
-            else if (ModelState.IsValid)
+            else
             {
                 _logger.LogInformation("ModelState is valid");
 
-                _context.Add(car);
-                await _context.SaveChangesAsync();
-
-                var i = 0;
-
-                foreach (var image in car.Images)
-                {
-                    
-                    if (image != null && image.Length > 0)
-                    {
-                        _logger.LogInformation("image != null");
-                        var fileExtension = Path.GetExtension(image.FileName);
-                        var fileName = Path.GetFileName(image.FileName);
-
-                        var folderDestinationName = car.Id.ToString() + "_" + car.CarModel.ModelName + "_" + car.CarTrim.TrimName;
-                        var fileNewName = "_NoImg" + i.ToString() + fileExtension; // New file name
-                        var folderDestinationPath = Path.Combine(Directory.GetCurrentDirectory(), folderDestinationName);
-
-                        if (!Directory.Exists(folderDestinationPath))
-                        {
-                            Directory.CreateDirectory(folderDestinationPath);
-                        }
-
-                        var fullNewFilePath = Path.Combine(folderDestinationPath, "wwwroot/images", fileNewName); // Full path for the new file
-
-                        _logger.LogInformation("fileName = " + fileName);
-                        _logger.LogInformation("folderDestinationPath = " + folderDestinationPath);
-                        _logger.LogInformation("fullNewFilePath = " + fullNewFilePath);
-
-                        using (var stream = new FileStream(fullNewFilePath, FileMode.Create))
-                        {
-                            await image.CopyToAsync(stream);
-                            i++;
-                        }
-
-                        try
-                        {
-                            if (car.ImagePaths == null)
-                            {
-                                car.ImagePaths = new List<string>();
-                            }
-                            if (fullNewFilePath != null)
-                            {
-                                car.ImagePaths.Add(fullNewFilePath); // Store the full path of the new file
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            _logger.LogError(ex, "Error while adding the image path to the list.");
-                        }
-                    }
-                }   
+                _carService.SaveCar(carViewModel);
 
 
-                await _context.SaveChangesAsync();
+                // _context.Add(car);
+                // await _context.SaveChangesAsync();
+
+                // var i = 0;
+
+                // foreach (var image in car.Images)
+                // {
+
+                //     if (image != null && image.Length > 0)
+                //     {
+                //         _logger.LogInformation("image != null");
+                //         var fileExtension = Path.GetExtension(image.FileName);
+                //         var fileName = Path.GetFileName(image.FileName);
+
+                //         var folderDestinationName = car.Id.ToString() + "_" + car.CarModel.ModelName + "_" + car.CarTrim.TrimName;
+                //         var fileNewName = "_NoImg" + i.ToString() + fileExtension; // New file name
+                //         var folderDestinationPath = Path.Combine(Directory.GetCurrentDirectory(), folderDestinationName);
+
+                //         if (!Directory.Exists(folderDestinationPath))
+                //         {
+                //             Directory.CreateDirectory(folderDestinationPath);
+                //         }
+
+                //         var fullNewFilePath = Path.Combine(folderDestinationPath, "wwwroot/images", fileNewName); // Full path for the new file
+
+                //         _logger.LogInformation("fileName = " + fileName);
+                //         _logger.LogInformation("folderDestinationPath = " + folderDestinationPath);
+                //         _logger.LogInformation("fullNewFilePath = " + fullNewFilePath);
+
+                //         using (var stream = new FileStream(fullNewFilePath, FileMode.Create))
+                //         {
+                //             await image.CopyToAsync(stream);
+                //             i++;
+                //         }
+
+                //         try
+                //         {
+                //             if (car.ImagePaths == null)
+                //             {
+                //                 car.ImagePaths = new List<string>();
+                //             }
+                //             if (fullNewFilePath != null)
+                //             {
+                //                 car.ImagePaths.Add(fullNewFilePath); // Store the full path of the new file
+                //             }
+                //         }
+                //         catch (Exception ex)
+                //         {
+                //             _logger.LogError(ex, "Error while adding the image path to the list.");
+                //         }
+                //     }
+                // }   
+                // await _context.SaveChangesAsync();
+
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "Brand", car.CarBrandId);
-            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "ModelName", car.CarModelId);
-            ViewData["CarTrimId"] = new SelectList(_context.CarTrim, "Id", "TrimName", car.CarTrimId);
-            return View(car);
+
         }
 
         // GET: Cars/Edit/5
@@ -199,8 +221,8 @@ namespace ExpressVoitures.Controllers
             var carModels = _context.CarModel ?? Enumerable.Empty<CarModel>();
             var carTrims = _context.CarTrim ?? Enumerable.Empty<CarTrim>();
 
-            ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "Brand", car.CarBrandId);
-            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "ModelName", car.CarModelId);
+            ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "CarBrandName", car.CarBrandId);
+            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "CarModelName", car.CarModelId);
             ViewData["CarTrimId"] = new SelectList(_context.CarTrim, "Id", "TrimName", car.CarTrimId);
             return View(car);
         }
@@ -251,7 +273,7 @@ namespace ExpressVoitures.Controllers
             _logger.LogInformation("GetModelsByBrand : Recherche des Models pour le modèle avec l'ID : " + brandId);
             var models = _context.CarModel
                 .Where(m => m.CarBrandId == brandId)
-                .Select(m => new { m.Id, m.ModelName })
+                .Select(m => new { m.Id, m.CarModelName })
                 .ToList();
             if (!models.Any())
             {
@@ -261,7 +283,7 @@ namespace ExpressVoitures.Controllers
             {
                 foreach (var model in models)
                 {
-                    _logger.LogInformation("Modeles trouvés Id : " + model.Id + " Nom : " + model.ModelName);
+                    _logger.LogInformation("Modeles trouvés Id : " + model.Id + " Nom : " + model.CarModelName);
                 }
             }
             return Json(models);
@@ -272,7 +294,7 @@ namespace ExpressVoitures.Controllers
             _logger.LogInformation("GetTrimsByModel : Recherche des finitions pour le modèle avec l'Id : " + modelId);
             var trims = _context.CarTrim
                 .Where(t => t.CarModelId == modelId)
-                .Select(t => new { t.Id, t.TrimName })
+                .Select(t => new { t.Id, t.CarTrimName })
                 .ToList();
 
             if (!trims.Any())
@@ -283,7 +305,7 @@ namespace ExpressVoitures.Controllers
             {
                 foreach (var trim in trims)
                 {
-                    _logger.LogInformation("Finitions trouvés Id : " + trim.Id + " Nom : " + trim.TrimName);
+                    _logger.LogInformation("Finitions trouvés Id : " + trim.Id + " Nom : " + trim.CarTrimName);
                 }
             }
 

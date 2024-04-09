@@ -12,7 +12,7 @@ namespace ExpressVoitures.Data
 
 
         [DisplayName("Finition")]
-        public string? TrimName { get; set; }
+        public string? CarTrimName { get; set; }
 
     }
 }

@@ -16,7 +16,7 @@
                 @Html.DisplayNameFor(model => model.CarBrand)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ModelName)
+                @Html.DisplayNameFor(model => model.CarModelName)
             </th>
             <th></th>
         </tr>
@@ -25,10 +25,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.CarBrand.Brand)
+                @Html.DisplayFor(modelItem => item.CarBrand.CarBrandName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ModelName)
+                    @Html.DisplayFor(modelItem => item.CarModelName)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

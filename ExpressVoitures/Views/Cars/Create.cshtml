@@ -1,4 +1,8 @@
-﻿@model ExpressVoitures.Data.Car
+﻿@using ExpressVoitures.Controllers
+@using ExpressVoitures.Models.Entities
+@using ExpressVoitures.Data 
+
+@model ExpressVoitures.Models.Entities.CarViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -130,7 +134,7 @@
                             carModelSelect.append($('<option>', 
                             {
                                 value: model.id,
-                                text: model.modelName
+                                text: model.carModelName
                             }));
                         });
                     
@@ -156,7 +160,7 @@
                         carTrimSelect.append($('<option>', 
                         {
                             value: trim.id,
-                            text: trim.trimName
+                            text: trim.carTrimName
                         }));
                     });
 
