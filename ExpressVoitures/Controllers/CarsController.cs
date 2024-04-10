@@ -125,7 +125,6 @@ namespace ExpressVoitures.Controllers
             var carTrimName = _context.CarTrim.FirstOrDefault(m => m.Id == carViewModel.CarTrimId)?.CarTrimName;
 
             var imagePaths = new List<string>();
-            var i = 1;
             if (carViewModel.Images != null)
             {
                 foreach (var image in carViewModel.Images)
@@ -133,7 +132,7 @@ namespace ExpressVoitures.Controllers
                     if (image != null && image.Length > 0)
                     {
                         var fileExtension = Path.GetExtension(image.FileName);
-                        var fileName = $"Img{i}{fileExtension}";
+                        var fileName = CreateUniqueFileName() + fileExtension;
                         var folderName = $"{carViewModel.Id}_{carBrandName}_{carModelName}_{carTrimName}";
                         var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", folderName);
                         if (!Directory.Exists(folderPath))
@@ -148,7 +147,6 @@ namespace ExpressVoitures.Controllers
                         }
 
                         imagePaths.Add(fullPath);
-                        i++;
                     }
                 }
             }
@@ -204,8 +202,6 @@ namespace ExpressVoitures.Controllers
 
                 return RedirectToAction(nameof(Index));
 
-                return RedirectToAction(nameof(Index));
-
             }
 
             var carBrands = _context.CarBrand ?? Enumerable.Empty<CarBrand>();
@@ -217,6 +213,56 @@ namespace ExpressVoitures.Controllers
             ViewData["CarTrimId"] = new SelectList(_context.CarTrim, "Id", "CarTrimeName", carViewModel.CarTrimId);
             return View(carViewModel);
         }
+
+
+        public string CreateUniqueFileName()
+        {
+            var timestamp = DateTimeOffset.Now.ToString("MMddHHmmss");
+            var guidPart = Guid.NewGuid().ToString().Substring(0, 8); // Utiliser seulement une partie du Guid pour la brièveté
+            return $"Img_{timestamp}_{guidPart}";
+        }
+
+        [HttpPost]
+        public IActionResult DeleteImage(int carId, string imagePath)
+        {
+            if (string.IsNullOrEmpty(imagePath) || carId <= 0)
+            {
+                return View("Error the parameters are invalid");
+            }
+
+            try
+            {
+                // Assuming imagePath is an absolute path to the image file
+                var fullPath = Path.GetFullPath(imagePath);
+
+                if (System.IO.File.Exists(fullPath))
+                {
+                    //Delete the image
+                    System.IO.File.Delete(fullPath);
+
+                    //Delete the image path from the database
+                    var carFromDb = _context.Car.Find(carId);
+                    if (carFromDb != null)
+                    {
+                        carFromDb.ImagePaths.Remove(imagePath);
+                        _context.Update(carFromDb);
+                        _context.SaveChanges();
+                    }
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                return View("Error while trying to delete the image");
+            }
+
+            // Redirect back to the edit page or wherever is appropriate after deletion
+            return RedirectToAction("Edit", new { id = carId });
+        }
+
 
         // GET: Cars/Delete/5
         public async Task<IActionResult> Delete(int? id)
