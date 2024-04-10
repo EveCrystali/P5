@@ -28,6 +28,9 @@
                 @Html.DisplayNameFor(model => model.PurchasePrice)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.CarRepairs)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.SellingPrice)
             </th>
             <th>
@@ -69,6 +72,24 @@
             <td>
                 @Html.DisplayFor(modelItem => item.PurchasePrice)
             </td>
+
+
+             <td>
+                @if (item.CarRepairs != null)
+                {
+                    foreach (var carRepair in item.CarRepairs)
+                    {
+                        @Html.DisplayFor(_ => carRepair.RepairCost)<br />
+                        @Html.DisplayFor(_ => carRepair.RepairDescription)<br />
+                    }
+                }
+                else
+                {
+                    <text>Pas de réparations</text>
+                }
+            </td>
+
+
             <td>
                 @Html.DisplayFor(modelItem => item.SellingPrice)
             </td>

@@ -1,6 +1,6 @@
 ﻿@using ExpressVoitures.Controllers
 @using ExpressVoitures.Models.Entities
-@using ExpressVoitures.Data 
+@using ExpressVoitures.Data
 
 @model ExpressVoitures.Models.Entities.CarViewModel
 
@@ -20,29 +20,37 @@
 
             <div class="form-group">
                 @Html.LabelFor(model => model.CarBrandId, "Car Brand", new { @class = "control-label" })
-                @Html.DropDownListFor(model => model.CarBrandId, (SelectList)ViewData["CarBrandId"], "Choose a Brand", new { id = "CarBrandId", @class = "form-control" })
+                @Html.DropDownListFor(model => model.CarBrandId, (SelectList)ViewData["CarBrandId"], "Choose a Brand",
+                         new { id = "CarBrandId", @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.CarBrandId)
                 <div class="col-md-4" style="display: flex; align-items: flex-end;">
-                    <button type="button" class="btn btn-primary btn-sm" onclick="location.href='@Url.Action("Create", "CarBrands")'" style="height: 75%; width: 75%;">Nouvelle Marque</button>
+                    <button type="button" class="btn btn-primary btn-sm"
+                        onclick="location.href='@Url.Action("Create", "CarBrands")'"
+                        style="height: 75%; width: 75%;">Nouvelle Marque</button>
                 </div>
             </div>
 
             <div class="form-group">
                 @Html.LabelFor(model => model.CarModelId, "Car Model", new { @class = "control-label" })
-                @Html.DropDownListFor(model => model.CarModelId, (SelectList)ViewData["CarModelId"], "Choose a Model", new { id = "CarModelId", @class = "form-control" })
+                @Html.DropDownListFor(model => model.CarModelId, (SelectList)ViewData["CarModelId"], "Choose a Model",
+                         new { id = "CarModelId", @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.CarModelId)
                 <div class="col-md-4" style="display: flex; align-items: flex-end;">
-                    <button type="button" class="btn btn-primary btn-sm" onclick="location.href='@Url.Action("Create", "CarModels")'" style="height: 75%; width: 75%;">Nouveau Modèle</button>
+                    <button type="button" class="btn btn-primary btn-sm"
+                        onclick="location.href='@Url.Action("Create", "CarModels")'"
+                        style="height: 75%; width: 75%;">Nouveau Modèle</button>
                 </div>
             </div>
 
-
             <div class="form-group">
                 @Html.LabelFor(model => model.CarTrimId, "Car Trim", new { @class = "control-label" })
-                @Html.DropDownListFor(model => model.CarTrimId, (SelectList)ViewData["CarTrimId"], "Choose a Finition", new { id = "CarTrimId", @class = "form-control" })
+                @Html.DropDownListFor(model => model.CarTrimId, (SelectList)ViewData["CarTrimId"], "Choose a Finition",
+                         new { id = "CarTrimId", @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.CarTrimId)
                 <div class="col-md-4" style="display: flex; align-items: flex-end;">
-                    <button type="button" class="btn btn-primary btn-sm" onclick="location.href='@Url.Action("Create", "CarTrims")'" style="height: 75%; width: 75%;">Nouvelle Finition</button>
+                    <button type="button" class="btn btn-primary btn-sm"
+                        onclick="location.href='@Url.Action("Create", "CarTrims")'"
+                        style="height: 75%; width: 75%;">Nouvelle Finition</button>
                 </div>
             </div>
 
@@ -61,46 +69,76 @@
                 <label asp-for="PurchasePrice" class="control-label"></label>
                 <input asp-for="PurchasePrice" class="form-control" />
                 <span asp-validation-for="PurchasePrice" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SellingPrice" class="control-label"></label>
-                <input asp-for="SellingPrice" class="form-control" />
-                <span asp-validation-for="SellingPrice" class="text-danger"></span>
-            </div>
+
+                <div id="repairs">
+                    <button type="button" id="addRepair" class="btn btn-primary">Ajouter une réparation</button>
+                    <h5>Réparations</h5>
+                    @for (int i = 0; i < Model.CarRepairs.Count; i++)
+
+                    {
+                        <div class="card mb-3">
+                            <div class="card-header">Réparation @(i + 1)</div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label asp-for="CarRepairs[i].RepairDescription" class="control-label">Description de la
+                                        réparation</label>
+                                    <input asp-for="CarRepairs[i].RepairDescription" class="form-control"
+                                        placeholder="Entrez la description" />
+                                    <span asp-validation-for="CarRepairs[i].RepairDescription" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="CarRepairs[i].RepairCost" class="control-label">Coût de
+                                        réparation(€)</label>
+                                    <input asp-for="CarRepairs[i].RepairCost" class="form-control"
+                                        placeholder="Entrez le coût" />
+                                    <span asp-validation-for="CarRepairs[i].RepairCost" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+
+
+                <div class="form-group">
+                    <label asp-for="SellingPrice" class="control-label"></label>
+                    <input asp-for="SellingPrice" class="form-control" />
+                    <span asp-validation-for="SellingPrice" class="text-danger"></span>
+                </div>
                 <div class="form-group form-check">
-                <label asp-for="IsAvailable" class="form-check-label"></label>
-                <input class="form-check-input" type="checkbox" asp-for="IsAvailable" /> 
+                    <label asp-for="IsAvailable" class="form-check-label"></label>
+                    <input class="form-check-input" type="checkbox" asp-for="IsAvailable" />
 
-            </div>
-            <div class="form-group">
-                <label asp-for="PurchaseDate" class="control-label"></label>
-                <input asp-for="PurchaseDate" class="form-control" />
-                <span asp-validation-for="PurchaseDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateOfAvailability" class="control-label"></label>
-                <input asp-for="DateOfAvailability" class="form-control" />
-                <span asp-validation-for="DateOfAvailability" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SaleDate" class="control-label"></label>
-                <input asp-for="SaleDate" class="form-control" />
-                <span asp-validation-for="SaleDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PurchaseDate" class="control-label"></label>
+                    <input asp-for="PurchaseDate" class="form-control" />
+                    <span asp-validation-for="PurchaseDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DateOfAvailability" class="control-label"></label>
+                    <input asp-for="DateOfAvailability" class="form-control" />
+                    <span asp-validation-for="DateOfAvailability" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SaleDate" class="control-label"></label>
+                    <input asp-for="SaleDate" class="form-control" />
+                    <span asp-validation-for="SaleDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
 
-            <div class ="form-group">
-                <label for="Images">Upload Images</label>
-                <input type="file" name="Images" multiple />
-            </div>
+                <div class="form-group">
+                    <label for="Images">Upload Images</label>
+                    <input type="file" name="Images" multiple />
+                </div>
 
-            <div class="from-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
+                <div class="from-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
         </form>
     </div>
 </div>
@@ -110,63 +148,83 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
     <script>
-    jQuery(document).ready(function () 
-    {
-        var carBrandSelect = $("#CarBrandId");
-        var carModelSelect = $("#CarModelId");
-        var carTrimSelect = $("#CarTrimId");
+        jQuery(document).ready(function () {
+            var carBrandSelect = $("#CarBrandId");
+            var carModelSelect = $("#CarModelId");
+            var carTrimSelect = $("#CarTrimId");
 
-        carBrandSelect.change(function () 
-        {
-            var carBrandId = $(this).val();
-            $.ajax(
-            {
-                url: '@Url.Action("GetModelsByBrand", "Cars")',
-                type: "GET",
-                data: { brandId: carBrandId },
-                success: function (models) {
-                        console.log(models);
-                        carModelSelect.empty().append('<option value="0" disabled selected>Select a model</option>');
-                        $.each(models, function (index, model) 
-                        {
-                            carModelSelect.append($('<option>', 
-                            {
-                                value: model.id,
-                                text: model.carModelName
-                            }));
-                        });
-                    
-                }
-            });
-        });
-
-        carModelSelect.change(function () 
-        {
-            var carModelId = $(this).val();
-            console.log("Modèle sélectionné val(): ", carModelId);
-            $.ajax(
-            {
-                url: '@Url.Action("GetTrimsByModel", "Cars")',
-                type: "GET",
-                data: { modelId: carModelId },
-                success: function (trims) 
-                {
-                    console.log(trims);
-                    carTrimSelect.empty().append('<option value="0" disabled selected>Select a trim</option>');
-                    $.each(trims, function (index, trim) 
+            carBrandSelect.change(function () {
+                var carBrandId = $(this).val();
+                $.ajax(
                     {
-                        carTrimSelect.append($('<option>', 
-                        {
-                            value: trim.id,
-                            text: trim.carTrimName
-                        }));
-                    });
+                        url: '@Url.Action("GetModelsByBrand", "Cars")',
+                        type: "GET",
+                        data: { brandId: carBrandId },
+                        success: function (models) {
+                            console.log(models);
+                            carModelSelect.empty().append('<option value="0" disabled selected>Select a model</option>');
+                            $.each(models, function (index, model) {
+                                carModelSelect.append($('<option>',
+                                    {
+                                        value: model.id,
+                                        text: model.carModelName
+                                    }));
+                            });
 
-                }
+                        }
+                    });
             });
+
+            carModelSelect.change(function () {
+                var carModelId = $(this).val();
+                console.log("Modèle sélectionné val(): ", carModelId);
+                $.ajax(
+                    {
+                        url: '@Url.Action("GetTrimsByModel", "Cars")',
+                        type: "GET",
+                        data: { modelId: carModelId },
+                        success: function (trims) {
+                            console.log(trims);
+                            carTrimSelect.empty().append('<option value="0" disabled selected>Select a trim</option>');
+                            $.each(trims, function (index, trim) {
+                                carTrimSelect.append($('<option>',
+                                    {
+                                        value: trim.id,
+                                        text: trim.carTrimName
+                                    }));
+                            });
+
+                        }
+                    });
+            });
+
+
+            document.getElementById('addRepair').addEventListener('click', function () {
+                var repairsDiv = document.getElementById('repairs');
+                var repairIndex = repairsDiv.getElementsByClassName('card').length;
+                var newRepairDiv = document.createElement('div');
+                newRepairDiv.className = 'card mb-3';
+                newRepairDiv.innerHTML = `
+            <div class="card-header">Réparation ${repairIndex + 1}</div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label>Description de la réparation</label>
+                    <input class="form-control" name="CarRepairs[${repairIndex}].RepairDescription" placeholder="Entrez la description" />
+                </div>
+                <div class="form-group">
+                    <label>Coût de réparation(€)</label>
+                    <input class="form-control" name="CarRepairs[${repairIndex}].RepairCost" placeholder="Entrez le coût" />
+                </div>
+            </div>`;
+                repairsDiv.appendChild(newRepairDiv);
+            });
+
+
+
         });
-    });
-</script>
+    </script>
 }
