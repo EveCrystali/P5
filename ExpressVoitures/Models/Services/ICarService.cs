@@ -13,14 +13,14 @@ namespace ExpressVoitures.Models.Services
 
         CarViewModel GetCarViewModelById(int id);
 
-        Car MapToCarEntity(CarViewModel carViewModel);
+        Task<Car> MapToCarEntityAsync(CarViewModel carViewModel);
 
         List<CarViewModel> MapToCarViewModel(IEnumerable<Car> carEntities);
         Task<Car> GetCar(int id);
 
         Task<IList<Car>> GetCar();
 
-        void SaveCar(CarViewModel car);
+        Task SaveCar(CarViewModel car);
 
         void DeleteCar(int id);
     }
