@@ -36,7 +36,7 @@ namespace ExpressVoitures.Models.Services
                     CarTrimId = car.CarTrimId,
                     CarTrim = car.CarTrim,
                     CarTrimName = car.CarTrim?.CarTrimName ?? "Version inconnue",
-                    CarRepairs = car.CarRepairs,
+                    CarRepairs = car.CarRepairs ?? new List<CarRepair>(),
                     Year = car.Year,
                     Mileage = car.Mileage,
                     PurchasePrice = car.PurchasePrice,
@@ -97,31 +97,61 @@ namespace ExpressVoitures.Models.Services
             return cars;
         }
 
-        public Car MapToCarEntity(CarViewModel carViewModel)
+        private async Task<bool> CarExistAsync(int id)
         {
-            Car carEntity = new()
-            {
-                CarBrandId = carViewModel.CarBrandId,
-                CarModelId = carViewModel.CarModelId, 
-                CarTrimId = carViewModel.CarTrimId,
-                CarRepairs = carViewModel.CarRepairs,
-                Year = carViewModel.Year,
-                Mileage = carViewModel.Mileage,
-                PurchasePrice = carViewModel.PurchasePrice,
-                SellingPrice = carViewModel.SellingPrice,
-                IsAvailable = carViewModel.IsAvailable,
-                PurchaseDate = carViewModel.PurchaseDate,
-                DateOfAvailability = carViewModel.DateOfAvailability,
-                SaleDate = carViewModel.SaleDate,
-                Description = carViewModel.Description,
-                ImagePaths = carViewModel.ImagePaths
-            };
-            return carEntity;
+            var existingCar = await GetCar(id);
+            return existingCar != null;
         }
 
-        public void SaveCar(CarViewModel car)
+        public async Task<Car> MapToCarEntityAsync(CarViewModel carViewModel)
         {
-            var carToAdd = MapToCarEntity(car);
+            if (await CarExistAsync(carViewModel.Id))
+            {
+                var existingCar = await GetCar(carViewModel.Id);
+                existingCar.CarBrandId = carViewModel.CarBrandId;
+                existingCar.CarModelId = carViewModel.CarModelId;
+                existingCar.CarTrimId = carViewModel.CarTrimId;
+                existingCar.CarRepairs = carViewModel.CarRepairs;
+                existingCar.Year = carViewModel.Year;
+                existingCar.Mileage = carViewModel.Mileage;
+                existingCar.PurchasePrice = carViewModel.PurchasePrice;
+                existingCar.SellingPrice = carViewModel.SellingPrice;
+                existingCar.IsAvailable = carViewModel.IsAvailable;
+                existingCar.PurchaseDate = carViewModel.PurchaseDate;
+                existingCar.DateOfAvailability = carViewModel.DateOfAvailability;
+                existingCar.SaleDate = carViewModel.SaleDate;
+                existingCar.Description = carViewModel.Description;
+                existingCar.ImagePaths = carViewModel.ImagePaths;
+
+                return existingCar;
+            }
+            else
+            {
+                Car carEntity = new()
+                {
+                    CarBrandId = carViewModel.CarBrandId,
+                    CarModelId = carViewModel.CarModelId,
+                    CarTrimId = carViewModel.CarTrimId,
+                    CarRepairs = carViewModel.CarRepairs,
+                    Year = carViewModel.Year,
+                    Mileage = carViewModel.Mileage,
+                    PurchasePrice = carViewModel.PurchasePrice,
+                    SellingPrice = carViewModel.SellingPrice,
+                    IsAvailable = carViewModel.IsAvailable,
+                    PurchaseDate = carViewModel.PurchaseDate,
+                    DateOfAvailability = carViewModel.DateOfAvailability,
+                    SaleDate = carViewModel.SaleDate,
+                    Description = carViewModel.Description,
+                    ImagePaths = carViewModel.ImagePaths
+                };
+                return carEntity;
+            }
+        }
+
+
+        public async Task SaveCar(CarViewModel car)
+        {
+            var carToAdd = await MapToCarEntityAsync(car);
             _carRepository.SaveCar(carToAdd);
         }
 

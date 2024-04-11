@@ -108,7 +108,7 @@ namespace ExpressVoitures.Controllers
             {
                 _logger.LogInformation("ModelState is valid");
 
-                Car car = _carService.MapToCarEntity(carViewModel);
+                Car car = await _carService.MapToCarEntityAsync(carViewModel);
                 _context.Car.Add(car);
                 // Sauvegarde les changements de manière asynchrone pour s'assurer que l'ID de Car est généré
                 await _context.SaveChangesAsync();
@@ -187,7 +187,7 @@ namespace ExpressVoitures.Controllers
                 return NotFound();
             }
 
-            var car = await _context.Car.FindAsync(id);
+            var car = await _context.Car.Include(car => car.CarRepairs).FirstAsync(c => c.Id == id);
             var carViewModel = _carService.GetCarViewModelById(car.Id);
 
             ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "CarBrandName");
@@ -202,6 +202,10 @@ namespace ExpressVoitures.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, CarViewModel carViewModel)
         {
+            for (int i = 0; i < carViewModel.CarRepairs.Count; i += 1)
+            {
+                ModelState.Remove($"CarRepairs[{i}].Car");
+            }
             if (id != carViewModel.Id)
             {
                 return NotFound();
@@ -217,12 +221,15 @@ namespace ExpressVoitures.Controllers
                     return NotFound();
                 }
 
-                await UploadCarImages(carViewModel);
-                _context.Update(carFromDb);
+                Car carUpdated = await _carService.MapToCarEntityAsync(carViewModel);
+
+
+                var newImagePaths = await UploadCarImages(carViewModel);
+                carFromDb.ImagePaths = newImagePaths;
+
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
-
             }
 
             var carBrands = _context.CarBrand ?? Enumerable.Empty<CarBrand>();
@@ -231,7 +238,7 @@ namespace ExpressVoitures.Controllers
 
             ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "CarBrandName", carViewModel.CarBrandId);
             ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "CarModelName", carViewModel.CarModelId);
-            ViewData["CarTrimId"] = new SelectList(_context.CarTrim, "Id", "CarTrimeName", carViewModel.CarTrimId);
+            ViewData["CarTrimId"] = new SelectList(_context.CarTrim, "Id", "CarTrimName", carViewModel.CarTrimId);
             return View(carViewModel);
         }
 

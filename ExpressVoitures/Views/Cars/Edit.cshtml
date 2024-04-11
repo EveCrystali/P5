@@ -1,6 +1,6 @@
 ﻿@using ExpressVoitures.Controllers
 @using ExpressVoitures.Models.Entities
-@using ExpressVoitures.Data 
+@using ExpressVoitures.Data
 
 @model ExpressVoitures.Models.Entities.CarViewModel
 
@@ -15,7 +15,7 @@
 <div class="row">
     <div class="col-md-4">
         <form method="post" enctype="multipart/form-data" asp-controller="Cars" asp-action="Edit">
-                 <input type="hidden" asp-for="Id" /> 
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="CarBrandId" class="control-label"></label>
                 <select asp-for="CarBrandId" class="form-control" asp-items="ViewBag.CarBrandId"></select>
@@ -46,14 +46,63 @@
                 <input asp-for="PurchasePrice" class="form-control" />
                 <span asp-validation-for="PurchasePrice" class="text-danger"></span>
             </div>
+
+            <div id="repairs">
+
+                <h5>Réparations</h5>
+                <button type="button" id="addRepair" class="btn btn-primary">Ajouter une réparation</button>
+                @if (Model.CarRepairs != null)
+                {
+                    @for (int i = 0; i < Model.CarRepairs.Count; i++)
+                    {
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                Réparation @(i + 1)
+                                <button type="button" class="close deleteRepair" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label asp-for="CarRepairs[i].RepairDescription" class="control-label">Description de la
+                                        réparation</label>
+                                    <input asp-for="CarRepairs[i].RepairDescription"
+                                        value="@Model.CarRepairs[i].RepairDescription" class="form-control"
+                                        placeholder="Entrez la description" />
+                                    <span asp-validation-for="CarRepairs[i].RepairDescription" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="CarRepairs[i].RepairCost" class="control-label">Coût de
+                                        réparation(€)</label>
+                                    <input asp-for="CarRepairs[i].RepairCost" value="@Model.CarRepairs[i].RepairCost"
+                                        class="form-control" placeholder="Entrez le coût" />
+                                    <span asp-validation-for="CarRepairs[i].RepairCost" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+
             <div class="form-group">
                 <label asp-for="SellingPrice" class="control-label"></label>
-                <input asp-for="SellingPrice" class="form-control" />
+                <input type="text" value="@(Model.PurchasePrice + Model.CarRepairs?.Sum(r => r.RepairCost??0) ?? 0)"
+                    class="form-control" readonly />
+                <a href="#" class="btn btn-link calc-selling-price">Modifier le prix</a>
                 <span asp-validation-for="SellingPrice" class="text-danger"></span>
+            </div>
+            <div class="d-none selling-price-editor">
+                <div class="form-group">
+                    <label asp-for="SellingPrice" class="control-label"></label>
+                    <input asp-for="SellingPrice" class="form-control" />
+                    <span asp-validation-for="SellingPrice" class="text-danger"></span>
+                </div>
+                <a href="#" class="btn btn-link cancel-selling-price-editor">Annuler</a>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsAvailable" /> @Html.DisplayNameFor(model => model.IsAvailable)
+                    <input class="form-check-input" asp-for="IsAvailable" /> @Html.DisplayNameFor(model =>
+                    model.IsAvailable)
                 </label>
             </div>
             <div class="form-group">
@@ -83,20 +132,24 @@
             }
 
             <ul>
-                @foreach (var imagePath in Model.ImagePaths)
+                @if (Model.ImagePaths != null)
                 {
-                    <li id="image-@imageCounter">
-                        @imagePath
-                        <button type="button" class="btn btn-danger delete-image" data-imagepath="@imagePath" data-imageid="@imageCounter">Delete</button>
-                    </li>
-                    imageCounter++;
+                    @foreach (var imagePath in Model.ImagePaths)
+                    {
+                        <li id="image-@imageCounter">
+                            @imagePath
+                            <button type="button" class="btn btn-danger delete-image" data-imagepath="@imagePath"
+                                data-imageid="@imageCounter">Delete</button>
+                        </li>
+                        imageCounter++;
+                    }
                 }
             </ul>
-            <div class ="form-group">
+            <div class="form-group">
                 <label for="Images">Upload New Images</label>
                 <input type="file" name="Images" multiple />
-            </div>  
-            
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -109,7 +162,9 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
     <script>
         jQuery(document).ready(function () {
             var carBrandSelect = $("#CarBrandId");
@@ -161,7 +216,7 @@
                     });
             });
 
-             $('.delete-image').click(function() {
+            $('.delete-image').click(function () {
                 var button = $(this);
                 var imagePath = button.data('imagepath');
                 var imageId = button.data('imageid');
@@ -174,13 +229,103 @@
                         carId: carId,
                         imagePath: imagePath
                     },
-                    success: function(result) {
+                    success: function (result) {
                         $('#image-' + imageId).remove();
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         console.error('Error deleting image');
                     }
                 });
+            });
+
+            $('#addRepair').click(function () {
+                var repairsDiv = $('#repairs');
+                var repairIndex = repairsDiv.find('.card').length;
+                var newRepairDiv = $('<div>').addClass('card mb-3');
+                newRepairDiv.html(`
+                                                                                    <div class="card-header">
+                                                                                        Réparation ${repairIndex + 1}
+                                                                                        <button type="button" class="close deleteRepair" aria-label="Close">
+                                                                                            <span aria-hidden="true">&times;</span>
+                                                                                        </button>
+                                                                                    </div>
+                                                                                    <div class="card-body">
+                                                                                        <div class="form-group">
+                                                                                            <label>Description de la réparation</label>
+                                                                                            <input class="form-control" name="CarRepairs[${repairIndex}].RepairDescription" placeholder="Entrez la description" />
+                                                                                        </div>
+                                                                                        <div class="form-group">
+                                                                                            <label>Coût de réparation(€)</label>
+                                                                                            <input class="form-control" name="CarRepairs[${repairIndex}].RepairCost" placeholder="Entrez le coût" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                `);
+                repairsDiv.append(newRepairDiv);
+                $('#deleteRepair').show();
+            });
+
+            $('#repairs').on('click', '.deleteRepair', function () {
+                $(this).closest('.card').remove();
+                updateRepairsIndex();
+                if ($('#repairs').children('.card').length === 0) {
+                    $('#deleteRepair').hide();
+                }
+            });
+
+            function updateRepairsIndex() {
+                $('#repairs .card').each(function (index) {
+                    $(this).find('.card-header').text(`Réparation ${index + 1}`);
+                    $(this).find('input').each(function () {
+                        var name = $(this).attr('name');
+                        if (name) {
+                            name = name.replace(/\[\d+\]/, `[${index}]`);
+                            $(this).attr('name', name);
+                        }
+                    });
+                });
+            }
+
+
+            function calculateSellingPrice() {
+                var purchasePrice = parseFloat($('#PurchasePrice').val()) || 0;
+                var repairCosts = 0;
+                $('input[name^="CarRepairs["]').each(function () {
+                    if ($(this).attr('name').endsWith('].RepairCost')) {
+                        repairCosts += parseFloat($(this).val()) || 0;
+                    }
+                });
+                var sellingPrice = purchasePrice + repairCosts + 500;
+                $('#SellingPrice').val(sellingPrice.toFixed(2));
+                $('.calc-selling-price').prev('input').val(sellingPrice.toFixed(2)); // Met à jour l'affichage du prix de vente calculé
+            }
+
+            $('#PurchasePrice').on('change keyup', function () { calculateSellingPrice(); });
+
+            // Déclenche manuellement l'événement pour calculer le prix de vente au chargement de la page
+            calculateSellingPrice();
+
+            $('#PurchasePrice, #repairs').on('change keyup', 'input', function () {
+                calculateSellingPrice();
+            });
+
+            $('#addRepair').click(function () {
+                calculateSellingPrice(); // Recalcule le prix de vente après l'ajout d'une réparation
+            });
+
+            $('#repairs').on('click', '.deleteRepair', function () {
+                calculateSellingPrice(); // Recalcule le prix de vente après la suppression d'une réparation
+            });
+
+            $('.calc-selling-price').click(function (e) {
+                e.preventDefault();
+                $(this).hide().closest('.form-group').next('.selling-price-editor').removeClass('d-none');
+                // Annule le calcul automatique et permet l'édition manuelle
+            });
+
+            $('.cancel-selling-price-editor').click(function (e) {
+                e.preventDefault();
+                $(this).closest('.selling-price-editor').addClass('d-none').prev('.form-group').find('.calc-selling-price').show();
+                calculateSellingPrice(); // Optionnel : Recalcule et réaffiche le prix de vente calculé lorsque l'édition est annulée
             });
 
         });
