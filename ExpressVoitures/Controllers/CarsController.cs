@@ -32,7 +32,7 @@ namespace ExpressVoitures.Controllers
         // GET: Cars
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Car.Include(c => c.CarBrand).Include(c => c.CarModel).Include(c => c.CarTrim);
+            var applicationDbContext = _context.Car.Include(c => c.CarBrand).Include(c => c.CarModel).Include(c => c.CarTrim).Include(c => c.CarRepairs);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -48,6 +48,7 @@ namespace ExpressVoitures.Controllers
                 .Include(c => c.CarBrand)
                 .Include(c => c.CarModel)
                 .Include(c => c.CarTrim)
+                .Include(c => c.CarRepairs)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (car == null)
             {
@@ -63,14 +64,30 @@ namespace ExpressVoitures.Controllers
             ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "CarBrandName");
             ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "CarModelName");
             ViewData["CarTrimId"] = new SelectList(_context.CarTrim, "Id", "CarTrimName");
-            return View();
+
+            var carViewModel = new CarViewModel
+            {
+                CarBrand = new CarBrand(),
+                CarModel = new CarModel(),
+                CarTrim = new CarTrim(),
+
+                CarRepairs = new List<CarRepair>()
+                // Initialiser d'autres propriétés si nécessaire...
+            };
+
+            return View(carViewModel);
         }
+
 
         // POST: Cars/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CarViewModel carViewModel)
         {
+            for (int i = 0; i < carViewModel.CarRepairs.Count; i += 1)
+            {
+                ModelState.Remove($"CarRepairs[{i}].Car");
+            }
 
             if (!ModelState.IsValid)
             {
@@ -79,12 +96,12 @@ namespace ExpressVoitures.Controllers
                 {
                     foreach (ModelError error in modelState.Errors)
                     {
-                        Console.WriteLine(error.ErrorMessage);
+                        _logger.LogInformation(error.ErrorMessage);
                     }
                 }
-                ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "CarBrandName", carViewModel.CarBrand.Id);
-                ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "CarModelName", carViewModel.CarModel.Id);
-                ViewData["CarTrimId"] = new SelectList(_context.CarTrim, "Id", "CarTrimName", carViewModel.CarTrim.Id);
+                ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "CarBrandName", carViewModel.CarBrandId);
+                ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "CarModelName", carViewModel.CarModelId);
+                ViewData["CarTrimId"] = new SelectList(_context.CarTrim, "Id", "CarTrimName", carViewModel.CarTrimId);
                 return View(carViewModel);
             }
             else
@@ -93,15 +110,19 @@ namespace ExpressVoitures.Controllers
 
                 Car car = _carService.MapToCarEntity(carViewModel);
                 _context.Car.Add(car);
-                _context.SaveChanges();
+                // Sauvegarde les changements de manière asynchrone pour s'assurer que l'ID de Car est généré
+                await _context.SaveChangesAsync();
+
                 carViewModel.Id = car.Id;
                 var newImagePaths = await UploadCarImages(carViewModel);
                 car.ImagePaths = newImagePaths;
+
+                // Sauvegarde les changements finaux de manière asynchrone
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
-            }
 
+            }
         }
 
         private async Task<List<string>> UploadCarImages(CarViewModel carViewModel)

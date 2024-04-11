@@ -101,9 +101,9 @@ namespace ExpressVoitures.Models.Services
         {
             Car carEntity = new()
             {
-                CarBrandId = carViewModel.CarBrandId.Value, // Utiliser .Value car c'est un int?
-                CarModelId = carViewModel.CarModelId.Value, // Utiliser .Value car c'est un int?
-                CarTrimId = carViewModel.CarTrimId.Value,
+                CarBrandId = carViewModel.CarBrandId,
+                CarModelId = carViewModel.CarModelId, 
+                CarTrimId = carViewModel.CarTrimId,
                 CarRepairs = carViewModel.CarRepairs,
                 Year = carViewModel.Year,
                 Mileage = carViewModel.Mileage,

@@ -12,10 +12,12 @@ namespace ExpressVoitures.Data
 
         public Car Car { get; set; }
 
+        [Required]
         [DisplayName("Coût de la réparation")]
         [Range(0.01, Double.MaxValue, ErrorMessage = "La valeur doit être positive.")]
         public decimal? RepairCost { get; set; }
 
+        [Required]
         [DisplayName("Description de la réparation")]
         public string? RepairDescription { get; set; }
     }
