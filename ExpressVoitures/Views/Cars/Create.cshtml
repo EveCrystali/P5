@@ -77,7 +77,12 @@
 
                     {
                         <div class="card mb-3">
-                            <div class="card-header">Réparation @(i + 1)</div>
+                            <div class="card-header">
+                                Réparation @(i + 1)
+                                <button type="button" class="close deleteRepair" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
                             <div class="card-body">
                                 <div class="form-group">
                                     <label asp-for="CarRepairs[i].RepairDescription" class="control-label">Description de la
@@ -97,8 +102,6 @@
                         </div>
                     }
                 </div>
-
-
 
                 <div class="form-group">
                     <label asp-for="SellingPrice" class="control-label"></label>
@@ -202,29 +205,52 @@
                     });
             });
 
-
-            document.getElementById('addRepair').addEventListener('click', function () {
-                var repairsDiv = document.getElementById('repairs');
-                var repairIndex = repairsDiv.getElementsByClassName('card').length;
-                var newRepairDiv = document.createElement('div');
-                newRepairDiv.className = 'card mb-3';
-                newRepairDiv.innerHTML = `
-            <div class="card-header">Réparation ${repairIndex + 1}</div>
-            <div class="card-body">
-                <div class="form-group">
-                    <label>Description de la réparation</label>
-                    <input class="form-control" name="CarRepairs[${repairIndex}].RepairDescription" placeholder="Entrez la description" />
-                </div>
-                <div class="form-group">
-                    <label>Coût de réparation(€)</label>
-                    <input class="form-control" name="CarRepairs[${repairIndex}].RepairCost" placeholder="Entrez le coût" />
-                </div>
-            </div>`;
-                repairsDiv.appendChild(newRepairDiv);
+            $('#addRepair').click(function () {
+                var repairsDiv = $('#repairs');
+                var repairIndex = repairsDiv.find('.card').length;
+                var newRepairDiv = $('<div>').addClass('card mb-3');
+                newRepairDiv.html(`
+                        <div class="card-header">
+                            Réparation ${repairIndex + 1}
+                            <button type="button" class="close deleteRepair" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Description de la réparation</label>
+                                <input class="form-control" name="CarRepairs[${repairIndex}].RepairDescription" placeholder="Entrez la description" />
+                            </div>
+                            <div class="form-group">
+                                <label>Coût de réparation(€)</label>
+                                <input class="form-control" name="CarRepairs[${repairIndex}].RepairCost" placeholder="Entrez le coût" />
+                            </div>
+                        </div>
+                    `);
+                repairsDiv.append(newRepairDiv);
+                $('#deleteRepair').show();
             });
 
+            $('#repairs').on('click', '.deleteRepair', function () {
+                $(this).closest('.card').remove();
+                updateRepairsIndex();
+                if ($('#repairs').children('.card').length === 0) {
+                    $('#deleteRepair').hide();
+                }
+            });
 
-
+            function updateRepairsIndex() {
+                $('#repairs .card').each(function (index) {
+                    $(this).find('.card-header').text(`Réparation ${index + 1}`);
+                    $(this).find('input').each(function () {
+                        var name = $(this).attr('name');
+                        if (name) {
+                            name = name.replace(/\[\d+\]/, `[${index}]`);
+                            $(this).attr('name', name);
+                        }
+                    });
+                });
+            }
         });
     </script>
 }

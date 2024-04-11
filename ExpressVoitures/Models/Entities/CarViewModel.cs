@@ -24,7 +24,7 @@ namespace ExpressVoitures.Models.Entities
 
         public string? CarTrimName { get; set; }
 
-        public List<CarRepair> CarRepairs { get; set; } = new List<CarRepair>();
+        public List<CarRepair> CarRepairs { get; set; } = [];
 
         [DisplayName("Année")]
         [Required(ErrorMessage = "L'année du véhicule est obligatoire.")]

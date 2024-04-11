@@ -84,8 +84,10 @@ namespace ExpressVoitures.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CarViewModel carViewModel)
         {
-
-            ModelState.Remove($"CarRepairs[0].Car");
+            for (int i = 0; i < carViewModel.CarRepairs.Count; i += 1)
+            {
+                ModelState.Remove($"CarRepairs[{i}].Car");
+            }
 
             if (!ModelState.IsValid)
             {
@@ -110,27 +112,6 @@ namespace ExpressVoitures.Controllers
                 _context.Car.Add(car);
                 // Sauvegarde les changements de manière asynchrone pour s'assurer que l'ID de Car est généré
                 await _context.SaveChangesAsync();
-
-                //Création d'une liste temporaire pour contourner le problème de foreach et du contenu de CarRepairs qui changent au cours de la boucle
-                // List<CarRepair> carRepairs = new List<CarRepair>();
-
-                // foreach (var carRepairViewModel in carViewModel.CarRepairs)
-                // {
-                //     CarRepair carRepairEntity = new CarRepair
-                //     {
-                //         RepairDescription = carRepairViewModel.RepairDescription,
-                //         RepairCost = carRepairViewModel.RepairCost,
-                //         CarId = car.Id
-                //     };
-                //     // Ajoute chaque CarRepair à la liste temporaire
-                //     carRepairs.Add(carRepairEntity);
-                // }
-
-                // Ajoute toutes les entités CarRepair à la base de données en une seule fois
-                // _context.CarRepair.AddRange(carRepairs);
-                // Sauvegarde les changements de manière asynchrone
-                // await _context.SaveChangesAsync();
-
 
                 carViewModel.Id = car.Id;
                 var newImagePaths = await UploadCarImages(carViewModel);
