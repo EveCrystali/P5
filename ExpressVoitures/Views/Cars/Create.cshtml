@@ -105,9 +105,20 @@
 
                 <div class="form-group">
                     <label asp-for="SellingPrice" class="control-label"></label>
-                    <input asp-for="SellingPrice" class="form-control" />
+                    <input type="text" value="@(Model.PurchasePrice + Model.CarRepairs.Sum(r => r.RepairCost))"
+                        class="form-control" readonly />
+                    <a href="#" class="btn btn-link calc-selling-price">Modifier le prix</a>
                     <span asp-validation-for="SellingPrice" class="text-danger"></span>
                 </div>
+                <div class="d-none selling-price-editor">
+                    <div class="form-group">
+                        <label asp-for="SellingPrice" class="control-label"></label>
+                        <input asp-for="SellingPrice" class="form-control" />
+                        <span asp-validation-for="SellingPrice" class="text-danger"></span>
+                    </div>
+                    <a href="#" class="btn btn-link cancel-selling-price-editor">Annuler</a>
+                </div>
+
                 <div class="form-group form-check">
                     <label asp-for="IsAvailable" class="form-check-label"></label>
                     <input class="form-check-input" type="checkbox" asp-for="IsAvailable" />
@@ -210,23 +221,23 @@
                 var repairIndex = repairsDiv.find('.card').length;
                 var newRepairDiv = $('<div>').addClass('card mb-3');
                 newRepairDiv.html(`
-                        <div class="card-header">
-                            Réparation ${repairIndex + 1}
-                            <button type="button" class="close deleteRepair" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label>Description de la réparation</label>
-                                <input class="form-control" name="CarRepairs[${repairIndex}].RepairDescription" placeholder="Entrez la description" />
-                            </div>
-                            <div class="form-group">
-                                <label>Coût de réparation(€)</label>
-                                <input class="form-control" name="CarRepairs[${repairIndex}].RepairCost" placeholder="Entrez le coût" />
-                            </div>
-                        </div>
-                    `);
+                                    <div class="card-header">
+                                        Réparation ${repairIndex + 1}
+                                        <button type="button" class="close deleteRepair" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label>Description de la réparation</label>
+                                            <input class="form-control" name="CarRepairs[${repairIndex}].RepairDescription" placeholder="Entrez la description" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Coût de réparation(€)</label>
+                                            <input class="form-control" name="CarRepairs[${repairIndex}].RepairCost" placeholder="Entrez le coût" />
+                                        </div>
+                                    </div>
+                                `);
                 repairsDiv.append(newRepairDiv);
                 $('#deleteRepair').show();
             });
@@ -251,6 +262,49 @@
                     });
                 });
             }
+
+            function calculateSellingPrice() {
+                var purchasePrice = parseFloat($('#PurchasePrice').val()) || 0;
+                var repairCosts = 0;
+                $('input[name^="CarRepairs["]').each(function () {
+                    if ($(this).attr('name').endsWith('].RepairCost')) {
+                        repairCosts += parseFloat($(this).val()) || 0;
+                    }
+                });
+                var sellingPrice = purchasePrice + repairCosts + 500;
+                $('#SellingPrice').val(sellingPrice.toFixed(2));
+                $('.calc-selling-price').prev('input').val(sellingPrice.toFixed(2)); // Met à jour l'affichage du prix de vente calculé
+            }
+
+            $('#PurchasePrice').on('change keyup', function () { calculateSellingPrice(); });
+
+            // Déclenche manuellement l'événement pour calculer le prix de vente au chargement de la page
+            calculateSellingPrice();
+
+            $('#PurchasePrice, #repairs').on('change keyup', 'input', function () {
+                calculateSellingPrice();
+            });
+
+            $('#addRepair').click(function () {
+                calculateSellingPrice(); // Recalcule le prix de vente après l'ajout d'une réparation
+            });
+
+            $('#repairs').on('click', '.deleteRepair', function () {
+                calculateSellingPrice(); // Recalcule le prix de vente après la suppression d'une réparation
+            });
+
+            $('.calc-selling-price').click(function (e) {
+                e.preventDefault();
+                $(this).hide().closest('.form-group').next('.selling-price-editor').removeClass('d-none');
+                // Annule le calcul automatique et permet l'édition manuelle
+            });
+
+            $('.cancel-selling-price-editor').click(function (e) {
+                e.preventDefault();
+                $(this).closest('.selling-price-editor').addClass('d-none').prev('.form-group').find('.calc-selling-price').show();
+                calculateSellingPrice(); // Optionnel : Recalcule et réaffiche le prix de vente calculé lorsque l'édition est annulée
+            });
         });
+
     </script>
 }
