@@ -61,6 +61,7 @@ namespace ExpressVoitures.Models.Entities
         [DisplayName("Chemin des images")]
         public List<String>? ImagePaths { get; set; }
 
+        [DisplayName("Images")]
         public List<IFormFile>? Images { get; set; }
     }
 }

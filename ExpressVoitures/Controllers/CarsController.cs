@@ -156,6 +156,8 @@ namespace ExpressVoitures.Controllers
                         var fileName = CreateUniqueFileName() + fileExtension;
                         var folderName = $"{carViewModel.Id}_{carBrandName}_{carModelName}_{carTrimName}";
                         var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", folderName);
+                        var folderRelativePath = Path.Combine("images", folderName);
+                        var fileRelativePath = Path.Combine(folderRelativePath, fileName);
                         if (!Directory.Exists(folderPath))
                         {
                             Directory.CreateDirectory(folderPath);
@@ -167,7 +169,7 @@ namespace ExpressVoitures.Controllers
                             await image.CopyToAsync(stream);
                         }
 
-                        imagePaths.Add(fullPath);
+                        imagePaths.Add(fileRelativePath);
                     }
                 }
             }
@@ -260,8 +262,9 @@ namespace ExpressVoitures.Controllers
 
             try
             {
-                // Assuming imagePath is an absolute path to the image file
-                var fullPath = Path.GetFullPath(imagePath);
+                // Assuming imagePath is a relative path to the image file
+                var relativePath = imagePath;
+                var fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", relativePath);
 
                 if (System.IO.File.Exists(fullPath))
                 {
@@ -272,11 +275,12 @@ namespace ExpressVoitures.Controllers
                     var carFromDb = _context.Car.Find(carId);
                     if (carFromDb != null)
                     {
-                        carFromDb.ImagePaths.Remove(imagePath);
+                        carFromDb.ImagePaths.Remove(relativePath);
                         _context.Update(carFromDb);
                         _context.SaveChanges();
                     }
                 }
+
                 else
                 {
                     return NotFound();
@@ -318,16 +322,28 @@ namespace ExpressVoitures.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var car = await _context.Car.FindAsync(id);
-            if (car != null)
+            var carFromDb = await _context.Car.FindAsync(id);
+            if (carFromDb != null)
             {
-                _context.Car.Remove(car);
+                var carBrandName = _context.CarBrand.FirstOrDefault(b => b.Id == carFromDb.CarBrandId)?.CarBrandName;
+                var carModelName = _context.CarModel.FirstOrDefault(m => m.Id == carFromDb.CarModelId)?.CarModelName;
+                var carTrimName = _context.CarTrim.FirstOrDefault(m => m.Id == carFromDb.CarTrimId)?.CarTrimName;
+                if (carBrandName != null && carModelName != null && carTrimName != null)
+                {
+                    var folderName = $"{carFromDb.Id}_{carBrandName}_{carModelName}_{carTrimName}";
+                    var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", folderName);
+
+                    if (Directory.Exists(folderPath))
+                    {
+                        Directory.Delete(folderPath, true);
+                    }
+                }
+                _context.Car.Remove(carFromDb);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
         private bool CarExists(int id)
         {
             return _context.Car.Any(e => e.Id == id);

@@ -9,7 +9,7 @@ namespace ExpressVoitures.Models.Services
 
         List<CarViewModel> GetAllCarsViewModel();
 
-        Car GetCarById(int id);
+        Task<Car> GetCarById(int id);
 
         CarViewModel GetCarViewModelById(int id);
 
