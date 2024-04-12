@@ -65,7 +65,7 @@ namespace ExpressVoitures.Models.Services
             return carViewModels.Find(c => c.Id == id);
         }
 
-        public Car GetCarById(int id)
+        public async Task<Car> GetCarById(int id)
         {
             List<Car> cars = GetAllCars().ToList();
             return cars.Find(c => c.Id == id);
@@ -87,7 +87,7 @@ namespace ExpressVoitures.Models.Services
 
         public async Task<Car> GetCar(int id)
         {
-            var cars = await _carRepository.GetCarById(id);
+            var cars = await GetCarById(id);
             return cars;
         }
 
