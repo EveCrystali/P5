@@ -1,6 +1,7 @@
 ﻿using ExpressVoitures.Data;
 using ExpressVoitures.Models.Entities;
 using ExpressVoitures.Models.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExpressVoitures.Models.Services
 {
@@ -36,6 +37,9 @@ namespace ExpressVoitures.Models.Services
                     CarTrimId = car.CarTrimId,
                     CarTrim = car.CarTrim,
                     CarTrimName = car.CarTrim?.CarTrimName ?? "Version inconnue",
+                    CarMotorId = car.CarMotorId,
+                    CarMotor = car.CarMotor,
+                    CarMotorName = car.CarMotor?.CarMotorName ?? "Moteur inconnu",
                     CarRepairs = car.CarRepairs ?? new List<CarRepair>(),
                     Year = car.Year,
                     Mileage = car.Mileage,
@@ -46,10 +50,9 @@ namespace ExpressVoitures.Models.Services
                     DateOfAvailability = car.DateOfAvailability,
                     SaleDate = car.SaleDate,
                     Description = car.Description,
-                    ImagePaths = car.ImagePaths
+                    ImagePaths = car.ImagePaths,
                 });
             }
-
             return carsViewModel;
         }
 
@@ -83,8 +86,6 @@ namespace ExpressVoitures.Models.Services
             return carBrands.Find(c => c.Id == id);
         }
 
-
-
         public async Task<Car> GetCar(int id)
         {
             var cars = await GetCarById(id);
@@ -111,6 +112,29 @@ namespace ExpressVoitures.Models.Services
                 existingCar.CarBrandId = carViewModel.CarBrandId;
                 existingCar.CarModelId = carViewModel.CarModelId;
                 existingCar.CarTrimId = carViewModel.CarTrimId;
+                existingCar.CarMotorId = carViewModel.CarMotorId;
+
+                existingCar.CarRepairs = new List<CarRepair>();
+                foreach (var repairViewModel in carViewModel.CarRepairs)
+                {
+                    var repair = existingCar.CarRepairs.FirstOrDefault(r => r.Id == repairViewModel.Id);
+                    if (repair != null)
+                    {
+                        // Update existing repair details
+                        repair.RepairCost = repairViewModel.RepairCost;
+                        repair.RepairDescription = repairViewModel.RepairDescription;
+                    }
+                    else
+                    {
+                        // Add as new repair if not found
+                        existingCar.CarRepairs.Add(new CarRepair
+                        {
+                            CarId = existingCar.Id,
+                            RepairCost = repairViewModel.RepairCost,
+                            RepairDescription = repairViewModel.RepairDescription
+                        });
+                    }
+                }
                 existingCar.CarRepairs = carViewModel.CarRepairs;
                 existingCar.Year = carViewModel.Year;
                 existingCar.Mileage = carViewModel.Mileage;
@@ -121,7 +145,7 @@ namespace ExpressVoitures.Models.Services
                 existingCar.DateOfAvailability = carViewModel.DateOfAvailability;
                 existingCar.SaleDate = carViewModel.SaleDate;
                 existingCar.Description = carViewModel.Description;
-                existingCar.ImagePaths = carViewModel.ImagePaths;
+                //existingCar.ImagePaths = carViewModel.ImagePaths;
 
                 return existingCar;
             }
@@ -132,6 +156,7 @@ namespace ExpressVoitures.Models.Services
                     CarBrandId = carViewModel.CarBrandId,
                     CarModelId = carViewModel.CarModelId,
                     CarTrimId = carViewModel.CarTrimId,
+                    CarMotorId = carViewModel.CarMotorId,
                     CarRepairs = carViewModel.CarRepairs,
                     Year = carViewModel.Year,
                     Mileage = carViewModel.Mileage,
@@ -147,7 +172,6 @@ namespace ExpressVoitures.Models.Services
                 return carEntity;
             }
         }
-
 
         public async Task SaveCar(CarViewModel car)
         {

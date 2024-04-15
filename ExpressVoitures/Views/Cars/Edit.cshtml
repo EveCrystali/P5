@@ -27,6 +27,11 @@
                 <span asp-validation-for="CarModelId" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="CarMotorId" class="control-label"></label>
+                <select asp-for="CarMotorId" class="form-control" asp-items="ViewBag.CarMotorId"></select>
+                <span asp-validation-for="CarMotorId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="CarTrimId" class="control-label"></label>
                 <select asp-for="CarTrimId" class="form-control" asp-items="ViewBag.CarTrimId"></select>
                 <span asp-validation-for="CarTrimId" class="text-danger"></span>
@@ -47,8 +52,8 @@
                 <span asp-validation-for="PurchasePrice" class="text-danger"></span>
             </div>
 
+            <!-- CAR REPAIRS -->
             <div id="repairs">
-
                 <h5>Réparations</h5>
                 <button type="button" id="addRepair" class="btn btn-primary">Ajouter une réparation</button>
                 @if (Model.CarRepairs != null)
@@ -64,30 +69,39 @@
                             </div>
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label asp-for="CarRepairs[i].RepairDescription" class="control-label">Description de la
-                                        réparation</label>
+                                    <label asp-for="CarRepairs[i].RepairDescription" class="control-label">
+                                        Description de la
+                                        réparation
+                                    </label>
                                     <input asp-for="CarRepairs[i].RepairDescription"
-                                        value="@Model.CarRepairs[i].RepairDescription" class="form-control"
-                                        placeholder="Entrez la description" />
-                                    <span asp-validation-for="CarRepairs[i].RepairDescription" class="text-danger"></span>
+                                           value="@Model.CarRepairs[i].RepairDescription" class="form-control"
+                                           placeholder="Entrez la description" />
                                 </div>
                                 <div class="form-group">
-                                    <label asp-for="CarRepairs[i].RepairCost" class="control-label">Coût de
-                                        réparation(€)</label>
+                                    <label asp-for="CarRepairs[i].RepairCost" class="control-label">
+                                        Coût de
+                                        réparation(€)
+                                    </label>
                                     <input asp-for="CarRepairs[i].RepairCost" value="@Model.CarRepairs[i].RepairCost"
-                                        class="form-control" placeholder="Entrez le coût" />
-                                    <span asp-validation-for="CarRepairs[i].RepairCost" class="text-danger"></span>
+                                           class="form-control" placeholder="Entrez le coût" />
                                 </div>
                             </div>
                         </div>
                     }
                 }
+                @for (int i = 0; i < Model.CarRepairs.Count; i++)
+                {
+                    <span asp-validation-for="CarRepairs[i].RepairDescription" class="text-danger"></span>
+                    <span asp-validation-for="CarRepairs[i].RepairCost" class="text-danger"></span>
+                }
             </div>
+
+            <!-- CAR REPAIRS -->
 
             <div class="form-group">
                 <label asp-for="SellingPrice" class="control-label"></label>
                 <input type="text" value="@(Model.PurchasePrice + Model.CarRepairs?.Sum(r => r.RepairCost??0) ?? 0)"
-                    class="form-control" readonly />
+                       class="form-control" readonly />
                 <a href="#" class="btn btn-link calc-selling-price">Modifier le prix</a>
                 <span asp-validation-for="SellingPrice" class="text-danger"></span>
             </div>
@@ -139,7 +153,9 @@
                         <li id="image-@imageCounter">
                             @imagePath
                             <button type="button" class="btn btn-danger delete-image" data-imagepath="@imagePath"
-                                data-imageid="@imageCounter">Delete</button>
+                                    data-imageid="@imageCounter">
+                                Delete
+                            </button>
                         </li>
                         imageCounter++;
                     }
@@ -170,6 +186,7 @@
             var carBrandSelect = $("#CarBrandId");
             var carModelSelect = $("#CarModelId");
             var carTrimSelect = $("#CarTrimId");
+            var carMotorSelect = $("#CarMotorId");
 
             carBrandSelect.change(function () {
                 var carBrandId = $(this).val();
@@ -216,6 +233,29 @@
                     });
             });
 
+            carModelSelect.change(function () {
+                var carModelId = $(this).val();
+                console.log("Modèle sélectionné val(): ", carModelId);
+                $.ajax(
+                    {
+                        url: '@Url.Action("GetMotorsByModel", "Cars")',
+                        type: "GET",
+                        data: { modelId: carModelId },
+                        success: function (motors) {
+                            console.log(motors);
+                            carMotorSelect.empty().append('<option value="0" disabled selected>Select a motor</option>');
+                            $.each(motors, function (index, motor) {
+                                carMotorSelect.append($('<option>',
+                                    {
+                                        value: motor.id,
+                                        text: motor.carMotorName
+                                    }));
+                            });
+
+                        }
+                    });
+            });
+
             $('.delete-image').click(function () {
                 var button = $(this);
                 var imagePath = button.data('imagepath');
@@ -243,39 +283,41 @@
                 var repairIndex = repairsDiv.find('.card').length;
                 var newRepairDiv = $('<div>').addClass('card mb-3');
                 newRepairDiv.html(`
-                                                                                    <div class="card-header">
-                                                                                        Réparation ${repairIndex + 1}
-                                                                                        <button type="button" class="close deleteRepair" aria-label="Close">
-                                                                                            <span aria-hidden="true">&times;</span>
-                                                                                        </button>
-                                                                                    </div>
-                                                                                    <div class="card-body">
-                                                                                        <div class="form-group">
-                                                                                            <label>Description de la réparation</label>
-                                                                                            <input class="form-control" name="CarRepairs[${repairIndex}].RepairDescription" placeholder="Entrez la description" />
-                                                                                        </div>
-                                                                                        <div class="form-group">
-                                                                                            <label>Coût de réparation(€)</label>
-                                                                                            <input class="form-control" name="CarRepairs[${repairIndex}].RepairCost" placeholder="Entrez le coût" />
-                                                                                        </div>
-                                                                                    </div>
-                                                                                `);
+                                <div class="card-header">
+                                    Réparation ${repairIndex + 1}
+                                    <button type="button" class="close deleteRepair" aria-label="Close">
+                                        <input type="hidden" name="CarRepairs[${repairIndex}].Id" value="${repairId}" />
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label>Description de la réparation</label>
+                                        <input class="form-control" name="CarRepairs[${repairIndex}].RepairDescription" placeholder="Entrez la description" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Coût de réparation(€)</label>
+                                        <input class="form-control" name="CarRepairs[${repairIndex}].RepairCost" placeholder="Entrez le coût" />
+                                    </div>
+                                </div>
+                            `);
                 repairsDiv.append(newRepairDiv);
                 $('#deleteRepair').show();
             });
 
             $('#repairs').on('click', '.deleteRepair', function () {
-                $(this).closest('.card').remove();
+                console.log("Before removal:", $('#repairs .card.mb-3').length);
+                $(this).closest('.card.mb-3').remove(); // Ensure only the closest .card.mb-3 is removed
+                console.log("After removal:", $('#repairs .card.mb-3').length);
                 updateRepairsIndex();
-                if ($('#repairs').children('.card').length === 0) {
-                    $('#deleteRepair').hide();
-                }
+                $('#repairs').hide().show(0); 
+
             });
 
             function updateRepairsIndex() {
                 $('#repairs .card').each(function (index) {
                     $(this).find('.card-header').text(`Réparation ${index + 1}`);
-                    $(this).find('input').each(function () {
+                    $(this).find('input, select').each(function () {  // Include <select> if any
                         var name = $(this).attr('name');
                         if (name) {
                             name = name.replace(/\[\d+\]/, `[${index}]`);
@@ -284,7 +326,6 @@
                     });
                 });
             }
-
 
             function calculateSellingPrice() {
                 var purchasePrice = parseFloat($('#PurchasePrice').val()) || 0;

@@ -14,6 +14,34 @@
 <p>
     <a asp-controller="Cars" asp-action="Create">Create New</a>
 </p>
+
+@foreach (CarViewModel carViewModel in Model) {
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Car Card -->
+        <div class="col-md-4">
+            <div class="card car-card">
+                @if (carViewModel.ImagePaths != null && carViewModel.ImagePaths.Count > 0)
+                @foreach (string imagePath in carViewModel.ImagePaths)
+                {
+                    <img src="~/@imagePath" class="card-img-top" alt="Car Image">
+                }      
+                <div class="card-body">
+                    <h5 class="card-title">@Html.DisplayFor(modelItem => carViewModel.CarBrandName)</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+}
+
+
+
+
+
 <table class="table">
     <thead>
         <tr>

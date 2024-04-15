@@ -48,7 +48,7 @@ namespace ExpressVoitures.Controllers
         // GET: CarModels/Create
         public IActionResult Create()
         {
-            ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "Brand");
+            ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "CarBrandName");
             return View();
         }
 
@@ -57,7 +57,7 @@ namespace ExpressVoitures.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CarBrandId,ModelName")] CarModel carModel)
+        public async Task<IActionResult> Create([Bind("Id,CarBrandId,CarModelName")] CarModel carModel)
         {
             if (!ModelState.IsValid)
             {
@@ -76,7 +76,7 @@ namespace ExpressVoitures.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "Brand", carModel.CarBrandId);
+            ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "CarBrandName", carModel.CarBrandId);
             return View(carModel);
         }
 

@@ -1,5 +1,4 @@
-﻿
-using ExpressVoitures.Data;
+﻿using ExpressVoitures.Data;
 using ExpressVoitures.Models.Entities;
 using ExpressVoitures.Models.Repositories;
 using ExpressVoitures.Models.Services;
@@ -28,7 +27,6 @@ namespace ExpressVoitures.Controllers
             _carRepository = carRepository;
         }
 
-
         // GET: Cars
         public async Task<IActionResult> Index()
         {
@@ -49,6 +47,7 @@ namespace ExpressVoitures.Controllers
                 .Include(c => c.CarModel)
                 .Include(c => c.CarTrim)
                 .Include(c => c.CarRepairs)
+                .Include(c => c.CarMotor)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (car == null)
             {
@@ -64,20 +63,19 @@ namespace ExpressVoitures.Controllers
             ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "CarBrandName");
             ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "CarModelName");
             ViewData["CarTrimId"] = new SelectList(_context.CarTrim, "Id", "CarTrimName");
+            ViewData["CarMotorId"] = new SelectList(_context.CarMotor, "Id", "CarMotorName");
 
             var carViewModel = new CarViewModel
             {
                 CarBrand = new CarBrand(),
                 CarModel = new CarModel(),
                 CarTrim = new CarTrim(),
-
+                CarMotor = new CarMotor(),
                 CarRepairs = new List<CarRepair>()
-                // Initialiser d'autres propriétés si nécessaire...
             };
 
             return View(carViewModel);
         }
-
 
         // POST: Cars/Create
         [HttpPost]
@@ -102,6 +100,7 @@ namespace ExpressVoitures.Controllers
                 ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "CarBrandName", carViewModel.CarBrandId);
                 ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "CarModelName", carViewModel.CarModelId);
                 ViewData["CarTrimId"] = new SelectList(_context.CarTrim, "Id", "CarTrimName", carViewModel.CarTrimId);
+                ViewData["CarMotorId"] = new SelectList(_context.CarMotor, "Id", "CarMotorName", carViewModel.CarMotorId);
                 return View(carViewModel);
             }
             else
@@ -121,7 +120,6 @@ namespace ExpressVoitures.Controllers
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
-
             }
         }
 
@@ -180,9 +178,8 @@ namespace ExpressVoitures.Controllers
             return imagePaths;
         }
 
-
         // GET: Cars/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
             if (id == null)
             {
@@ -190,11 +187,12 @@ namespace ExpressVoitures.Controllers
             }
 
             var car = await _context.Car.Include(car => car.CarRepairs).FirstAsync(c => c.Id == id);
-            var carViewModel = _carService.GetCarViewModelById(car.Id);
+            var carViewModel = _carService.GetCarViewModelById(id);
 
             ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "CarBrandName");
             ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "CarModelName");
             ViewData["CarTrimId"] = new SelectList(_context.CarTrim, "Id", "CarTrimName");
+            ViewData["CarMotorId"] = new SelectList(_context.CarMotor, "Id", "CarMotorName");
 
             return View(carViewModel);
         }
@@ -204,7 +202,7 @@ namespace ExpressVoitures.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, CarViewModel carViewModel)
         {
-            for (int i = 0; i < carViewModel.CarRepairs.Count; i += 1)
+            for (int i = 0; i < carViewModel.CarRepairs.Count; i++)
             {
                 ModelState.Remove($"CarRepairs[{i}].Car");
             }
@@ -222,12 +220,13 @@ namespace ExpressVoitures.Controllers
                 {
                     return NotFound();
                 }
+                // Delete all existingCar.CarRepair already in database concerning this car WIP
+                var carRepairsToDelete = _context.CarRepair.Where(r => r.CarId == carFromDb.Id);
+                _context.CarRepair.RemoveRange(carRepairsToDelete);
 
-                Car carUpdated = await _carService.MapToCarEntityAsync(carViewModel);
+                await _carService.MapToCarEntityAsync(carViewModel);
 
-
-                var newImagePaths = await UploadCarImages(carViewModel);
-                carFromDb.ImagePaths = newImagePaths;
+                await UploadCarImages(carViewModel);
 
                 await _context.SaveChangesAsync();
 
@@ -237,13 +236,14 @@ namespace ExpressVoitures.Controllers
             var carBrands = _context.CarBrand ?? Enumerable.Empty<CarBrand>();
             var carModels = _context.CarModel ?? Enumerable.Empty<CarModel>();
             var carTrims = _context.CarTrim ?? Enumerable.Empty<CarTrim>();
+            var carMotors = _context.CarMotor ?? Enumerable.Empty<CarMotor>();
 
             ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "CarBrandName", carViewModel.CarBrandId);
             ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "CarModelName", carViewModel.CarModelId);
             ViewData["CarTrimId"] = new SelectList(_context.CarTrim, "Id", "CarTrimName", carViewModel.CarTrimId);
+            ViewData["CarMotor"] = new SelectList(_context.CarMotor, "Id", "CarMotorName", carViewModel.CarMotorId);
             return View(carViewModel);
         }
-
 
         public string CreateUniqueFileName()
         {
@@ -280,7 +280,6 @@ namespace ExpressVoitures.Controllers
                         _context.SaveChanges();
                     }
                 }
-
                 else
                 {
                     return NotFound();
@@ -295,7 +294,6 @@ namespace ExpressVoitures.Controllers
             return RedirectToAction("Edit", new { id = carId });
         }
 
-
         // GET: Cars/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -308,6 +306,7 @@ namespace ExpressVoitures.Controllers
                 .Include(c => c.CarBrand)
                 .Include(c => c.CarModel)
                 .Include(c => c.CarTrim)
+                .Include(c => c.CarMotor)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (car == null)
             {
@@ -328,6 +327,7 @@ namespace ExpressVoitures.Controllers
                 var carBrandName = _context.CarBrand.FirstOrDefault(b => b.Id == carFromDb.CarBrandId)?.CarBrandName;
                 var carModelName = _context.CarModel.FirstOrDefault(m => m.Id == carFromDb.CarModelId)?.CarModelName;
                 var carTrimName = _context.CarTrim.FirstOrDefault(m => m.Id == carFromDb.CarTrimId)?.CarTrimName;
+
                 if (carBrandName != null && carModelName != null && carTrimName != null)
                 {
                     var folderName = $"{carFromDb.Id}_{carBrandName}_{carModelName}_{carTrimName}";
@@ -344,6 +344,7 @@ namespace ExpressVoitures.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
         private bool CarExists(int id)
         {
             return _context.Car.Any(e => e.Id == id);
@@ -391,6 +392,29 @@ namespace ExpressVoitures.Controllers
             }
 
             return Json(trims);
+        }
+
+        public IActionResult GetMotorsByModel(int modelId)
+        {
+            _logger.LogInformation("GetMotorsByModel : Searching for motors for the model with Id: " + modelId);
+            var motors = _context.CarMotor
+                .Where(m => m.CarModelId == modelId)
+                .Select(m => new { m.Id, m.CarMotorName })
+                .ToList();
+
+            if (!motors.Any())
+            {
+                _logger.LogInformation("No motors found for the model with Id: " + modelId);
+            }
+            else
+            {
+                foreach (var motor in motors)
+                {
+                    _logger.LogInformation("Motors found Id: " + motor.Id + " Name: " + motor.CarMotorName);
+                }
+            }
+
+            return Json(motors);
         }
     }
 }

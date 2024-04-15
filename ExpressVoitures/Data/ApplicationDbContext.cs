@@ -22,6 +22,8 @@ namespace ExpressVoitures.Data
 
         public DbSet<ExpressVoitures.Data.CarTrim> CarTrim { get; set; } = default!;
 
+        public DbSet<ExpressVoitures.Data.CarMotor> CarMotor { get; set; } = default!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -56,12 +58,16 @@ namespace ExpressVoitures.Data
                 .OnDelete(DeleteBehavior.Restrict); // ou DeleteBehavior.SetNull
 
             modelBuilder.Entity<Car>()
+                .HasOne(c => c.CarMotor)
+                .WithMany()
+                .HasForeignKey(c => c.CarMotorId)
+                .OnDelete(DeleteBehavior.Restrict); // ou DeleteBehavior.SetNull
+
+            modelBuilder.Entity<Car>()
                .HasOne(c => c.CarTrim)
                .WithMany()
                .HasForeignKey(c => c.CarTrimId)
                .OnDelete(DeleteBehavior.Restrict); // ou DeleteBehavior.SetNull
-
         }
-
     }
 }

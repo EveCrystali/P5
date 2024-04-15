@@ -47,7 +47,7 @@ namespace ExpressVoitures.Controllers
         // GET: CarTrims/Create
         public IActionResult Create()
         {
-            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "ModelName");
+            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "CarModelName");
             return View();
         }
 
@@ -56,7 +56,7 @@ namespace ExpressVoitures.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CarModelId,TrimName")] CarTrim carTrim)
+        public async Task<IActionResult> Create([Bind("Id,CarModelId,CarTrimName")] CarTrim carTrim)
         {
             if (ModelState.IsValid)
             {
@@ -64,7 +64,7 @@ namespace ExpressVoitures.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "ModelName", carTrim.CarModelId);
+            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "CarModelName", carTrim.CarModelId);
             return View(carTrim);
         }
 
@@ -81,7 +81,7 @@ namespace ExpressVoitures.Controllers
             {
                 return NotFound();
             }
-            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "ModelName", carTrim.CarModelId);
+            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "CarModelName", carTrim.CarModelId);
             return View(carTrim);
         }
 
@@ -117,7 +117,7 @@ namespace ExpressVoitures.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "ModelName", carTrim.CarModelId);
+            ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "CarModelName", carTrim.CarModelId);
             return View(carTrim);
         }
 
