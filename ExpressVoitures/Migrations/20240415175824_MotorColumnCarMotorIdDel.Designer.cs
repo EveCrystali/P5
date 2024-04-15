@@ -9,18 +9,18 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace ExpressVoitures.Data.Migrations
+namespace ExpressVoitures.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240409092946_CarTrimNameColumn")]
-    partial class CarTrimNameColumn
+    [Migration("20240415175824_MotorColumnCarMotorIdDel")]
+    partial class MotorColumnCarMotorIdDel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.3")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -37,6 +37,9 @@ namespace ExpressVoitures.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("CarModelId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CarMotorId")
                         .HasColumnType("int");
 
                     b.Property<int>("CarTrimId")
@@ -82,6 +85,8 @@ namespace ExpressVoitures.Data.Migrations
 
                     b.HasIndex("CarModelId");
 
+                    b.HasIndex("CarMotorId");
+
                     b.HasIndex("CarTrimId");
 
                     b.ToTable("Car");
@@ -94,6 +99,9 @@ namespace ExpressVoitures.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CarBrandId")
+                        .HasColumnType("int");
 
                     b.Property<string>("CarBrandName")
                         .IsRequired()
@@ -115,6 +123,9 @@ namespace ExpressVoitures.Data.Migrations
                     b.Property<int>("CarBrandId")
                         .HasColumnType("int");
 
+                    b.Property<int>("CarModelId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CarModelName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -124,6 +135,27 @@ namespace ExpressVoitures.Data.Migrations
                     b.HasIndex("CarBrandId");
 
                     b.ToTable("CarModel");
+                });
+
+            modelBuilder.Entity("ExpressVoitures.Data.CarMotor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CarModelId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CarMotorName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarModelId");
+
+                    b.ToTable("CarMotor");
                 });
 
             modelBuilder.Entity("ExpressVoitures.Data.CarRepair", b =>
@@ -138,10 +170,12 @@ namespace ExpressVoitures.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal?>("RepairCost")
+                        .IsRequired()
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("RepairDescription")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -388,6 +422,12 @@ namespace ExpressVoitures.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("ExpressVoitures.Data.CarMotor", "CarMotor")
+                        .WithMany()
+                        .HasForeignKey("CarMotorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("ExpressVoitures.Data.CarTrim", "CarTrim")
                         .WithMany()
                         .HasForeignKey("CarTrimId")
@@ -397,6 +437,8 @@ namespace ExpressVoitures.Data.Migrations
                     b.Navigation("CarBrand");
 
                     b.Navigation("CarModel");
+
+                    b.Navigation("CarMotor");
 
                     b.Navigation("CarTrim");
                 });
@@ -410,6 +452,17 @@ namespace ExpressVoitures.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("CarBrand");
+                });
+
+            modelBuilder.Entity("ExpressVoitures.Data.CarMotor", b =>
+                {
+                    b.HasOne("ExpressVoitures.Data.CarModel", "CarModel")
+                        .WithMany("Motors")
+                        .HasForeignKey("CarModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CarModel");
                 });
 
             modelBuilder.Entity("ExpressVoitures.Data.CarRepair", b =>
@@ -497,6 +550,8 @@ namespace ExpressVoitures.Data.Migrations
 
             modelBuilder.Entity("ExpressVoitures.Data.CarModel", b =>
                 {
+                    b.Navigation("Motors");
+
                     b.Navigation("Trims");
                 });
 #pragma warning restore 612, 618

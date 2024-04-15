@@ -1,4 +1,5 @@
 ﻿using ExpressVoitures.Models.Entities;
+using ExpressVoitures.Models.Repositories;
 using ExpressVoitures.Data;
 
 namespace ExpressVoitures.Models.Repositories

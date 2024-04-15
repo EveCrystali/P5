@@ -27,6 +27,11 @@
                 <span asp-validation-for="CarModelId" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="CarMotorId" class="control-label"></label>
+                <select asp-for="CarMotorId" class="form-control" asp-items="ViewBag.CarMotorId"></select>
+                <span asp-validation-for="CarMotorId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="CarTrimId" class="control-label"></label>
                 <select asp-for="CarTrimId" class="form-control" asp-items="ViewBag.CarTrimId"></select>
                 <span asp-validation-for="CarTrimId" class="text-danger"></span>
@@ -90,6 +95,7 @@
                     <span asp-validation-for="CarRepairs[i].RepairCost" class="text-danger"></span>
                 }
             </div>
+
             <!-- CAR REPAIRS -->
 
             <div class="form-group">
@@ -180,6 +186,7 @@
             var carBrandSelect = $("#CarBrandId");
             var carModelSelect = $("#CarModelId");
             var carTrimSelect = $("#CarTrimId");
+            var carMotorSelect = $("#CarMotorId");
 
             carBrandSelect.change(function () {
                 var carBrandId = $(this).val();
@@ -219,6 +226,29 @@
                                     {
                                         value: trim.id,
                                         text: trim.carTrimName
+                                    }));
+                            });
+
+                        }
+                    });
+            });
+
+            carModelSelect.change(function () {
+                var carModelId = $(this).val();
+                console.log("Modèle sélectionné val(): ", carModelId);
+                $.ajax(
+                    {
+                        url: '@Url.Action("GetMotorsByModel", "Cars")',
+                        type: "GET",
+                        data: { modelId: carModelId },
+                        success: function (motors) {
+                            console.log(motors);
+                            carMotorSelect.empty().append('<option value="0" disabled selected>Select a motor</option>');
+                            $.each(motors, function (index, motor) {
+                                carMotorSelect.append($('<option>',
+                                    {
+                                        value: motor.id,
+                                        text: motor.carMotorName
                                     }));
                             });
 

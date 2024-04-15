@@ -1,4 +1,5 @@
 ﻿using ExpressVoitures.Data;
+using ExpressVoitures.Models.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressVoitures.Models.Repositories
@@ -45,7 +46,6 @@ namespace ExpressVoitures.Models.Repositories
             }
         }
 
-
         public IEnumerable<CarModel> GetAllCarModels()
         {
             return _context.CarModel.ToList();
@@ -65,7 +65,6 @@ namespace ExpressVoitures.Models.Repositories
             }
         }
 
-
         public async Task<IList<Car>> GetCar()
         {
             var cars = await _context.Car.ToListAsync();
@@ -74,11 +73,22 @@ namespace ExpressVoitures.Models.Repositories
 
         public IEnumerable<Car> GetAllCars()
         {
-            IEnumerable<Car> carEntities = _context.Car
-                                                   .Include(c => c.CarBrand) // Eager loading for CarBrand
-                                                   .Include(c => c.CarModel) // Eager loading for CarModel
-                                                   .Include(c => c.CarTrim); // Eager loading for CarModel
-            return carEntities.ToList();
+            try
+            {
+                var carEntities = _context.Car
+                    .Include(c => c.CarBrand)
+                    .Include(c => c.CarModel)
+                    .Include(c => c.CarTrim)
+                    .Include(c => c.CarMotor)
+                    .ToList();
+
+                return carEntities;
+            }
+            catch (Exception ex)
+            {
+                // Log l'exception ou traitez-la selon le cas
+                return new List<Car>(); // Retourne une liste vide en cas d'exception
+            }
         }
 
         public void SaveCar(Car car)

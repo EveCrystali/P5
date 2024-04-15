@@ -10,10 +10,12 @@ namespace ExpressVoitures.Models.Entities
 
         public int CarBrandId { get; set; }
 
-        public int CarModelId { get; set; }
+
         public CarBrand? CarBrand { get; set; }
 
         public string? CarBrandName { get; set; }
+
+        public int CarModelId { get; set; }
 
         public CarModel? CarModel { get; set; }
 
@@ -24,10 +26,17 @@ namespace ExpressVoitures.Models.Entities
 
         public string? CarTrimName { get; set; }
 
+        public int CarMotorId { get; set; }
+
+        public CarMotor? CarMotor { get; set; }
+
+        public string? CarMotorName { get; set; }
+
         public List<CarRepair> CarRepairs { get; set; } = [];
 
         [DisplayName("Année")]
         [Required(ErrorMessage = "L'année du véhicule est obligatoire.")]
+        [Range(1990, 2024, ErrorMessage = "La valeur doit être comprise entre 1990 et 2024.")]
         public int? Year { get; set; }
 
         [DisplayName("Kilométrage")]

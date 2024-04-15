@@ -25,8 +25,10 @@
                 @Html.ValidationMessageFor(model => model.CarBrandId)
                 <div class="col-md-4" style="display: flex; align-items: flex-end;">
                     <button type="button" class="btn btn-primary btn-sm"
-                        onclick="location.href='@Url.Action("Create", "CarBrands")'"
-                        style="height: 75%; width: 75%;">Nouvelle Marque</button>
+                            onclick="location.href='@Url.Action("Create", "CarBrands")'"
+                            style="height: 75%; width: 75%;">
+                        Nouvelle Marque
+                    </button>
                 </div>
             </div>
 
@@ -37,8 +39,24 @@
                 @Html.ValidationMessageFor(model => model.CarModelId)
                 <div class="col-md-4" style="display: flex; align-items: flex-end;">
                     <button type="button" class="btn btn-primary btn-sm"
-                        onclick="location.href='@Url.Action("Create", "CarModels")'"
-                        style="height: 75%; width: 75%;">Nouveau Modèle</button>
+                            onclick="location.href='@Url.Action("Create", "CarModels")'"
+                            style="height: 75%; width: 75%;">
+                        Nouveau Modèle
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CarMotorId, "Car Motor", new { @class = "control-label" })
+                @Html.DropDownListFor(model => model.CarMotorId, (SelectList)ViewData["CarMotorId"], "Choose a Motor",
+                         new { id = "CarMotorId", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CarMotorId)
+                <div class="col-md-4" style="display: flex; align-items: flex-end;">
+                    <button type="button" class="btn btn-primary btn-sm"
+                            onclick="location.href='@Url.Action("Create", "CarMotors")'"
+                            style="height: 75%; width: 75%;">
+                        Nouveau Moteur
+                    </button>
                 </div>
             </div>
 
@@ -49,8 +67,10 @@
                 @Html.ValidationMessageFor(model => model.CarTrimId)
                 <div class="col-md-4" style="display: flex; align-items: flex-end;">
                     <button type="button" class="btn btn-primary btn-sm"
-                        onclick="location.href='@Url.Action("Create", "CarTrims")'"
-                        style="height: 75%; width: 75%;">Nouvelle Finition</button>
+                            onclick="location.href='@Url.Action("Create", "CarTrims")'"
+                            style="height: 75%; width: 75%;">
+                        Nouvelle Finition
+                    </button>
                 </div>
             </div>
 
@@ -70,89 +90,93 @@
                 <input asp-for="PurchasePrice" class="form-control" />
                 <span asp-validation-for="PurchasePrice" class="text-danger"></span>
             </div>
-                <div id="repairs">
-                    <button type="button" id="addRepair" class="btn btn-primary">Ajouter une réparation</button>
-                    <h5>Réparations</h5>
-                    @for (int i = 0; i < Model.CarRepairs.Count; i++)
+            <div id="repairs">
+                <button type="button" id="addRepair" class="btn btn-primary">Ajouter une réparation</button>
+                <h5>Réparations</h5>
+                @for (int i = 0; i < Model.CarRepairs.Count; i++)
 
-                    {
-                        <div class="card mb-3">
-                            <div class="card-header">
-                                Réparation @(i + 1)
-                                <button type="button" class="close deleteRepair" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+                {
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            Réparation @(i + 1)
+                            <button type="button" class="close deleteRepair" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label asp-for="CarRepairs[i].RepairDescription" class="control-label">
+                                    Description de la
+                                    réparation
+                                </label>
+                                <input asp-for="CarRepairs[i].RepairDescription" class="form-control"
+                                       placeholder="Entrez la description" />
+                                <span asp-validation-for="CarRepairs[i].RepairDescription" class="text-danger"></span>
                             </div>
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label asp-for="CarRepairs[i].RepairDescription" class="control-label">Description de la
-                                        réparation</label>
-                                    <input asp-for="CarRepairs[i].RepairDescription" class="form-control"
-                                        placeholder="Entrez la description" />
-                                    <span asp-validation-for="CarRepairs[i].RepairDescription" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="CarRepairs[i].RepairCost" class="control-label">Coût de
-                                        réparation(€)</label>
-                                    <input asp-for="CarRepairs[i].RepairCost" class="form-control"
-                                        placeholder="Entrez le coût" />
-                                    <span asp-validation-for="CarRepairs[i].RepairCost" class="text-danger"></span>
-                                </div>
+                            <div class="form-group">
+                                <label asp-for="CarRepairs[i].RepairCost" class="control-label">
+                                    Coût de
+                                    réparation(€)
+                                </label>
+                                <input asp-for="CarRepairs[i].RepairCost" class="form-control"
+                                       placeholder="Entrez le coût" />
+                                <span asp-validation-for="CarRepairs[i].RepairCost" class="text-danger"></span>
                             </div>
                         </div>
-                    }
-                </div>
+                    </div>
+                }
+            </div>
 
+            <div class="form-group">
+                <label asp-for="SellingPrice" class="control-label"></label>
+                <input type="text" value="@(Model.PurchasePrice + Model.CarRepairs.Sum(r => r.RepairCost))"
+                       class="form-control" readonly />
+                <a href="#" class="btn btn-link calc-selling-price">Modifier le prix</a>
+                <span asp-validation-for="SellingPrice" class="text-danger"></span>
+            </div>
+            <div class="d-none selling-price-editor">
                 <div class="form-group">
                     <label asp-for="SellingPrice" class="control-label"></label>
-                    <input type="text" value="@(Model.PurchasePrice + Model.CarRepairs.Sum(r => r.RepairCost))"
-                        class="form-control" readonly />
-                    <a href="#" class="btn btn-link calc-selling-price">Modifier le prix</a>
+                    <input asp-for="SellingPrice" class="form-control" />
                     <span asp-validation-for="SellingPrice" class="text-danger"></span>
                 </div>
-                <div class="d-none selling-price-editor">
-                    <div class="form-group">
-                        <label asp-for="SellingPrice" class="control-label"></label>
-                        <input asp-for="SellingPrice" class="form-control" />
-                        <span asp-validation-for="SellingPrice" class="text-danger"></span>
-                    </div>
-                    <a href="#" class="btn btn-link cancel-selling-price-editor">Annuler</a>
-                </div>
+                <a href="#" class="btn btn-link cancel-selling-price-editor">Annuler</a>
+            </div>
 
-                <div class="form-group form-check">
-                    <label asp-for="IsAvailable" class="form-check-label"></label>
-                    <input class="form-check-input" type="checkbox" asp-for="IsAvailable" />
+            <div class="form-group form-check">
+                <label asp-for="IsAvailable" class="form-check-label"></label>
+                <input class="form-check-input" type="checkbox" asp-for="IsAvailable" />
 
-                </div>
-                <div class="form-group">
-                    <label asp-for="PurchaseDate" class="control-label"></label>
-                    <input asp-for="PurchaseDate" class="form-control" />
-                    <span asp-validation-for="PurchaseDate" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="DateOfAvailability" class="control-label"></label>
-                    <input asp-for="DateOfAvailability" class="form-control" />
-                    <span asp-validation-for="DateOfAvailability" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="SaleDate" class="control-label"></label>
-                    <input asp-for="SaleDate" class="form-control" />
-                    <span asp-validation-for="SaleDate" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Description" class="control-label"></label>
-                    <input asp-for="Description" class="form-control" />
-                    <span asp-validation-for="Description" class="text-danger"></span>
-                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="PurchaseDate" class="control-label"></label>
+                <input asp-for="PurchaseDate" class="form-control" />
+                <span asp-validation-for="PurchaseDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateOfAvailability" class="control-label"></label>
+                <input asp-for="DateOfAvailability" class="form-control" />
+                <span asp-validation-for="DateOfAvailability" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SaleDate" class="control-label"></label>
+                <input asp-for="SaleDate" class="form-control" />
+                <span asp-validation-for="SaleDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
 
-                <div class="form-group">
-                    <label for="Images">Upload Images</label>
-                    <input type="file" name="Images" multiple />
-                </div>
+            <div class="form-group">
+                <label for="Images">Upload Images</label>
+                <input type="file" name="Images" multiple />
+            </div>
 
-                <div class="from-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
-                </div>
+            <div class="from-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
         </form>
     </div>
 </div>
@@ -170,6 +194,7 @@
             var carBrandSelect = $("#CarBrandId");
             var carModelSelect = $("#CarModelId");
             var carTrimSelect = $("#CarTrimId");
+            var carMotorSelect = $("#CarMotorId");
 
             carBrandSelect.change(function () {
                 var carBrandId = $(this).val();
@@ -213,7 +238,31 @@
                             });
 
                         }
-                    });
+                    }
+                );
+            });
+
+            carModelSelect.change(function () {
+                var carModelId = $(this).val();
+                console.log("Modèle sélectionné val(): ", carModelId);
+                $.ajax(
+                {
+                    url: '@Url.Action("GetMotorsByModel", "Cars")',
+                    type: "GET",
+                    data: { modelId: carModelId },
+                    success: function (motors) {
+                        console.log(motors);
+                        carMotorSelect.empty().append('<option value="0" disabled selected>Select a motor</option>');
+                        $.each(motors, function (index, motor) {
+                            carMotorSelect.append($('<option>',
+                                {
+                                    value: motor.id,
+                                    text: motor.carMotorName
+                                }));
+                        });
+
+                    }
+                });
             });
 
             $('#addRepair').click(function () {
@@ -221,23 +270,23 @@
                 var repairIndex = repairsDiv.find('.card').length;
                 var newRepairDiv = $('<div>').addClass('card mb-3');
                 newRepairDiv.html(`
-                                    <div class="card-header">
-                                        Réparation ${repairIndex + 1}
-                                        <button type="button" class="close deleteRepair" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="form-group">
-                                            <label>Description de la réparation</label>
-                                            <input class="form-control" name="CarRepairs[${repairIndex}].RepairDescription" placeholder="Entrez la description" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Coût de réparation(€)</label>
-                                            <input class="form-control" name="CarRepairs[${repairIndex}].RepairCost" placeholder="Entrez le coût" />
-                                        </div>
-                                    </div>
-                                `);
+                                            <div class="card-header">
+                                                Réparation ${repairIndex + 1}
+                                                <button type="button" class="close deleteRepair" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="form-group">
+                                                    <label>Description de la réparation</label>
+                                                    <input class="form-control" name="CarRepairs[${repairIndex}].RepairDescription" placeholder="Entrez la description" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Coût de réparation(€)</label>
+                                                    <input class="form-control" name="CarRepairs[${repairIndex}].RepairCost" placeholder="Entrez le coût" />
+                                                </div>
+                                            </div>
+                                        `);
                 repairsDiv.append(newRepairDiv);
                 $('#deleteRepair').show();
             });

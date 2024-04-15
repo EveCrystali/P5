@@ -21,6 +21,10 @@ namespace ExpressVoitures.Data
 
         public CarTrim? CarTrim { get; set; }
 
+        public int CarMotorId { get; set; }
+
+        public CarMotor? CarMotor { get; set; }
+
         public List<CarRepair>? CarRepairs { get; set; }
 
         [DisplayName("Année")]
@@ -57,7 +61,7 @@ namespace ExpressVoitures.Data
 
         [DisplayName("Chemin des images")]
         public List<String>? ImagePaths { get; set; }
-
+    
         [NotMapped]
         public List<IFormFile>? Images { get; set; }
     }
