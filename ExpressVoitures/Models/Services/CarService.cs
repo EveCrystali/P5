@@ -1,4 +1,5 @@
 ﻿using ExpressVoitures.Data;
+using ExpressVoitures.Data.Migrations;
 using ExpressVoitures.Models.Entities;
 using ExpressVoitures.Models.Repositories;
 
@@ -111,6 +112,31 @@ namespace ExpressVoitures.Models.Services
                 existingCar.CarBrandId = carViewModel.CarBrandId;
                 existingCar.CarModelId = carViewModel.CarModelId;
                 existingCar.CarTrimId = carViewModel.CarTrimId;
+                // existingCar.CarRepairs = carViewModel.CarRepairs;
+                existingCar.CarRepairs ??= new List<CarRepair>();
+                foreach (var repairViewModel in carViewModel.CarRepairs)
+                {
+                    var repair = existingCar.CarRepairs.FirstOrDefault(r => r.Id == repairViewModel.Id);
+                    if (repair != null)
+                    {
+                        // Update existing repair details
+                        repair.RepairCost = repairViewModel.RepairCost;
+                        repair.RepairDescription = repairViewModel.RepairDescription;
+                    }
+                    else
+                    {
+                        // Add as new repair if not found
+                        existingCar.CarRepairs.Add(new CarRepair
+                        {
+                            CarId = existingCar.Id,
+                            RepairCost = repairViewModel.RepairCost,
+                            RepairDescription = repairViewModel.RepairDescription
+                        });
+                    }
+                }
+
+                // existingCar.CarRepairs ??= new List<CarRepair>();
+                // if (existingCar.CarRepairs != null) {existingCar.CarRepairs.Clear();}
                 existingCar.CarRepairs = carViewModel.CarRepairs;
                 existingCar.Year = carViewModel.Year;
                 existingCar.Mileage = carViewModel.Mileage;
@@ -147,7 +173,6 @@ namespace ExpressVoitures.Models.Services
                 return carEntity;
             }
         }
-
 
         public async Task SaveCar(CarViewModel car)
         {
