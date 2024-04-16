@@ -5,10 +5,15 @@ html {
 @media (min-width: 768px) {
   html {
     font-size: 16px;
+    color: #081B32;
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
@@ -19,4 +24,76 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+
+.container-cars {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin: 0;
+  max-width: calc(100%-200px);
+}
+
+.container-cars > div {
+  width: calc(20% - 10px); /* 20% - largeur des margins entre les éléments */
+  margin: 5px;
+}
+
+.car-card {
+  padding: 8px; /* Ajoute un padding pour créer de l'espace autour de l'image */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  border-radius: 10px;
+  box-sizing: border-box; /* S'assurer que le padding et la bordure sont inclus dans la largeur/hauteur */
+  display: flex;
+  flex-direction: column;justify-content: space-between; /* Répartit l'espace verticalement */
+  height: auto; /* Ajuste la hauteur selon ta maquette */
+  padding: 5px; /* Pour l'espacement interne */
+  box-sizing: border-box; /* Inclut le padding dans la hauteur totale */
+}
+
+.car-card img {
+  width: 185px; /* Largeur fixe */
+  height: 185px; /* Hauteur fixe */
+  object-fit: contain;
+  border-radius: 9px;
+  border: 1px solid #d2d2d2;
+  display: block; /* Ceci garantit que l'image prend toute la largeur disponible */
+  margin: auto; /* Ceci centre l'image dans le bloc */
+  box-sizing: border-box;
+}
+
+.car-card h3 {
+  font-style: bold;
+  font-weight: 700;
+  font-size: 1.1rem;
+  line-height: 125%;
+  display: flex;
+  align-items: center;
+  color: #081B32;
+  margin: 0.5rem; /* Adjust margin to match Figma */
+}
+
+.car-price {
+  font-size: 1rem; /* Taille de police plus grande */
+  font-weight: bold; /* Police en gras */
+  color: #081B32; /* Mettre en couleur, par exemple un rouge pour le prix */
+  margin: 0.5rem 0; /* Espacement autour du titre du prix */
+  text-align: center; /* Centrer le titre dans la carte */
+
+  margin-top: auto;
+}
+
+.car-card p {
+  font-size: 0.9rem; /* Adjust font-size to match Figma */
+  color: #666; /* Adjust color to match Figma */
+  margin: 0 0.5em 0.5em; /* Adjust margin to match Figma */
+  line-height: 100%;
+  text-align: left;
+}
+
+/* Consider adding hover effects to match the Figma design */
+.car-card:hover {
+  transform: translateY(-5px); /* Example hover effect */
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
 }
