@@ -17,9 +17,11 @@
 <!-- Fin de A supprimer -->
 
 <div class="container-cars">
+   
     @foreach (CarViewModel carViewModel in Model)
     {
         <div class="car-card">
+            <a asp-controller="Cars" asp-action="Details" asp-route-id="@carViewModel.Id">
             @if (carViewModel.ImagePaths?.Count > 0)
             {
                 var carImagePath = carViewModel.ImagePaths.First();
@@ -41,7 +43,8 @@
                              carViewModel.DateOfAvailability)</span>
                 }
             </p>
-            <h2 class="car-price">@string.Format(new System.Globalization.CultureInfo("fr-FR"), "{0:N0}", carViewModel.SellingPrice) €</h2>
+            </a>
+            <h2 class="car-price-landing">@string.Format(new System.Globalization.CultureInfo("fr-FR"), "{0:N0}", carViewModel.SellingPrice) €</h2>
         </div>
     }
 </div>

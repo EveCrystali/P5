@@ -46,7 +46,8 @@ body {
   border-radius: 10px;
   box-sizing: border-box; /* S'assurer que le padding et la bordure sont inclus dans la largeur/hauteur */
   display: flex;
-  flex-direction: column;justify-content: space-between; /* Répartit l'espace verticalement */
+  flex-direction: column;
+  justify-content: space-between; /* Répartit l'espace verticalement */
   height: auto; /* Ajuste la hauteur selon ta maquette */
   padding: 5px; /* Pour l'espacement interne */
   box-sizing: border-box; /* Inclut le padding dans la hauteur totale */
@@ -74,13 +75,12 @@ body {
   margin: 0.5rem; /* Adjust margin to match Figma */
 }
 
-.car-price {
-  font-size: 1rem; /* Taille de police plus grande */
+.car-price-landing {
+  font-size: 1.5rem; /* Taille de police plus grande */
   font-weight: bold; /* Police en gras */
   color: #081B32; /* Mettre en couleur, par exemple un rouge pour le prix */
   margin: 0.5rem 0; /* Espacement autour du titre du prix */
   text-align: center; /* Centrer le titre dans la carte */
-
   margin-top: auto;
 }
 
@@ -92,8 +92,40 @@ body {
   text-align: left;
 }
 
-/* Consider adding hover effects to match the Figma design */
 .car-card:hover {
   transform: translateY(-5px); /* Example hover effect */
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+}
+
+.car-card a {
+  text-decoration: none; /* Enlève le soulignement */
+  color: inherit; /* Garde la couleur du texte héritée plutôt que la couleur par défaut des liens */
+}
+
+.car-card a:hover {
+  background-color: #060ea307; /* Ajoute un arrière-plan clair au survol */
+}
+
+
+/* --------DETAILS---------- */
+
+.carousel-thumbnails {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Espacement entre les vignettes */
+    max-height: 300px; /* Hauteur maximale avec défilement */
+    max-width: 200px;
+    overflow-y: auto; /* Défilement vertical si nécessaire */
+}
+
+.img-thumbnail {
+    width: 100%; /* Utiliser la largeur complète du conteneur */
+    cursor: pointer; /* Curseur cliquable */
+    border: none; /* Pas de bordure */
+    border-radius: 5px; /* Arrondir les coins */
+    margin-bottom: 5px; /* Espacement en bas de l'image */
+}
+.img-thumbnail:hover{
+transform: translateY(-3px); /* Example hover effect */
+box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }

@@ -35,26 +35,12 @@ namespace ExpressVoitures.Controllers
         }
 
         // GET: Cars/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var car = await _context.Car.FirstAsync(c => c.Id == id);
+            var carViewModel = _carService.GetCarViewModelById(id);
 
-            var car = await _context.Car
-                .Include(c => c.CarBrand)
-                .Include(c => c.CarModel)
-                .Include(c => c.CarTrim)
-                .Include(c => c.CarRepairs)
-                .Include(c => c.CarMotor)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (car == null)
-            {
-                return NotFound();
-            }
-
-            return View(car);
+            return View(carViewModel);
         }
 
         // GET: Cars/Create
