@@ -10,12 +10,12 @@
 <div class="container">
     <!-- Miniatures -->
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-2">
             <div class="carousel-thumbnails">
                 @if(Model.ImagePaths?.Count > 0)
                 @foreach (var imagePath in Model.ImagePaths)
                 {
-                    <img src="@Url.Content($"~/{imagePath}")" class="img-thumbnail" alt="Car Thumbnail" onclick="changeImage(this)" />
+                    <img src="@Url.Content($"~/{imagePath}")" class="img-thumbnail" alt="Car Thumbnail" onclick="changeImage(this)" style="width:100%"/>
                 }
                 @if (Model.ImagePaths?.Count <= 0)
                 {
@@ -24,37 +24,46 @@
             </div>
         </div>
         <!-- Image principale -->
-         <div class="col-md-6">
+         <div class="col-md-7">
             @if (Model.ImagePaths?.Count > 0)
             {
                 var carImagePath = Model.ImagePaths.First();
-                <img src="~/@carImagePath" class="card-img-top" alt="Car Image" id="mainImage" style="width:100%" />
+                
+                 <img src="@Url.Content($"~/{carImagePath}")" class="card-img-top" alt="Car Image" id="mainImage" onclick="openModal(this);" />
             }
             else
             {
-                <img src="~/Images/Img_Vignette_Default.jpg" class="card-img-top" alt="Car Image" id="mainImage" style="width:100%" />
+                <img src="~/Images/Img_Vignette_Default.jpg" class="card-img-top" alt="Car Image" id="mainImage"  />
             }
         </div>
-    </div>>
-</div>
-
-<!-- Informations -->
-    <!-- Informations -->
-    <div class="row">
-        <div class="col-md-12 car-info">
+        <!-- Informations -->
+        <div class="col-md-3 car-info">
             <h2>@Model.CarBrand.CarBrandName - @Model.CarModel.CarModelName</h2>
             <ul class="list-unstyled">
                 <li><strong>Finition :</strong> @Model.CarTrim.CarTrimName</li>
                 <li><strong>Motorisation :</strong> @Model.CarMotor.CarMotorName</li>
                 <li><strong>Kilométrage :</strong> @Model.Mileage km</li>
                 <li><strong>Année :</strong> @Model.Year</li>
-                <li><strong>Disponible le :</strong> @Model.DateOfAvailability</li>
+                <li><div class="car-info-available">Disponible le : @Model.DateOfAvailability<div class="car-info-available"></li>
             </ul>
-            <div class="car-price-details">@string.Format(new System.Globalization.CultureInfo("fr-FR"), "{0:N0}", Model.SellingPrice) €</div>
-            <p>@Model.Description</p>
+            <div class="car-price-details">@string.Format(new System.Globalization.CultureInfo("fr-FR"), "{0:N0}", Model.SellingPrice)€</div>
+
         </div>
     </div>
 </div>
+<div class="col-md-12">
+    <div class="car-description">   
+        <p>@Model.Description</p>
+    </div>
+</div>
+<!-- Modal Lightbox -->
+<div id="myModal" class="modal">
+  <span class="close">&times;</span>
+  <img class="modal-content" id="img01">
+  <div id="caption"></div>
+</div>
+
+
 
 @section Scripts {
     @{
@@ -62,11 +71,44 @@
     }
 <script>
 
+//Fonction pour changer l'img-principale
     function changeImage(element) {
         console.log(element.src);
         var imagePath = element.src.split('\\').pop();
         console.log(imagePath);
         document.getElementById("mainImage").src =  imagePath;
     }
+
+    // Fonction pour ouvrir le modal
+function openModal(img) {
+  var modal = document.getElementById("myModal");
+  var modalImg = document.getElementById("img01");
+  var captionText = document.getElementById("caption");
+  
+  modal.style.display = "block";
+  modalImg.src = img.src;
+  captionText.innerHTML = img.alt;
+
+
+  // Ajouter un écouteur d'événements pour fermer la modal en cliquant en dehors de l'image
+  modal.onclick = function(event) {
+    if (event.target === modalImg) {
+      // Ne fait rien si l'image est cliquée
+      return;
+    }
+    // Sinon, ferme le modal
+    modal.style.display = 'none';
+  }
+}
+
+// Obtenir l'élément pour fermer le modal
+var span = document.getElementsByClassName("close")[0];
+
+// Lorsque l'utilisateur clique sur (x), fermez le modal
+span.onclick = function() {
+  var modal = document.getElementById("myModal");
+  modal.style.display = "none";
+}
+
 </script>
 }

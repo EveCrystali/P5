@@ -24,7 +24,11 @@ html {
 
 body {
   margin-bottom: 60px;
+  color: #081B32;
 }
+
+
+/* ----- Landing ----- */
 
 .container-cars {
   display: flex;
@@ -34,33 +38,33 @@ body {
   max-width: calc(100%-200px);
 }
 
-.container-cars > div {
-  width: calc(20% - 10px); /* 20% - largeur des margins entre les éléments */
+.container-cars>div {
+  width: calc(20% - 10px);
   margin: 5px;
 }
 
 .car-card {
-  padding: 8px; /* Ajoute un padding pour créer de l'espace autour de l'image */
+  padding: 8px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
   background: #ffffff;
   border-radius: 10px;
-  box-sizing: border-box; /* S'assurer que le padding et la bordure sont inclus dans la largeur/hauteur */
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Répartit l'espace verticalement */
-  height: auto; /* Ajuste la hauteur selon ta maquette */
-  padding: 5px; /* Pour l'espacement interne */
-  box-sizing: border-box; /* Inclut le padding dans la hauteur totale */
+  justify-content: space-between;
+  height: auto;
+  padding: 5px;
+  box-sizing: border-box;
 }
 
 .car-card img {
-  width: 185px; /* Largeur fixe */
-  height: 185px; /* Hauteur fixe */
+  width: 185px;
+  height: 185px;
   object-fit: contain;
   border-radius: 9px;
   border: 1px solid #d2d2d2;
-  display: block; /* Ceci garantit que l'image prend toute la largeur disponible */
-  margin: auto; /* Ceci centre l'image dans le bloc */
+  display: block;
+  margin: auto;
   box-sizing: border-box;
 }
 
@@ -72,60 +76,163 @@ body {
   display: flex;
   align-items: center;
   color: #081B32;
-  margin: 0.5rem; /* Adjust margin to match Figma */
+  margin: 0.5rem;
 }
 
 .car-price-landing {
-  font-size: 1.5rem; /* Taille de police plus grande */
-  font-weight: bold; /* Police en gras */
-  color: #081B32; /* Mettre en couleur, par exemple un rouge pour le prix */
-  margin: 0.5rem 0; /* Espacement autour du titre du prix */
-  text-align: center; /* Centrer le titre dans la carte */
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #081B32;
+  margin: 0.5rem 0;
+  text-align: center;
   margin-top: auto;
 }
 
 .car-card p {
-  font-size: 0.9rem; /* Adjust font-size to match Figma */
-  color: #666; /* Adjust color to match Figma */
-  margin: 0 0.5em 0.5em; /* Adjust margin to match Figma */
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0 0.5em 0.5em;
   line-height: 100%;
   text-align: left;
 }
 
 .car-card:hover {
-  transform: translateY(-5px); /* Example hover effect */
+  transform: translateY(-5px);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
 }
 
 .car-card a {
-  text-decoration: none; /* Enlève le soulignement */
-  color: inherit; /* Garde la couleur du texte héritée plutôt que la couleur par défaut des liens */
+  text-decoration: none;
+  color: inherit;
 }
 
 .car-card a:hover {
-  background-color: #060ea307; /* Ajoute un arrière-plan clair au survol */
+  background-color: #060ea307;
 }
 
 
 /* --------DETAILS---------- */
 
 .carousel-thumbnails {
-    display: flex;
-    flex-direction: column;
-    gap: 10px; /* Espacement entre les vignettes */
-    max-height: 300px; /* Hauteur maximale avec défilement */
-    max-width: 200px;
-    overflow-y: auto; /* Défilement vertical si nécessaire */
+  display: row;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 400px;
+  max-width: 200px;
+  overflow-y: auto;
+  border: 9px;
 }
 
 .img-thumbnail {
-    width: 100%; /* Utiliser la largeur complète du conteneur */
-    cursor: pointer; /* Curseur cliquable */
-    border: none; /* Pas de bordure */
-    border-radius: 5px; /* Arrondir les coins */
-    margin-bottom: 5px; /* Espacement en bas de l'image */
+  width: 100%;
+  cursor: pointer;
+  border: none;
+  border-radius: 9px;
+  margin-bottom: 5px;
+  display: flex;
+  flex-direction: column;
 }
-.img-thumbnail:hover{
-transform: translateY(-3px); /* Example hover effect */
-box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+
+.img-thumbnail:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 24px rgba(0, 0, 0, 0.2);
+}
+
+.card-img-top {
+  display: flex;
+  flex-direction: column;
+  border-radius: 9px;
+  width:735px;
+}
+
+.card-img-top:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+.car-description {
+  margin: 20px;
+}
+
+.car-info {
+  display: flex;
+  flex-direction: column;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 160%;
+  color: #454545;
+  margin-top: 5px;
+}
+
+.car-info h2 {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 175%;
+  display: flex;
+  align-items: center;
+  color: #000000;
+}
+
+.car-info-available{
+font-style: italic;
+font-weight: 200;
+font-size: 16px;
+line-height: 150%;
+color: #161616;
+margin-top: 2px;
+}
+
+.car-price-details{
+font-style: normal;
+font-weight: 700;
+font-size: 24px;
+line-height: 150%;
+display: flex;
+align-items: center;
+
+color: #081B32;
+}
+
+/* Style pour le fond assombri */
+.modal {
+  display: none; /* Caché par défaut */
+  position: fixed; /* Reste en place même lors du défilement */
+  z-index: 1000; /* S'assure qu'il est au-dessus des autres éléments */
+  left: 0;
+  top: 0;
+  width: 100%; /* Pleine largeur */
+  height: 100%; /* Pleine hauteur */
+  overflow: auto; /* Gérer le défilement si nécessaire */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.9); /* Noir avec opacité */
+}
+
+/* Style pour l'image agrandie */
+.modal-content {
+  margin: auto;
+  display: block;
+  max-width: calc(65vw - 100px); /* 65% de la largeur de la fenêtre, moins 100px pour éviter de débordement */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Style pour le bouton de fermeture */
+.close {
+  position: absolute;
+  top: 50px;
+  right: 150px;
+  color: #fff;
+  font-size: 50px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+@media (max-width: 1400px) {
+  .row {
+      flex-direction: column;
+  }
 }
