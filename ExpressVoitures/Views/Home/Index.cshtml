@@ -1,4 +1,4 @@
-﻿@using ExpressVoitures.Controllers
+@using ExpressVoitures.Controllers
 @using ExpressVoitures.Models.Entities
 @using ExpressVoitures.Data
 
@@ -31,14 +31,15 @@
             {
                 <img src="~/Images/Img_Vignette_Default.jpg" alt="Car Image" style="width:100%" />
             }
-            <h3 class="card-title">@Html.DisplayFor(modelItem => carViewModel.CarBrandName) &nbsp;-&nbsp; <span style="font-size: smaller;">@Html.DisplayFor(modelItem => carViewModel.CarModelName)</span></h3>
+                <h3 class="card-title">@Html.DisplayFor(modelItem => carViewModel.CarBrandName) &nbsp;-&nbsp; <span
+                        style="font-size: smaller;">@Html.DisplayFor(modelItem => carViewModel.CarModelName)</span></h3>
             <p>@Html.DisplayFor(modelItem => carViewModel.CarTrimName)</p>
             <p>@Html.DisplayFor(modelItem => carViewModel.CarMotorName)</p>
-            <p>Année : @Html.DisplayFor(modelItem => carViewModel.Year) - @Html.DisplayFor(modelItem => carViewModel.Mileage) km</p>
+                <p>Année : @Html.DisplayFor(modelItem => carViewModel.Year) - @Html.DisplayFor(modelItem =>
+                carViewModel.Mileage) km</p>
             <p>@if (carViewModel.IsAvailable)
                 {
-                    <span
-                    style="font-size: smaller;"><text> Disponible le : </text>
+                        <span style="font-size: smaller;"><text> Disponible le : </text>
                     @Html.DisplayFor(modelItem =>
                              carViewModel.DateOfAvailability)</span>
                 }

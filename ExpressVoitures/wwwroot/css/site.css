@@ -29,40 +29,82 @@ body {
 
 .main-header {
   background-color: #031428;
-  min-height: 100px;
+  color: white;
+  display: flex;
+  align-items: center;
+  height: 100px;
+}
+
+.main{
+  margin-bottom: 10px;
+}
+
+.footer
+{
+  background-color: #031428;
+  display: flex;
+  align-items: center;
+  height: 97px;
+  margin-top: 10px;
+
+}
+
+.footer a
+{
+  background-color: #031428;
+  color: white;
+  display: flex;
+  align-items: center;
+  height: 97px;
+
+}
+
+
+.main-header h1 {
+  position: relative;
+  background-color: #031428;
+  color: white;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .navbar-brand {
-  color: white;
-  height:"100";
-  text-align: right;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  position: absolute;
-  margin-left: 10%;
-  padding-top: 0rem;
-}
-.navbar {
   background-color: #031428;
+  color: white;
+  display: flex;
+  align-items: center;
+  height: 100px;
 }
 
+.navbar-brand a{
+  position: absolute;
+  left: 10%;
+}
 
-.navbar-nav {
-  justify-content: right;
+.nav-item {
+  background-color: #031428;
+  color: white;
+  display: flex;
+  align-items: center;
+  height: 100px;
 }
 
 .nav-link {
   color: white;
-  text-align: right;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
   position: absolute;
-  right: 10%; /* Marge droite */
+  right: 10%;
 }
 
 /* ----- Landing ----- */
+
+.d-flex
+{
+  display: flex;
+  width: auto;
+  margin-bottom: 15px;
+}
+
 
 .container-cars {
   display: flex;
