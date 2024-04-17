@@ -25,11 +25,11 @@
             @if (carViewModel.ImagePaths?.Count > 0)
             {
                 var carImagePath = carViewModel.ImagePaths.First();
-                <img src="~/@carImagePath" class="card-img-top" alt="Car Image" style="width:100%" />
+                <img src="~/@carImagePath" alt="Car Image" style="width:100%" />
             }
             @if (carViewModel.ImagePaths?.Count <= 0)
             {
-                <img src="~/Images/Img_Vignette_Default.jpg" class="card-img-top" alt="Car Image" style="width:100%" />
+                <img src="~/Images/Img_Vignette_Default.jpg" alt="Car Image" style="width:100%" />
             }
             <h3 class="card-title">@Html.DisplayFor(modelItem => carViewModel.CarBrandName) &nbsp;-&nbsp; <span style="font-size: smaller;">@Html.DisplayFor(modelItem => carViewModel.CarModelName)</span></h3>
             <p>@Html.DisplayFor(modelItem => carViewModel.CarTrimName)</p>
@@ -111,7 +111,6 @@
                 </td>
                 <td>
                     <a asp-controller="Cars" asp-action="Edit" asp-route-id="@carViewModel.Id">Edit</a> |
-                    <a asp-controller="Cars" asp-action="Details" asp-route-id="@carViewModel.Id">Details</a>
                     <a asp-controller="Cars" asp-action="Delete" asp-route-id="@carViewModel.Id">Delete</a>
                 </td>
             </tr>

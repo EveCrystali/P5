@@ -5,7 +5,7 @@ html {
 @media (min-width: 768px) {
   html {
     font-size: 16px;
-    color: #081B32;
+    color: #031428;
   }
 }
 
@@ -24,9 +24,43 @@ html {
 
 body {
   margin-bottom: 60px;
-  color: #081B32;
+  color: #031428;
 }
 
+.main-header {
+  background-color: #031428;
+  min-height: 100px;
+}
+
+.navbar-brand {
+  color: white;
+  height:"100";
+  text-align: right;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  position: absolute;
+  margin-left: 10%;
+  padding-top: 0rem;
+}
+.navbar {
+  background-color: #031428;
+}
+
+
+.navbar-nav {
+  justify-content: right;
+}
+
+.nav-link {
+  color: white;
+  text-align: right;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  position: absolute;
+  right: 10%; /* Marge droite */
+}
 
 /* ----- Landing ----- */
 
@@ -38,7 +72,7 @@ body {
   max-width: calc(100%-200px);
 }
 
-.container-cars>div {
+.container-cars > div {
   width: calc(20% - 10px);
   margin: 5px;
 }
@@ -75,14 +109,14 @@ body {
   line-height: 125%;
   display: flex;
   align-items: center;
-  color: #081B32;
+  color: #031428;
   margin: 0.5rem;
 }
 
 .car-price-landing {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #081B32;
+  color: #031428;
   margin: 0.5rem 0;
   text-align: center;
   margin-top: auto;
@@ -110,8 +144,13 @@ body {
   background-color: #060ea307;
 }
 
-
 /* --------DETAILS---------- */
+
+.container-cars-details {
+  display: flex;
+  flex-direction: row;
+  margin-top: 5%;
+}
 
 .carousel-thumbnails {
   display: row;
@@ -142,7 +181,7 @@ body {
   display: flex;
   flex-direction: column;
   border-radius: 9px;
-  width:735px;
+  width: 735px;
 }
 
 .card-img-top:hover {
@@ -175,24 +214,24 @@ body {
   color: #000000;
 }
 
-.car-info-available{
-font-style: italic;
-font-weight: 200;
-font-size: 16px;
-line-height: 150%;
-color: #161616;
-margin-top: 2px;
+.car-info-available {
+  font-style: italic;
+  font-weight: 200;
+  font-size: 16px;
+  line-height: 150%;
+  color: #161616;
+  margin-top: 2px;
 }
 
-.car-price-details{
-font-style: normal;
-font-weight: 700;
-font-size: 24px;
-line-height: 150%;
-display: flex;
-align-items: center;
+.car-price-details {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 150%;
+  display: flex;
+  align-items: center;
 
-color: #081B32;
+  color: #031428;
 }
 
 /* Style pour le fond assombri */
@@ -205,15 +244,17 @@ color: #081B32;
   width: 100%; /* Pleine largeur */
   height: 100%; /* Pleine hauteur */
   overflow: auto; /* Gérer le défilement si nécessaire */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.9); /* Noir avec opacité */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.9); /* Noir avec opacité */
 }
 
 /* Style pour l'image agrandie */
 .modal-content {
   margin: auto;
   display: block;
-  max-width: calc(65vw - 100px); /* 65% de la largeur de la fenêtre, moins 100px pour éviter de débordement */
+  max-width: calc(
+    65vw - 100px
+  ); /* 65% de la largeur de la fenêtre, moins 100px pour éviter de débordement */
   position: absolute;
   top: 50%;
   left: 50%;
@@ -233,6 +274,6 @@ color: #081B32;
 
 @media (max-width: 1400px) {
   .row {
-      flex-direction: column;
+    flex-direction: column;
   }
 }
