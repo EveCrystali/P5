@@ -7,19 +7,18 @@
 {
     <li class="nav-item">
         <a  class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><img src="~/images/TConnexion.png"
-                height="40">Hello @User.Identity?.Name!</a>
+                height="40">@User.Identity?.Name</a>
     </li>
     <li class="nav-item">
         <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link">Logout</button>
+            <button  type="submit" class="nav-link btn btn-link">Se déconnecter</button>
         </form>
-    </li>
+    </li>  
 }
 else
 {
     <li class="nav-item">
-        <a class="nav-link" asp-area="Identity" asp-page="/Account/Login"><img src="~/images/TConnexion.png"
-                height="40">Connexion</a>
+        <a class="nav-link" asp-area="Identity" asp-page="/Account/Login"><img src="~/images/TConnexion.png" height="40">Connexion</a>
     </li>
 }
 </ul>

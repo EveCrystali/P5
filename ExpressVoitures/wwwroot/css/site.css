@@ -28,6 +28,7 @@ body {
   background-color: #031428;
   color: white;
   display: flex;
+  justify-content: center;
   align-items: center;
   height: 100px;
 }
@@ -54,7 +55,6 @@ body {
   align-items: center;
 }
 
-
 .main-header h1 {
   background-color: #031428;
   color: white;
@@ -69,28 +69,118 @@ body {
   color: white;
   display: flex;
   align-items: center;
+  justify-content: center;
   height: 100px;
 }
 
 .navbar-brand a{
-  position: absolute;
-  left: 10%;
+position:absolute;
+left:10%;
+}
+
+
+.navbar-nav {
+  display: flex;
+  width: 100%;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100px;
+  padding-right: 10%;
 }
 
 .nav-item {
-  background-color: #031428;
-  color: white;
   display: flex;
   align-items: center;
-  height: 100px;
 }
 
 .nav-link {
   color: white;
-  position: absolute;
-  right: 10%;
   font-style: italic;
+  text-decoration: none;
 }
+
+.nav-link a{
+  color: white;
+  font-style: italic;
+  text-decoration: none;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  top: -25px;
+  position: relative;
+}
+
+
+.small-red-button {
+  background-color: #FF0000;
+  color: white;
+  border: none;
+  position: absolute;
+  left:50%;
+  top: -5px;
+  transform: translateX(-50%);
+  padding: 5px 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.small-red-button:hover {
+  background-color: #E60000;
+  transform: translate(-50%, -5px);
+}
+
+.small-red-button:active {
+  background-color: #CC0000;
+  transform: translateY(1px);
+}
+
+.small-red-button a {
+  text-decoration: none;
+  color: white;
+}
+
+.large-red-button {
+  background-color: #FF0000;
+  color: white;
+  border: none;
+  position: relative;
+  left:50%;
+  transform: translateX(-50%);
+  margin-top: 10px;
+  padding: 10px 20px;
+  text-transform: uppercase;
+  font-weight: bold;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.large-red-button:hover {
+  background-color: #E60000;
+  transform: translate(-50%, -5px);
+}
+
+.large-red-button:active {
+  background-color: #CC0000;
+  transform: translateY(1px);
+}
+
+/* S'assure que le texte reste blanc et qu'il n'y a pas de soulignement */
+.large-red-button a {
+  text-decoration: none;
+  color: white;
+}
+
+
 
 /* ----- LANDING ----- */
 
@@ -125,6 +215,7 @@ body {
   flex-direction: column;
   justify-content: space-between;
   height: auto;
+  position: relative;
 }
 
 .car-card img {

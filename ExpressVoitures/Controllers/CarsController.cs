@@ -2,6 +2,7 @@
 using ExpressVoitures.Models.Entities;
 using ExpressVoitures.Models.Repositories;
 using ExpressVoitures.Models.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ExpressVoitures.Controllers
 {
+    
     public class CarsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -27,6 +29,7 @@ namespace ExpressVoitures.Controllers
             _carRepository = carRepository;
         }
 
+        [Authorize]
         // GET: Cars
         public async Task<IActionResult> Index()
         {
@@ -42,6 +45,8 @@ namespace ExpressVoitures.Controllers
 
             return View(carViewModel);
         }
+
+        [Authorize]
 
         // GET: Cars/Create
         public IActionResult Create()
@@ -63,6 +68,7 @@ namespace ExpressVoitures.Controllers
             return View(carViewModel);
         }
 
+        [Authorize]
         // POST: Cars/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -109,6 +115,7 @@ namespace ExpressVoitures.Controllers
             }
         }
 
+        [Authorize]
         private async Task<List<string>> UploadCarImages(CarViewModel carViewModel)
         {
             var carFromDb = await _context.Car.FindAsync(carViewModel.Id);
@@ -164,6 +171,7 @@ namespace ExpressVoitures.Controllers
             return imagePaths;
         }
 
+        [Authorize]
         // GET: Cars/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
@@ -182,6 +190,8 @@ namespace ExpressVoitures.Controllers
 
             return View(carViewModel);
         }
+
+        [Authorize]
 
         // POST: Cars/Edit/5
         [HttpPost]
@@ -231,6 +241,8 @@ namespace ExpressVoitures.Controllers
             return View(carViewModel);
         }
 
+        [Authorize]
+
         public string CreateUniqueFileName()
         {
             var timestamp = DateTimeOffset.Now.ToString("MMddHHmmss");
@@ -238,6 +250,8 @@ namespace ExpressVoitures.Controllers
             return $"Img_{timestamp}_{guidPart}";
         }
 
+
+        [Authorize]
         [HttpPost]
         public IActionResult DeleteImage(int carId, string imagePath)
         {
@@ -280,6 +294,8 @@ namespace ExpressVoitures.Controllers
             return RedirectToAction("Edit", new { id = carId });
         }
 
+        [Authorize]
+
         // GET: Cars/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -301,6 +317,8 @@ namespace ExpressVoitures.Controllers
 
             return View(car);
         }
+
+        [Authorize]
 
         // POST: Cars/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -331,10 +349,7 @@ namespace ExpressVoitures.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CarExists(int id)
-        {
-            return _context.Car.Any(e => e.Id == id);
-        }
+        [Authorize]
 
         public IActionResult GetModelsByBrand(int brandId)
         {
@@ -356,6 +371,8 @@ namespace ExpressVoitures.Controllers
             }
             return Json(models);
         }
+
+        [Authorize]
 
         public IActionResult GetTrimsByModel(int modelId)
         {
@@ -379,6 +396,8 @@ namespace ExpressVoitures.Controllers
 
             return Json(trims);
         }
+
+        [Authorize]
 
         public IActionResult GetMotorsByModel(int modelId)
         {
