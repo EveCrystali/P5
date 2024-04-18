@@ -1,4 +1,4 @@
-@using ExpressVoitures.Controllers
+﻿@using ExpressVoitures.Controllers
 @using ExpressVoitures.Models.Entities
 @using ExpressVoitures.Data
 
@@ -8,16 +8,13 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
 <!-- TODO A SUPPRIMER -->
 <p>
     <a asp-controller="Cars" asp-action="Create">Create New</a>
 </p>
 <!-- Fin de A supprimer -->
 
-<div class="container-cars">
-   
+<div class="container-cars">  
     @foreach (CarViewModel carViewModel in Model)
     {
         <div class="car-card">
@@ -25,11 +22,11 @@
             @if (carViewModel.ImagePaths?.Count > 0)
             {
                 var carImagePath = carViewModel.ImagePaths.First();
-                <img src="~/@carImagePath" alt="Car Image" style="width:100%" />
+                <img src="~/@carImagePath" alt="Car" style="width:100%" />
             }
             @if (carViewModel.ImagePaths?.Count <= 0)
             {
-                <img src="~/Images/Img_Vignette_Default.jpg" alt="Car Image" style="width:100%" />
+                <img src="~/Images/Img_Vignette_Default.jpg" alt="CarDefault" style="width:100%" />
             }
                 <h3 class="card-title">@Html.DisplayFor(modelItem => carViewModel.CarBrandName) &nbsp;-&nbsp; <span
                         style="font-size: smaller;">@Html.DisplayFor(modelItem => carViewModel.CarModelName)</span></h3>
@@ -40,8 +37,7 @@
             <p>@if (carViewModel.IsAvailable)
                 {
                         <span style="font-size: smaller;"><text> Disponible le : </text>
-                    @Html.DisplayFor(modelItem =>
-                             carViewModel.DateOfAvailability)</span>
+                    @Html.DisplayFor(modelItem => carViewModel.DateOfAvailability)</span>
                 }
             </p>
             </a>
@@ -82,8 +78,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (CarViewModel carViewModel in Model)
-       {
+        @foreach (CarViewModel carViewModel in Model) {
             <tr>
 
                 <td>
