@@ -17,7 +17,6 @@
 <nav>
     <form method="get" class="d-flex" aspcontroller="Home" asp-action="Search" >
         <input class="form-control me-2" type="search" placeholder="Rechercher un modèle de voiture" aria-label="Search" name="query">
-        <button class="btn btn-outline-success" type="submit">Rechercher</button>
     </form>
     <a class="nav-link" href="#">Link</a>
     <!-- Autres liens si nécessaire -->
@@ -61,22 +60,37 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
-    jQuery(document).ready(function () {
-        $("form").submit(function(event){
-            event.preventDefault();
-            var query = $("input[type='search']").val();
-            $.ajax({
-                url: '@Url.Action("Search", "Home")',
-                data: { query: query },
-                success: function(data) {
-                    $(".container-cars").html(data);
-                },
-                error: function() {
-                    alert("Erreur lors de la recherche.");
-                }
-            });
+        jQuery(document).ready(function () {
+
+            function debounce(func, wait, immediate) {
+                var timeout;
+                return function() {
+                    var context = this, args = arguments;
+                    var later = function() {
+                        timeout = null;
+                        if (!immediate) func.apply(context, args);
+                    };
+                    var callNow = immediate && !timeout;
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                    if (callNow) func.apply(context, args);
+                };
+            };
+
+            $("input[type='search']").on("input", debounce(function() {
+                var query = $(this).val();
+                $.ajax({
+                    url: '@Url.Action("Search", "Home")',
+                    data: { query: query },
+                    success: function(data) {
+                        $(".container-cars").html(data);
+                    },
+                    error: function(xhr, status, error) {
+                        alert("Erreur lors de la recherche: " + xhr.responseText);
+                    }
+                });
+            }, 250)); // Attente de 250ms avant d'exécuter la fonction
         });
-    });
     </script>
 }
 
