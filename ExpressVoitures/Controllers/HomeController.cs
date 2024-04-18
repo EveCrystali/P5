@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics;
 using ExpressVoitures.Data;
 using ExpressVoitures.Models;
@@ -24,16 +23,40 @@ namespace ExpressVoitures.Controllers
 
         public IActionResult Index()
         {
-
-            var cars = _context.Car
+            _context.Car
                 .Include(c => c.CarModel) // Eager loading CarModel
                 .Include(c => c.CarBrand); // Eager loading CarBrand
-
             IEnumerable<CarViewModel> carViewModels = _carService.GetAllCarsViewModel();
 
             return View(carViewModels);
-
         }
+
+        [HttpGet]
+        public IActionResult Search(string query)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(query) || string.IsNullOrWhiteSpace(query))
+                {
+                    _context.Car
+                    .Include(c => c.CarModel) // Eager loading CarModel
+                    .Include(c => c.CarBrand); // Eager loading CarBrand
+                    IEnumerable<CarViewModel> carViewModelsNoSearch = _carService.GetAllCarsViewModel();
+                    return PartialView("_CarCards", carViewModelsNoSearch);
+                }
+
+                List<CarViewModel> carViewModels = _carService.GetAllCarsViewModel();
+                List<CarViewModel> filteredCars = carViewModels.Where(c => c.CarModel.CarModelName.Contains(query))
+                                                                .ToList();
+                return PartialView("_CarCards", filteredCars);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("An error occurred during search: {Error}", ex.Message);
+                return StatusCode(500, "Internal Server Error: " + ex.Message);
+            }
+        }
+
 
         public IActionResult Privacy()
         {
