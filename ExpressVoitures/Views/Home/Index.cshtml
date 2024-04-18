@@ -1,4 +1,4 @@
-﻿@using ExpressVoitures.Controllers
+@using ExpressVoitures.Controllers
 @using ExpressVoitures.Models.Entities
 @using ExpressVoitures.Data
 
@@ -14,7 +14,17 @@
 </p>
 <!-- Fin de A supprimer -->
 
-<div class="container-cars">  
+<nav>
+    <form method="get" class="d-flex" aspcontroller="Home" asp-action="Search" >
+        <input class="form-control me-2" type="search" placeholder="Rechercher un modèle de voiture" aria-label="Search" name="query">
+        <button class="btn btn-outline-success" type="submit">Rechercher</button>
+    </form>
+    <a class="nav-link" href="#">Link</a>
+    <!-- Autres liens si nécessaire -->
+</nav>
+
+<div class="container-cars">
+
     @foreach (CarViewModel carViewModel in Model)
     {
         <div class="car-card">
@@ -30,12 +40,12 @@
             }
                 <h3 class="card-title">@Html.DisplayFor(modelItem => carViewModel.CarBrandName) &nbsp;-&nbsp; <span
                         style="font-size: smaller;">@Html.DisplayFor(modelItem => carViewModel.CarModelName)</span></h3>
-            <p>@Html.DisplayFor(modelItem => carViewModel.CarTrimName)</p>
-            <p>@Html.DisplayFor(modelItem => carViewModel.CarMotorName)</p>
+                <p>@Html.DisplayFor(modelItem => carViewModel.CarTrimName)</p>
+                <p>@Html.DisplayFor(modelItem => carViewModel.CarMotorName)</p>
                 <p>Année : @Html.DisplayFor(modelItem => carViewModel.Year) - @Html.DisplayFor(modelItem =>
                 carViewModel.Mileage) km</p>
-            <p>@if (carViewModel.IsAvailable)
-                {
+                <p>@if (carViewModel.IsAvailable)
+                    {
                         <span style="font-size: smaller;"><text> Disponible le : </text>
                     @Html.DisplayFor(modelItem => carViewModel.DateOfAvailability)</span>
                 }
@@ -46,70 +56,27 @@
     }
 </div>
 
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+    jQuery(document).ready(function () {
+        $("form").submit(function(event){
+            event.preventDefault();
+            var query = $("input[type='search']").val();
+            $.ajax({
+                url: '@Url.Action("Search", "Home")',
+                data: { query: query },
+                success: function(data) {
+                    $(".container-cars").html(data);
+                },
+                error: function() {
+                    alert("Erreur lors de la recherche.");
+                }
+            });
+        });
+    });
+    </script>
+}
 
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CarModel.CarModelName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CarBrand.CarBrandName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CarTrim.CarTrimName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Year)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Mileage)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SellingPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateOfAvailability)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (CarViewModel carViewModel in Model) {
-            <tr>
-
-                <td>
-                    @Html.DisplayFor(modelItem => carViewModel.CarModelName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => carViewModel.CarBrandName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => carViewModel.CarTrimName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => carViewModel.Year)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => carViewModel.Mileage)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => carViewModel.SellingPrice)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => carViewModel.DateOfAvailability)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => carViewModel.Description)
-                </td>
-                <td>
-                    <a asp-controller="Cars" asp-action="Edit" asp-route-id="@carViewModel.Id">Edit</a> |
-                    <a asp-controller="Cars" asp-action="Delete" asp-route-id="@carViewModel.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>

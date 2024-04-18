@@ -1,5 +1,7 @@
 html {
   font-size: 14px;
+  position: relative;
+  min-height: 100%;
 }
 
 @media (min-width: 768px) {
@@ -15,11 +17,6 @@ html {
 .form-control:focus,
 .form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
 }
 
 body {
@@ -59,7 +56,6 @@ body {
 
 
 .main-header h1 {
-  position: relative;
   background-color: #031428;
   color: white;
   position: absolute;
@@ -109,7 +105,6 @@ body {
   flex-wrap: wrap;
   justify-content: flex-start;
   margin: 0;
-  max-width: calc(100%-200px);
   margin-bottom: 5%;
 }
 
@@ -128,8 +123,6 @@ body {
   flex-direction: column;
   justify-content: space-between;
   height: auto;
-  padding: 5px;
-  box-sizing: border-box;
 }
 
 .car-card img {
