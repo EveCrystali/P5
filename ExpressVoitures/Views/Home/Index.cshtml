@@ -1,7 +1,6 @@
 ﻿@using ExpressVoitures.Controllers
 @using ExpressVoitures.Models.Entities
-@using ExpressVoitures.Data 
-@* @inject HomeController homeController *@
+@using ExpressVoitures.Data
 
 @model IEnumerable<ExpressVoitures.Models.Entities.CarViewModel>
 
@@ -9,36 +8,43 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
+<!-- TODO A SUPPRIMER -->
 <p>
     <a asp-controller="Cars" asp-action="Create">Create New</a>
 </p>
+<!-- Fin de A supprimer -->
 
-@foreach (CarViewModel carViewModel in Model) {
-
-<div class="container mt-5">
-    <div class="row">
-        <!-- Car Card -->
-        <div class="col-md-4">
-            <div class="card car-card">
-                @if (carViewModel.ImagePaths != null && carViewModel.ImagePaths.Count > 0)
-                @foreach (string imagePath in carViewModel.ImagePaths)
+<div class="container-cars">  
+    @foreach (CarViewModel carViewModel in Model)
+    {
+        <div class="car-card">
+            <a asp-controller="Cars" asp-action="Details" asp-route-id="@carViewModel.Id">
+            @if (carViewModel.ImagePaths?.Count > 0)
+            {
+                var carImagePath = carViewModel.ImagePaths.First();
+                <img src="~/@carImagePath" alt="Car" style="width:100%" />
+            }
+            @if (carViewModel.ImagePaths?.Count <= 0)
+            {
+                <img src="~/Images/Img_Vignette_Default.jpg" alt="CarDefault" style="width:100%" />
+            }
+                <h3 class="card-title">@Html.DisplayFor(modelItem => carViewModel.CarBrandName) &nbsp;-&nbsp; <span
+                        style="font-size: smaller;">@Html.DisplayFor(modelItem => carViewModel.CarModelName)</span></h3>
+            <p>@Html.DisplayFor(modelItem => carViewModel.CarTrimName)</p>
+            <p>@Html.DisplayFor(modelItem => carViewModel.CarMotorName)</p>
+                <p>Année : @Html.DisplayFor(modelItem => carViewModel.Year) - @Html.DisplayFor(modelItem =>
+                carViewModel.Mileage) km</p>
+            <p>@if (carViewModel.IsAvailable)
                 {
-                    <img src="~/@imagePath" class="card-img-top" alt="Car Image">
-                }      
-                <div class="card-body">
-                    <h5 class="card-title">@Html.DisplayFor(modelItem => carViewModel.CarBrandName)</h5>
-                </div>
-            </div>
+                        <span style="font-size: smaller;"><text> Disponible le : </text>
+                    @Html.DisplayFor(modelItem => carViewModel.DateOfAvailability)</span>
+                }
+            </p>
+            </a>
+            <h2 class="car-price-landing">@string.Format(new System.Globalization.CultureInfo("fr-FR"), "{0:N0}", carViewModel.SellingPrice) €</h2>
         </div>
-    </div>
+    }
 </div>
-
-
-}
-
-
 
 
 
@@ -72,39 +78,38 @@
         </tr>
     </thead>
     <tbody>
-@foreach (CarViewModel carViewModel in Model) {
-        <tr>
+        @foreach (CarViewModel carViewModel in Model) {
+            <tr>
 
-            <td>
+                <td>
                     @Html.DisplayFor(modelItem => carViewModel.CarModelName)
-            </td>
-            <td>
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => carViewModel.CarBrandName)
-            </td>
-            <td>
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => carViewModel.CarTrimName)
-            </td>
-            <td>
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => carViewModel.Year)
-            </td>
-            <td>
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => carViewModel.Mileage)
-            </td>
-            <td>
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => carViewModel.SellingPrice)
-            </td>
-            <td>
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => carViewModel.DateOfAvailability)
-            </td>
-            <td>
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => carViewModel.Description)
-            </td>
-            <td>
+                </td>
+                <td>
                     <a asp-controller="Cars" asp-action="Edit" asp-route-id="@carViewModel.Id">Edit</a> |
-                    <a asp-controller="Cars" asp-action="Details" asp-route-id="@carViewModel.Id">Details</a>
                     <a asp-controller="Cars" asp-action="Delete" asp-route-id="@carViewModel.Id">Delete</a>
-            </td>
-        </tr>
-}
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

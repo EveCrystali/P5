@@ -30,7 +30,7 @@ namespace ExpressVoitures.Models.Services
                     Id = car.Id,
                     CarBrandId = car.CarBrandId,
                     CarBrand = car.CarBrand,
-                    CarBrandName = car.CarModel?.CarModelName ?? "Marque inconnu",
+                    CarBrandName = car.CarBrand?.CarBrandName ?? "Marque inconnu",
                     CarModelId = car.CarModelId,
                     CarModel = car.CarModel,
                     CarModelName = car.CarModel?.CarModelName ?? "Modèle inconnu",
