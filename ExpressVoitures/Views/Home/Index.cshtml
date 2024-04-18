@@ -1,4 +1,6 @@
 @using ExpressVoitures.Controllers
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
 @using ExpressVoitures.Models.Entities
 @using ExpressVoitures.Data
 
@@ -7,19 +9,16 @@
 @{
     ViewData["Title"] = "Index";
 }
-
-<!-- TODO A SUPPRIMER -->
-<p>
-    <a asp-controller="Cars" asp-action="Create">Create New</a>
+<p> 
+ @if (User.Identity.IsAuthenticated && UserManager.GetUserAsync(User).Result != null)
+    {
+    <a asp-controller="Cars" asp-action="Create"><button class="large-red-button">Enregistrer une nouvelle voiture</button></a>
+    }
 </p>
-<!-- Fin de A supprimer -->
-
 <nav>
     <form method="get" class="d-flex" aspcontroller="Home" asp-action="Search" >
         <input class="form-control me-2" type="search" placeholder="Rechercher un modèle de voiture" aria-label="Search" name="query">
     </form>
-    <a class="nav-link" href="#">Link</a>
-    <!-- Autres liens si nécessaire -->
 </nav>
 
 <div class="container-cars">
@@ -27,6 +26,10 @@
     @foreach (CarViewModel carViewModel in Model)
     {
         <div class="car-card">
+            
+            @if (User.Identity.IsAuthenticated && UserManager.GetUserAsync(User).Result != null)
+                {<a asp-controller="Cars" asp-action="Edit" asp-route-id="@carViewModel.Id"><button class="small-red-button">Editer</button></a>
+                }  
             <a asp-controller="Cars" asp-action="Details" asp-route-id="@carViewModel.Id">
             @if (carViewModel.ImagePaths?.Count > 0)
             {
