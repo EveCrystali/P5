@@ -196,3 +196,4 @@ PublishScripts/
 **/[Pp]ackages/*
 # except build/, which is used
 ExpressVoitures/wwwroot/images/
+identity.txt
