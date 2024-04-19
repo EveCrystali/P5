@@ -8,24 +8,29 @@ namespace ExpressVoitures.Models.Entities
     {
         public int Id { get; set; }
 
+        [DisplayName("Marque*")]
         public int CarBrandId { get; set; }
 
-
+        
         public CarBrand? CarBrand { get; set; }
 
+        
         public string? CarBrandName { get; set; }
 
+        [DisplayName("Modèle*")]
         public int CarModelId { get; set; }
 
         public CarModel? CarModel { get; set; }
 
         public string? CarModelName { get; set; }
 
+        [DisplayName("Finition*")]
         public int CarTrimId { get; set; }
         public CarTrim? CarTrim { get; set; }
 
         public string? CarTrimName { get; set; }
 
+        [DisplayName("Motorisation")]
         public int CarMotorId { get; set; }
 
         public CarMotor? CarMotor { get; set; }
@@ -34,7 +39,7 @@ namespace ExpressVoitures.Models.Entities
 
         public List<CarRepair> CarRepairs { get; set; } = [];
 
-        [DisplayName("Année")]
+        [DisplayName("Année*")]
         [Required(ErrorMessage = "L'année du véhicule est obligatoire.")]
         [Range(1990, 2024, ErrorMessage = "La valeur doit être comprise entre 1990 et 2024.")]
         public int? Year { get; set; }
@@ -42,7 +47,7 @@ namespace ExpressVoitures.Models.Entities
         [DisplayName("Kilométrage")]
         public int? Mileage { get; set; }
 
-        [DisplayName("Prix d'achat")]
+        [DisplayName("Prix d'achat*")]
         [Required(ErrorMessage = "Le prix d'achat du véhicule est obligatoire.")]
         [Range(0.01, Double.MaxValue, ErrorMessage = "La valeur doit être positive.")]
         public decimal? PurchasePrice { get; set; }
@@ -51,7 +56,7 @@ namespace ExpressVoitures.Models.Entities
         [Range(0.01, Double.MaxValue, ErrorMessage = "La valeur doit être positive.")]
         public decimal? SellingPrice { get; set; }
 
-        [DisplayName("Disponibile")]
+        [DisplayName("Disponibile*")]
         [Required(ErrorMessage = "La disponibilité du vehicule est obligatoire.")]
         public bool IsAvailable { get; set; }
 

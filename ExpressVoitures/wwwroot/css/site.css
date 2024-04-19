@@ -34,7 +34,10 @@ body {
 }
 
 .container {
-  margin-bottom: 8%
+  margin-bottom: 8%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content:center;
 }
 
 .footer
@@ -58,9 +61,12 @@ body {
 .main-header h1 {
   background-color: #031428;
   color: white;
+  font-size: 50px;
+  font-weight: bold;
   position: absolute;
   left: 50%;
   font-style:italic;
+  font-variant: small-caps;
   transform: translateX(-50%);
 }
 
@@ -360,35 +366,28 @@ left:10%;
 
   color: #031428;
 }
-
-/* Style pour le fond assombri */
 .modal {
-  display: none; /* Caché par défaut */
-  position: fixed; /* Reste en place même lors du défilement */
-  z-index: 1000; /* S'assure qu'il est au-dessus des autres éléments */
+  display: none;
+  position: fixed;
+  z-index: 1000;
   left: 0;
   top: 0;
-  width: 100%; /* Pleine largeur */
-  height: 100%; /* Pleine hauteur */
-  overflow: auto; /* Gérer le défilement si nécessaire */
-  background-color: rgb(0, 0, 0); /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.9); /* Noir avec opacité */
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.9);
 }
 
-/* Style pour l'image agrandie */
 .modal-content {
   margin: auto;
   display: block;
-  max-width: calc(
-    65vw - 100px
-  ); /* 65% de la largeur de la fenêtre, moins 100px pour éviter de débordement */
+  max-width: calc(65vw - 100px);
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
-/* Style pour le bouton de fermeture */
 .close {
   position: absolute;
   top: 50px;
@@ -403,4 +402,79 @@ left:10%;
   .row {
     flex-direction: column;
   }
+}
+
+
+
+/* -------- CAR CREATION ---------- */
+
+h2 {
+position: relative;
+font-size: 36px;
+text-align: center;
+justify-content: center;
+color: #031428;
+margin:25px;
+margin-bottom:35px;
+font-weight: bold;
+font-style:italic;
+font-variant: small-caps;
+}
+
+.calc-selling-price
+{
+  color: #031428;
+  font-style: italic;
+  font-variant: small-caps;
+  font-size: 16px;
+  margin-top: 20px;
+  font-weight:600;
+}
+
+.form-control
+{
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border-radius: 9px;
+  width: 50%;
+
+}
+
+
+.btn-primary
+{
+  background-color: #031428;
+  border-color:white;
+  border-radius: 9px;
+  align-items: center;
+  justify-items: center;
+  font-variant: normal;
+  padding: 2px;
+  width:50%;
+  font-size:14px;
+  height:27px;
+}
+
+.btn-validate.btn-primary
+{
+  width: 25%;
+  position:absolute;
+  left:50%; 
+  background-color:rgba(255, 0, 0, 0.75);
+  transform: translateX(-50%); 
+  margin-top: 5%;
+  border-color:white;
+  border-radius: 9px;
+  align-items: center;
+  justify-items: center;
+  font-weight: bold;
+  font-variant: small-caps;
+  height:40px;
+}
+
+
+.btn-validate.btn-primary:hover
+{
+  background-color: red;
+  color:white;
 }
