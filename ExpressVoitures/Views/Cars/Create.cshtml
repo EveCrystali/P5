@@ -19,8 +19,7 @@
                     <div class="form-group">
                         @Html.LabelFor(model => model.CarBrandId, new { @class = "control-label" })
                         @Html.DropDownListFor(model => model.CarBrandId, (SelectList)ViewData["CarBrandId"], "Choisir une marque", new { id = "CarBrandId", @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.CarBrandId)
-                        
+                        @Html.ValidationMessageFor(model => model.CarBrandId)  
                             <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "CarBrands")'">
                                Créer marque
                             </button>
@@ -40,7 +39,6 @@
                             <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "CarMotors")'">
                                 Créer moteur
                             </button>
-
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(model => model.CarTrimId, new { @class = "control-label" })
@@ -49,7 +47,6 @@
                             <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "CarTrims")'">
                                 Créer finition
                             </button>
-                        
                     </div>
                     <div class="form-group">
                         <label asp-for="Year" class="control-label"></label>
@@ -67,12 +64,11 @@
                     <div class="form-group">
                         <label asp-for="PurchasePrice" class="control-label"></label>
                         <input asp-for="PurchasePrice" class="form-control" />
-                        <span asp-validation-for="PurchasePrice" class="text-danger"></span>
+                        <span asp-validation-for="PurchasePrice" class="text-danger"></span>€
                     </div>
                     <div id="repairs">
                         Réparations :
                         <button type="button" id="addRepair" class="btn btn-primary">Ajouter</button>
-
                         @for (int i = 0; i < Model.CarRepairs.Count; i++)
                         {
                             <div class="card mb-3">
@@ -105,7 +101,7 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="SellingPrice" class="control-label"></label>
-                        <input type="text" value="@(Model.PurchasePrice + Model.CarRepairs.Sum(r => r.RepairCost))" class="form-control" readonly />
+                        <input type="text" value="@(Model.PurchasePrice + Model.CarRepairs.Sum(r => r.RepairCost))" class="form-control" readonly />€
                         <a href="#" class="btn btn-link calc-selling-price">Cliquez ici pour entrer un prix manuellement</a>
                         <span asp-validation-for="SellingPrice" class="text-danger"></span>
                     </div>
@@ -123,7 +119,6 @@
                         <div class="car-info-available" >Indisponible par défaut (cocher pour rendre disponible)**</div>
                     </div>
                 </div>
-
                 <div class="col-md-4">
                     <div class="form-group">
                         <label asp-for="PurchaseDate" class="control-label"></label>
@@ -149,19 +144,17 @@
 
             <div class="col-md-12">
                 <div class="row">
-                        <label asp-for="Description" class="control-label"></label>
+                        <label asp-for="Description" class="control-label car-register-description"></label>
                 </div>
                 <div class="row">
                         <textarea asp-for="Description" class="form-control car-register-description" rows="3"></textarea>
                         <span asp-validation-for="Description" class="text-danger"></span>
-                 </div>
+                </div>
                 <div class="row">
                     <input type="submit" value="Enregistrer" class="btn btn-validate btn-primary"/>
-            </div>
+                </div>
             </div>
 
-
-            </div>
         </div>
     </div>
 </form>

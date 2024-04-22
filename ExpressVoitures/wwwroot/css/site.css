@@ -180,12 +180,10 @@ left:10%;
   transform: translateY(1px);
 }
 
-/* S'assure que le texte reste blanc et qu'il n'y a pas de soulignement */
 .large-red-button a {
   text-decoration: none;
   color: white;
 }
-
 
 
 /* ----- LANDING ----- */
@@ -279,7 +277,6 @@ left:10%;
 
 /* --------DETAILS---------- */
 
-
 /* Marque - Modèle */
 h3 {
 font-style:normal;
@@ -288,7 +285,6 @@ font-size: 26px;
 line-height: 150%;
 color: #000000;
 }
-
 
 .container-cars-details {
   display: flex;
@@ -416,7 +412,6 @@ color: #000000;
 }
 
 
-
 /* -------- CAR CREATION ---------- */
 
 h2 {
@@ -442,9 +437,6 @@ font-variant: small-caps;
   font-weight:600;
 }
 
-
-
-
 .btn-primary
 {
   background-color: #031428;
@@ -456,7 +448,6 @@ font-variant: small-caps;
   width:26%;
   font-size:14px;
   height:27px;
-
 }
 
 .btn-validate.btn-primary
@@ -483,9 +474,7 @@ font-variant: small-caps;
   margin-bottom: 10px;
   margin-top: 5px;
   border-radius: 9px;
-  width:auto;
-  padding: 5px;
-
+  width:45%;
 }
 
 
@@ -504,4 +493,8 @@ font-variant: small-caps;
 }
 
 
+
+select.form-control {
+  -webkit-appearance: menulist-button;
+}
 
