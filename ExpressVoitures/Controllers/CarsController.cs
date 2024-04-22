@@ -111,7 +111,7 @@ namespace ExpressVoitures.Controllers
                 // Sauvegarde les changements finaux de manière asynchrone
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Home");
             }
         }
 
@@ -226,7 +226,7 @@ namespace ExpressVoitures.Controllers
 
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Home");
             }
 
             var carBrands = _context.CarBrand ?? Enumerable.Empty<CarBrand>();
