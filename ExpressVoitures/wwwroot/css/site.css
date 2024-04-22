@@ -503,4 +503,35 @@ font-variant: small-caps;
 select.form-control {
   -webkit-appearance: menulist-button;
 }
+.image-list {
+  list-style-type: none;
+  padding: 0;
+}
 
+.image-item {
+  position: relative;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.car-img {
+  width: 150px;
+  height: auto;
+}
+
+.btn-delete-image {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: none;
+  background: transparent;
+  color: red;
+  font-size: 20px;
+  padding: 0;
+}
+
+.btn-delete-image:hover,
+.btn-delete-image:focus {
+  background: transparent;
+  outline: none;
+}
