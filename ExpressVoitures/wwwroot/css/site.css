@@ -236,7 +236,6 @@ left:10%;
 }
 
 .car-card h3 {
-  font-style: bold;
   font-weight: 700;
   font-size: 1.1rem;
   line-height: 125%;
@@ -279,6 +278,17 @@ left:10%;
 }
 
 /* --------DETAILS---------- */
+
+
+/* Marque - Modèle */
+h3 {
+font-style:normal;
+font-weight: 500;
+font-size: 26px;
+line-height: 150%;
+color: #000000;
+}
+
 
 .container-cars-details {
   display: flex;
@@ -432,14 +442,7 @@ font-variant: small-caps;
   font-weight:600;
 }
 
-.form-control
-{
-  margin-top: 5px;
-  margin-bottom: 5px;
-  border-radius: 9px;
-  width: 50%;
 
-}
 
 
 .btn-primary
@@ -447,13 +450,13 @@ font-variant: small-caps;
   background-color: #031428;
   border-color:white;
   border-radius: 9px;
-  align-items: center;
   justify-items: center;
   font-variant: normal;
   padding: 2px;
-  width:50%;
+  width:26%;
   font-size:14px;
   height:27px;
+
 }
 
 .btn-validate.btn-primary
@@ -463,14 +466,26 @@ font-variant: small-caps;
   left:50%; 
   background-color:rgba(255, 0, 0, 0.75);
   transform: translateX(-50%); 
-  margin-top: 5%;
+  margin-top: 25px;
   border-color:white;
   border-radius: 9px;
-  align-items: center;
+  align-items:center;
   justify-items: center;
   font-weight: bold;
   font-variant: small-caps;
   height:40px;
+}
+
+
+.form-control
+{
+  display:inline-block;
+  margin-bottom: 10px;
+  margin-top: 5px;
+  border-radius: 9px;
+  width:auto;
+  padding: 5px;
+
 }
 
 
@@ -479,3 +494,14 @@ font-variant: small-caps;
   background-color: red;
   color:white;
 }
+
+
+.car-register-description
+{
+ width:100%;
+ margin-top: 10px;
+ resize: both;
+}
+
+
+

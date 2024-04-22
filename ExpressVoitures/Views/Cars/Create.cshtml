@@ -13,8 +13,8 @@
  <form method="post" enctype="multipart/form-data" asp-controller="Cars" asp-action="Create">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="container">
-            <div class="row">
 
+            <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
                         @Html.LabelFor(model => model.CarBrandId, new { @class = "control-label" })
@@ -22,7 +22,7 @@
                         @Html.ValidationMessageFor(model => model.CarBrandId)
                         
                             <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "CarBrands")'">
-                               Créer une nouvelle marque
+                               Créer marque
                             </button>
                     </div>
                     <div class="form-group">
@@ -30,16 +30,15 @@
                         @Html.DropDownListFor(model => model.CarModelId, (SelectList)ViewData["CarModelId"], "Choisir un modèle", new { id = "CarModelId", @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.CarModelId)
                             <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "CarModels")'">
-                                 Créer un nouveau modèle
+                                 Créer modèle
                             </button>
-                        
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(model => model.CarMotorId, new { @class = "control-label" })
                         @Html.DropDownListFor(model => model.CarMotorId, (SelectList)ViewData["CarMotorId"], "Choisir un moteur", new { id = "CarMotorId", @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.CarMotorId)
                             <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "CarMotors")'">
-                                Créer un nouveau moteur
+                                Créer moteur
                             </button>
 
                     </div>
@@ -48,7 +47,7 @@
                         @Html.DropDownListFor(model => model.CarTrimId, (SelectList)ViewData["CarTrimId"], "Choisir une finition", new { id = "CarTrimId", @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.CarTrimId)    
                             <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "CarTrims")'">
-                                Créer une nouveau finition
+                                Créer finition
                             </button>
                         
                     </div>
@@ -72,7 +71,7 @@
                     </div>
                     <div id="repairs">
                         Réparations :
-                        <button type="button" id="addRepair" class="btn btn-primary">Ajouter une réparation</button>
+                        <button type="button" id="addRepair" class="btn btn-primary">Ajouter</button>
 
                         @for (int i = 0; i < Model.CarRepairs.Count; i++)
                         {
@@ -107,7 +106,7 @@
                     <div class="form-group">
                         <label asp-for="SellingPrice" class="control-label"></label>
                         <input type="text" value="@(Model.PurchasePrice + Model.CarRepairs.Sum(r => r.RepairCost))" class="form-control" readonly />
-                        <a href="#" class="btn btn-link calc-selling-price">Cliquez ici pour entrer un prix manuel</a>
+                        <a href="#" class="btn btn-link calc-selling-price">Cliquez ici pour entrer un prix manuellement</a>
                         <span asp-validation-for="SellingPrice" class="text-danger"></span>
                     </div>
                     <div class="d-none selling-price-editor">
@@ -140,32 +139,33 @@
                         <label asp-for="SaleDate" class="control-label"></label>
                         <input type="date" asp-for="SaleDate" class="form-control" />
                         <span asp-validation-for="SaleDate" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Description" class="control-label"></label>
-                        <input asp-for="Description" class="form-control" />
-                        <span asp-validation-for="Description" class="text-danger"></span>
-                    </div>
-                    
+                    </div>                    
                     <div class="form-group">
                         <label for="Images">Importer des photos</label>
                         <input type="file" name="Images" multiple />
                     </div>
                 </div>
             </div>
-            <div class="col-6">
-                <div class="form-group">
-                        <input type="submit" value="Enregistrer" class="btn btn-validate btn-primary"/>
+
+            <div class="col-md-12">
+                <div class="row">
+                        <label asp-for="Description" class="control-label"></label>
                 </div>
+                <div class="row">
+                        <textarea asp-for="Description" class="form-control car-register-description" rows="3"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                 </div>
+                <div class="row">
+                    <input type="submit" value="Enregistrer" class="btn btn-validate btn-primary"/>
             </div>
+            </div>
+
+
             </div>
         </div>
     </div>
 </form>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{
