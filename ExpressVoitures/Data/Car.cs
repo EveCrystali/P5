@@ -10,6 +10,8 @@ namespace ExpressVoitures.Data
         public int Id { get; set; }
 
         public int CarBrandId { get; set; }
+
+        public string? CodeVIN { get; set; }
         
         public CarBrand? CarBrand { get; set; }
 

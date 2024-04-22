@@ -17,6 +17,11 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
+                        <label asp-for="CodeVIN" class="control-label"></label>
+                        <input asp-for="CodeVIN" class="form-control" />
+                        <span asp-validation-for="CodeVIN" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
                         @Html.LabelFor(model => model.CarBrandId, new { @class = "control-label" })
                         @Html.DropDownListFor(model => model.CarBrandId, (SelectList)ViewData["CarBrandId"], "Choisir une marque", new { id = "CarBrandId", @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.CarBrandId)  

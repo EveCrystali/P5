@@ -47,7 +47,6 @@ body {
   align-items: center;
   height: 70px;
   margin-top: 10px;
-
 }
 
 .footer a
@@ -56,6 +55,13 @@ body {
   color: white;
   display: flex;
   align-items: center;
+}
+
+.text-muted
+{
+  align-items: center;
+  justify-items: center;
+  flex-direction: column;
 }
 
 .main-header h1 {

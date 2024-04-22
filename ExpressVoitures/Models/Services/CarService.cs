@@ -28,6 +28,7 @@ namespace ExpressVoitures.Models.Services
                 carsViewModel.Add(new CarViewModel
                 {
                     Id = car.Id,
+                    CodeVIN = car.CodeVIN,
                     CarBrandId = car.CarBrandId,
                     CarBrand = car.CarBrand,
                     CarBrandName = car.CarBrand?.CarBrandName ?? "Marque inconnu",
@@ -109,6 +110,7 @@ namespace ExpressVoitures.Models.Services
             if (await CarExistAsync(carViewModel.Id))
             {
                 var existingCar = await GetCar(carViewModel.Id);
+                existingCar.CodeVIN = carViewModel.CodeVIN;
                 existingCar.CarBrandId = carViewModel.CarBrandId;
                 existingCar.CarModelId = carViewModel.CarModelId;
                 existingCar.CarTrimId = carViewModel.CarTrimId;
@@ -153,6 +155,7 @@ namespace ExpressVoitures.Models.Services
             {
                 Car carEntity = new()
                 {
+                    CodeVIN = carViewModel.CodeVIN,
                     CarBrandId = carViewModel.CarBrandId,
                     CarModelId = carViewModel.CarModelId,
                     CarTrimId = carViewModel.CarTrimId,

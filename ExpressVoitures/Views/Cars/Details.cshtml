@@ -1,12 +1,24 @@
 ﻿@using ExpressVoitures.Controllers
 @using ExpressVoitures.Models.Entities
 @using ExpressVoitures.Data
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
 
 
 @model ExpressVoitures.Models.Entities.CarViewModel
 @{
     ViewData["Title"] = "Details";
 }
+
+<p> 
+ @if (User.Identity.IsAuthenticated && UserManager.GetUserAsync(User).Result != null)
+    {
+    <a asp-controller="Cars" asp-action="Create"><button class="large-red-button">Enregistrer une nouvelle voiture</button></a>
+    }
+</p>
+
+
+
 <div class="container-cars-details">
     <!-- Miniatures -->
     <div class="row">
@@ -40,6 +52,11 @@
         <div class="col-md-3 car-info">
             <h3>@Model.CarBrand.CarBrandName - @Model.CarModel.CarModelName</h3>
             <ul class="list-unstyled">
+                <li> 
+                @if (User.Identity.IsAuthenticated && UserManager.GetUserAsync(User).Result != null)
+                {
+                    <strong>Code VIN :</strong> @Model.CodeVIN                }
+                </li>
                 <li><strong>Finition :</strong> @Model.CarTrim.CarTrimName</li>
                 <li><strong>Motorisation :</strong> @Model.CarMotor.CarMotorName</li>
                 <li><strong>Kilométrage :</strong> @Model.Mileage km</li>

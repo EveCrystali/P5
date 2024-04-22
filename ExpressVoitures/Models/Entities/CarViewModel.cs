@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Permissions;
 using ExpressVoitures.Data;
 
 namespace ExpressVoitures.Models.Entities
@@ -11,7 +12,9 @@ namespace ExpressVoitures.Models.Entities
         [DisplayName("Marque* :")]
         public int CarBrandId { get; set; }
 
-        
+        [DisplayName("Code VIN :")]
+        public string? CodeVIN { get; set; }
+
         public CarBrand? CarBrand { get; set; }
 
         
@@ -56,7 +59,7 @@ namespace ExpressVoitures.Models.Entities
         [Range(0.01, Double.MaxValue, ErrorMessage = "La valeur doit être positive.")]
         public decimal? SellingPrice { get; set; }
 
-        [DisplayName("Disponibile* :")]
+        [DisplayName("Disponibile** :")]
         [Required(ErrorMessage = "La disponibilité du vehicule est obligatoire.")]
         public bool IsAvailable { get; set; }
 
