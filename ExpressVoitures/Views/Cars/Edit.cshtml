@@ -7,180 +7,186 @@
 @{
     ViewData["Title"] = "Edit";
 }
-
-<h1>Edit</h1>
-
-<h4>Car</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post" enctype="multipart/form-data" asp-controller="Cars" asp-action="Edit">
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="CodeVIN" class="control-label"></label>
-                <input asp-for="CodeVIN" class="form-control" />
-                <span asp-validation-for="CodeVIN" class="text-danger"></span>
+<h2>Modification d'une voiture</h2>
+<form method="post" enctype="multipart/form-data" asp-controller="Cars" asp-action="Edit">
+<input type="hidden" asp-for="Id" />
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                        <label asp-for="CodeVIN" class="control-label"></label>
+                        <input asp-for="CodeVIN" class="form-control" />
+                        <span asp-validation-for="CodeVIN" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CarBrandId" class="control-label"></label>
+                    <select asp-for="CarBrandId" class="form-control" asp-items="ViewBag.CarBrandId"></select>
+                    <span asp-validation-for="CarBrandId" class="text-danger"></span>
+                    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "CarBrands")'">
+                               Créer marque
+                    </button>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CarModelId" class="control-label"></label>
+                    <select asp-for="CarModelId" class="form-control" asp-items="ViewBag.CarModelId"></select>
+                    <span asp-validation-for="CarModelId" class="text-danger"></span>
+                    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "CarModels")'">
+                                 Créer modèle
+                    </button>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CarMotorId" class="control-label"></label>
+                    <select asp-for="CarMotorId" class="form-control" asp-items="ViewBag.CarMotorId"></select>
+                    <span asp-validation-for="CarMotorId" class="text-danger"></span>
+                    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "CarMotors")'">
+                                Créer moteur
+                    </button>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CarTrimId" class="control-label"></label>
+                    <select asp-for="CarTrimId" class="form-control" asp-items="ViewBag.CarTrimId"></select>
+                    <span asp-validation-for="CarTrimId" class="text-danger"></span>
+                    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "CarTrims")'">
+                                Créer finition
+                    </button>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Year" class="control-label"></label>
+                    <input asp-for="Year" class="form-control" />
+                    <span asp-validation-for="Year" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Mileage" class="control-label"></label>
+                    <input asp-for="Mileage" class="form-control" />
+                    <span asp-validation-for="Mileage" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="CarBrandId" class="control-label"></label>
-                <select asp-for="CarBrandId" class="form-control" asp-items="ViewBag.CarBrandId"></select>
-                <span asp-validation-for="CarBrandId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CarModelId" class="control-label"></label>
-                <select asp-for="CarModelId" class="form-control" asp-items="ViewBag.CarModelId"></select>
-                <span asp-validation-for="CarModelId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CarMotorId" class="control-label"></label>
-                <select asp-for="CarMotorId" class="form-control" asp-items="ViewBag.CarMotorId"></select>
-                <span asp-validation-for="CarMotorId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CarTrimId" class="control-label"></label>
-                <select asp-for="CarTrimId" class="form-control" asp-items="ViewBag.CarTrimId"></select>
-                <span asp-validation-for="CarTrimId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Year" class="control-label"></label>
-                <input asp-for="Year" class="form-control" />
-                <span asp-validation-for="Year" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Mileage" class="control-label"></label>
-                <input asp-for="Mileage" class="form-control" />
-                <span asp-validation-for="Mileage" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PurchasePrice" class="control-label"></label>
-                <input asp-for="PurchasePrice" class="form-control" />
-                <span asp-validation-for="PurchasePrice" class="text-danger"></span>
-            </div>
-
-            <!-- CAR REPAIRS -->
-            <div id="repairs">
-                <h5>Réparations</h5>
-                <button type="button" id="addRepair" class="btn btn-primary">Ajouter une réparation</button>
-                @if (Model.CarRepairs != null)
-                {
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="PurchasePrice" class="control-label"></label>
+                    <input asp-for="PurchasePrice" class="form-control" />
+                    <span asp-validation-for="PurchasePrice" class="text-danger"></span>
+                </div>
+                <div id="repairs">
+                    <h5>Réparations</h5>
+                    <button type="button" id="addRepair" class="btn btn-primary">Ajouter une réparation</button>
+                    @if (Model.CarRepairs != null)
+                    {
+                        @for (int i = 0; i < Model.CarRepairs.Count; i++)
+                        {
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    Réparation @(i + 1)
+                                    <button type="button" class="close deleteRepair" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label asp-for="CarRepairs[i].RepairDescription" class="control-label">
+                                            Description de la
+                                            réparation
+                                        </label>
+                                        <input asp-for="CarRepairs[i].RepairDescription"
+                                            value="@Model.CarRepairs[i].RepairDescription" class="form-control"
+                                            placeholder="Entrez la description" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="CarRepairs[i].RepairCost" class="control-label">
+                                            Coût de
+                                            réparation(€)
+                                        </label>
+                                        <input asp-for="CarRepairs[i].RepairCost" value="@Model.CarRepairs[i].RepairCost"
+                                            class="form-control" placeholder="Entrez le coût" />
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
                     @for (int i = 0; i < Model.CarRepairs.Count; i++)
                     {
-                        <div class="card mb-3">
-                            <div class="card-header">
-                                Réparation @(i + 1)
-                                <button type="button" class="close deleteRepair" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label asp-for="CarRepairs[i].RepairDescription" class="control-label">
-                                        Description de la
-                                        réparation
-                                    </label>
-                                    <input asp-for="CarRepairs[i].RepairDescription"
-                                           value="@Model.CarRepairs[i].RepairDescription" class="form-control"
-                                           placeholder="Entrez la description" />
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="CarRepairs[i].RepairCost" class="control-label">
-                                        Coût de
-                                        réparation(€)
-                                    </label>
-                                    <input asp-for="CarRepairs[i].RepairCost" value="@Model.CarRepairs[i].RepairCost"
-                                           class="form-control" placeholder="Entrez le coût" />
-                                </div>
-                            </div>
-                        </div>
+                        <span asp-validation-for="CarRepairs[i].RepairDescription" class="text-danger"></span>
+                        <span asp-validation-for="CarRepairs[i].RepairCost" class="text-danger"></span>
                     }
-                }
-                @for (int i = 0; i < Model.CarRepairs.Count; i++)
-                {
-                    <span asp-validation-for="CarRepairs[i].RepairDescription" class="text-danger"></span>
-                    <span asp-validation-for="CarRepairs[i].RepairCost" class="text-danger"></span>
-                }
-            </div>
-
-            <!-- CAR REPAIRS -->
-
-            <div class="form-group">
-                <label asp-for="SellingPrice" class="control-label"></label>
-                <input type="text" value="@(Model.PurchasePrice + Model.CarRepairs?.Sum(r => r.RepairCost??0) ?? 0)"
-                       class="form-control" readonly />
-                <a href="#" class="btn btn-link calc-selling-price">Modifier le prix</a>
-                <span asp-validation-for="SellingPrice" class="text-danger"></span>
-            </div>
-            <div class="d-none selling-price-editor">
+                </div>
                 <div class="form-group">
                     <label asp-for="SellingPrice" class="control-label"></label>
-                    <input asp-for="SellingPrice" class="form-control" />
+                    <input type="text" value="@(Model.PurchasePrice + Model.CarRepairs?.Sum(r => r.RepairCost??0) ?? 0)"
+                        class="form-control" readonly />
+                    <a href="#" class="btn btn-link calc-selling-price">Modifier le prix</a>
                     <span asp-validation-for="SellingPrice" class="text-danger"></span>
                 </div>
-                <a href="#" class="btn btn-link cancel-selling-price-editor">Annuler</a>
+                <div class="d-none selling-price-editor">
+                    <div class="form-group">
+                        <label asp-for="SellingPrice" class="control-label"></label>
+                        <input asp-for="SellingPrice" class="form-control" />
+                        <span asp-validation-for="SellingPrice" class="text-danger"></span>
+                    </div>
+                    <a href="#" class="btn btn-link cancel-selling-price-editor">Annuler</a>
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="IsAvailable" /> @Html.DisplayNameFor(model =>
+                        model.IsAvailable)
+                    </label>
+                    <div class="car-info-available" >**Indisponible par défaut (cocher pour rendre disponible)</div>
+                </div>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsAvailable" /> @Html.DisplayNameFor(model =>
-                    model.IsAvailable)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="PurchaseDate" class="control-label"></label>
-                <input asp-for="PurchaseDate" class="form-control" />
-                <span asp-validation-for="PurchaseDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateOfAvailability" class="control-label"></label>
-                <input asp-for="DateOfAvailability" class="form-control" />
-                <span asp-validation-for="DateOfAvailability" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SaleDate" class="control-label"></label>
-                <input asp-for="SaleDate" class="form-control" />
-                <span asp-validation-for="SaleDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-
-            <!-- Affichage des images existantes avec un bouton pour supprimer chaque image -->
-            @{
-                int imageCounter = 0;
-            }
-
-            <ul>
-                @if (Model.ImagePaths != null)
-                {
-                    @foreach (var imagePath in Model.ImagePaths)
-                    {
-                        <li id="image-@imageCounter">
-                            @imagePath
-                            <button type="button" class="btn btn-danger delete-image" data-imagepath="@imagePath"
-                                    data-imageid="@imageCounter">
-                                Delete
-                            </button>
-                        </li>
-                        imageCounter++;
-                    }
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="PurchaseDate" class="control-label"></label>
+                    <input type="date" asp-for="PurchaseDate" class="form-control" />
+                    <span asp-validation-for="PurchaseDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DateOfAvailability" class="control-label"></label>
+                    <input type="date" asp-for="DateOfAvailability" class="form-control" />
+                    <span asp-validation-for="DateOfAvailability" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SaleDate" class="control-label"></label>
+                    <input type="date" asp-for="SaleDate" class="form-control" />
+                    <span asp-validation-for="SaleDate" class="text-danger"></span>
+                </div>
+                <!-- Affichage des images existantes avec un bouton pour supprimer chaque image -->
+                @{
+                    int imageCounter = 0;
                 }
-            </ul>
-            <div class="form-group">
-                <label for="Images">Upload New Images</label>
-                <input type="file" name="Images" multiple />
+                <ul>
+                    @if (Model.ImagePaths != null)
+                    {
+                        @foreach (var imagePath in Model.ImagePaths)
+                        {
+                            <li id="image-@imageCounter" class="image-item">
+                                <img src="@Url.Content($"~/{imagePath}")" alt="Car Image" class="car-img">
+                                <button type="button" class="btn btn-delete-image" data-imagepath="@imagePath" data-imageid="@imageCounter">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </li>
+                            imageCounter++;
+                        }
+                    }
+                </ul>
+                <div class="form-group">
+                    <label for="Images">Ajout des photos :</label>
+                    <input type="file" name="Images" multiple />
+                </div>
             </div>
-
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="col-md-12">
+                <div class="row">
+                        <label asp-for="Description" class="control-label car-register-description"></label>
+                </div>
+                <div class="row">
+                        <textarea asp-for="Description" class="form-control car-register-description" rows="3"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="row">
+                    <input type="submit" value="Enregistrer" class="btn btn-validate btn-primary"/>
+                </div>
             </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+</form>
 
 @section Scripts {
     @{
@@ -261,7 +267,7 @@
                     });
             });
 
-            $('.delete-image').click(function () {
+            $('.btn-delete-image').click(function () {
                 var button = $(this);
                 var imagePath = button.data('imagepath');
                 var imageId = button.data('imageid');
