@@ -197,3 +197,4 @@ PublishScripts/
 # except build/, which is used
 ExpressVoitures/wwwroot/images/
 identity.txt
+change.diff

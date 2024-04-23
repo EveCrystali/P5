@@ -23,7 +23,7 @@ namespace ExpressVoitures.Data
 
         public CarTrim? CarTrim { get; set; }
 
-        public int CarMotorId { get; set; }
+        public int? CarMotorId { get; set; }
 
         public CarMotor? CarMotor { get; set; }
 
