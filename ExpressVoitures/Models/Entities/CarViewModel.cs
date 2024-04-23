@@ -34,7 +34,7 @@ namespace ExpressVoitures.Models.Entities
         public string? CarTrimName { get; set; }
 
         [DisplayName("Motorisation :")]
-        public int CarMotorId { get; set; }
+        public int? CarMotorId { get; set; }
 
         public CarMotor? CarMotor { get; set; }
 

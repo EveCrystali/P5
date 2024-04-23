@@ -56,7 +56,7 @@
                     <strong>Code VIN :</strong> @Model.CodeVIN                }
                 </li>
                 <li><strong>Finition :</strong> @Model.CarTrim.CarTrimName</li>
-                <li><strong>Motorisation :</strong> @Model.CarMotor.CarMotorName</li>
+                <li><strong>Motorisation :</strong> @(string.IsNullOrEmpty(Model.CarMotor?.CarMotorName) ? "Inconnu" : Model.CarMotor.CarMotorName)</li>
                 <li><strong>Kilométrage :</strong> @Model.Mileage km</li>
                 <li><strong>Année :</strong> @Model.Year</li>
                 <li><div class="car-info-available">Disponible le : @Model.DateOfAvailability<div class="car-info-available"></li>
@@ -118,6 +118,6 @@
                 var modal = document.getElementById("myModal");
                 modal.style.display = "none";
             }
-            
+
     </script>
 }
