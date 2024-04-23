@@ -10,14 +10,12 @@
     ViewData["Title"] = "Details";
 }
 
-<p> 
- @if (User.Identity.IsAuthenticated && UserManager.GetUserAsync(User).Result != null)
-    {
-    <a asp-controller="Cars" asp-action="Create"><button class="large-red-button">Enregistrer une nouvelle voiture</button></a>
-    }
-</p>
-
-
+<h3> 
+@if (User.Identity.IsAuthenticated && UserManager.GetUserAsync(User).Result != null)
+{
+    <a asp-controller="Cars" asp-action="Edit" asp-route-id="@Model.Id"><button class="small-red-button">Editer</button></a>
+}  
+</h3>
 
 <div class="container-cars-details">
     <!-- Miniatures -->
@@ -80,52 +78,46 @@
   <div id="caption"></div>
 </div>
 
-
-
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-<script>
+    <script>
 
-//Fonction pour changer l'img-principale
-    function changeImage(element) {
-        console.log(element.src);
-        var imagePath = element.src.split('\\').pop();
-        console.log(imagePath);
-        document.getElementById("mainImage").src =  imagePath;
-    }
+        function changeImage(element) {
+            console.log(element.src);
+            var imagePath = element.src.split('\\').pop();
+            console.log(imagePath);
+            document.getElementById("mainImage").src =  imagePath;
+        }
 
-    // Fonction pour ouvrir le modal
-function openModal(img) {
-  var modal = document.getElementById("myModal");
-  var modalImg = document.getElementById("img01");
-  var captionText = document.getElementById("caption");
-  
-  modal.style.display = "block";
-  modalImg.src = img.src;
-  captionText.innerHTML = img.alt;
+        function openModal(img) {
+            var modal = document.getElementById("myModal");
+            var modalImg = document.getElementById("img01");
+            var captionText = document.getElementById("caption");
+            
+            modal.style.display = "block";
+            modalImg.src = img.src;
+            captionText.innerHTML = img.alt;
 
+            modal.onclick = function(event) {
+                if (event.target === modalImg) {
+                // Ne fait rien si l'image est cliquée
+                return;
+                }
+                // Sinon, ferme le modal
+                modal.style.display = 'none';
+            }
+        }
 
-  // Ajouter un écouteur d'événements pour fermer la modal en cliquant en dehors de l'image
-  modal.onclick = function(event) {
-    if (event.target === modalImg) {
-      // Ne fait rien si l'image est cliquée
-      return;
-    }
-    // Sinon, ferme le modal
-    modal.style.display = 'none';
-  }
-}
+            // Obtenir l'élément pour fermer le modal
+            var span = document.getElementsByClassName("close")[0];
 
-// Obtenir l'élément pour fermer le modal
-var span = document.getElementsByClassName("close")[0];
-
-// Lorsque l'utilisateur clique sur (x), fermez le modal
-span.onclick = function() {
-  var modal = document.getElementById("myModal");
-  modal.style.display = "none";
-}
-
-</script>
+            // Lorsque l'utilisateur clique sur (x), fermez le modal
+            span.onclick = function() {
+                var modal = document.getElementById("myModal");
+                modal.style.display = "none";
+            }
+            
+    </script>
 }
