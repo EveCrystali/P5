@@ -546,3 +546,55 @@ select.form-control {
   background: transparent;
   outline: none;
 }
+
+.close.deleteRepair
+{
+  position: relative;
+  top: -2%;
+  right: -70%;
+  border: none;
+  color: red;
+  background: transparent;
+  font-size: 30px;
+  padding: -5px;
+  margin: -10px;
+}
+
+.deleteRepair:hover,
+.deleteRepair:focus {
+  background: transparent;
+  outline: none;
+}
+
+
+.car-repair-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, .125);
+  border-radius: .25rem;
+}
+
+.car-repair-card-body {
+  flex: auto;
+  padding: 0.25em;
+  margin: 0.5em;
+  padding-top: 0.015em;
+  margin-top: 0.015em;
+  padding-bottom: 0.015em;
+  margin-bottom: 0.015em;
+}
+
+.car-repair-header {
+  padding: 0.25em;
+  margin: 0.5em;
+  padding-top: 0.015em;
+  margin-top: 0.015em;
+  /* height: 1em; */
+  background-color: rgba(0, 0, 0, .03);
+  border-bottom: 1px solid rgba(0, 0, 0, .125);
+}
