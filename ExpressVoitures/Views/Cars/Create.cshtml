@@ -73,37 +73,35 @@
                     </div>
                     <div id="repairs">
                         Réparations :
-                        <button type="button" id="addRepair" class="btn btn-primary">Ajouter</button>
                         @for (int i = 0; i < Model.CarRepairs.Count; i++)
                         {
-                            <div class="card mb-3">
-                                <div class="card-header">
+                            <div class="car-repair-card mb-3">
+                                <div class="car-repair-header">
                                     Réparation @(i + 1)
                                     <button type="button" class="close deleteRepair" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <div class="card-body">
+                                <div class="car-repair-card-body">
                                     <div class="form-group">
                                         <label asp-for="CarRepairs[i].RepairDescription" class="control-label">
-                                            Description de la
-                                            réparation
+                                            Réparation :
                                         </label>
                                         <input asp-for="CarRepairs[i].RepairDescription" class="form-control" placeholder="Entrez la description" />
                                         <span asp-validation-for="CarRepairs[i].RepairDescription" class="text-danger"></span>
                                     </div>
                                     <div class="form-group">
                                         <label asp-for="CarRepairs[i].RepairCost" class="control-label">
-                                            Coût de
-                                            réparation(€)
+                                            Coût :
                                         </label>
                                         <input asp-for="CarRepairs[i].RepairCost" class="form-control" placeholder="Entrez le coût" />
-                                        <span asp-validation-for="CarRepairs[i].RepairCost" class="text-danger"></span>
+                                        <span asp-validation-for="CarRepairs[i].RepairCost" class="text-danger"></span>€
                                     </div>
                                 </div>
                             </div>
                         }
                     </div>
+                    <button type="button" id="addRepair" class="btn btn-primary">Ajouter</button>
                     <div class="form-group">
                         <label asp-for="SellingPrice" class="control-label"></label>
                         <input type="text" value="@(Model.PurchasePrice + Model.CarRepairs.Sum(r => r.RepairCost))" class="form-control" readonly />€
@@ -247,23 +245,23 @@
 
             $('#addRepair').click(function () {
                 var repairsDiv = $('#repairs');
-                var repairIndex = repairsDiv.find('.card').length;
-                var newRepairDiv = $('<div>').addClass('card mb-3');
+                var repairIndex = repairsDiv.find('.car-repair-card').length;
+                var newRepairDiv = $('<div>').addClass('car-repair-card mb-3');
                 newRepairDiv.html(`
-                                            <div class="card-header">
+                                            <div class="car-repair-header">
                                                 Réparation ${repairIndex + 1}
                                                 <button type="button" class="close deleteRepair" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
-                                            <div class="card-body">
+                                            <div class="car-repair-card-body">
                                                 <div class="form-group">
-                                                    <label>Description de la réparation</label>
+                                                    <label>Réparation :</label>
                                                     <input class="form-control" name="CarRepairs[${repairIndex}].RepairDescription" placeholder="Entrez la description" />
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Coût de réparation(€)</label>
-                                                    <input class="form-control" name="CarRepairs[${repairIndex}].RepairCost" placeholder="Entrez le coût" />
+                                                    <label>Coût :</label>
+                                                    <input class="form-control" name="CarRepairs[${repairIndex}].RepairCost" placeholder="Entrez le coût" />€
                                                 </div>
                                             </div>
                                         `);
@@ -272,25 +270,8 @@
             });
 
             $('#repairs').on('click', '.deleteRepair', function () {
-                $(this).closest('.card').remove();
-                updateRepairsIndex();
-                if ($('#repairs').children('.card').length === 0) {
-                    $('#deleteRepair').hide();
-                }
+                $(this).closest('.car-repair-card').remove();
             });
-
-            function updateRepairsIndex() {
-                $('#repairs .card').each(function (index) {
-                    $(this).find('.card-header').text(`Réparation ${index + 1}`);
-                    $(this).find('input').each(function () {
-                        var name = $(this).attr('name');
-                        if (name) {
-                            name = name.replace(/\[\d+\]/, `[${index}]`);
-                            $(this).attr('name', name);
-                        }
-                    });
-                });
-            }
 
             function calculateSellingPrice() {
                 var purchasePrice = parseFloat($('#PurchasePrice').val()) || 0;
