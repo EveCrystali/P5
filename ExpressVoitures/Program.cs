@@ -34,8 +34,25 @@ builder.Services.AddSession();
 
 builder.Services.AddMvc();
 
-
 var app = builder.Build();
+
+// Resolve UserManager from the service provider
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+        // Assuming DataSeeder is your class and SeedData is a static method within it
+        // Adjust this line according to your actual DataSeeder implementation
+        DataSeeder.SeedData(userManager).Wait();
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred seeding the DB.");
+    }
+}
 
 app.UseStaticFiles();
 
