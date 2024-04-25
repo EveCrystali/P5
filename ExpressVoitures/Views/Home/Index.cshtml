@@ -9,52 +9,136 @@
 @{
     ViewData["Title"] = "Index";
 }
-<p> 
- @if (User.Identity.IsAuthenticated && UserManager.GetUserAsync(User).Result != null)
+<p>
+    @if (User.Identity.IsAuthenticated && UserManager.GetUserAsync(User).Result != null)
+
+
+
     {
-    <a asp-controller="Cars" asp-action="Create"><button class="large-red-button">Enregistrer une nouvelle voiture</button></a>
+        <a asp-controller="Cars" asp-action="Create"><button class="large-red-button">Enregistrer une nouvelle
+                voiture</button></a>
     }
 </p>
 <nav>
-    <form method="get" class="d-flex" aspcontroller="Home" asp-action="Search" >
-        <input class="form-control me-2" type="search" placeholder="Rechercher un modèle de voiture" aria-label="Search" name="query">
+    <form method="get" class="d-flex" aspcontroller="Home" asp-action="Search">
+        <input class="form-control me-2" type="search" placeholder="Rechercher un modèle de voiture" aria-label="Search"
+            name="query">
     </form>
 </nav>
 
 <div class="container-cars">
 
     @foreach (CarViewModel carViewModel in Model)
+
     {
-        <div class="car-card">
-            
-            @if (User.Identity.IsAuthenticated && UserManager.GetUserAsync(User).Result != null)
-                {<a asp-controller="Cars" asp-action="Edit" asp-route-id="@carViewModel.Id"><button class="small-red-button">Editer</button></a>
-                }  
-            <a asp-controller="Cars" asp-action="Details" asp-route-id="@carViewModel.Id">
-            @if (carViewModel.ImagePaths?.Count > 0)
-            {
-                var carImagePath = carViewModel.ImagePaths.First();
-                <img src="~/@carImagePath" alt="Car" style="width:100%" />
-            }
-            @if (carViewModel.ImagePaths?.Count <= 0)
-            {
-                <img src="~/Images/Img_Vignette_Default.jpg" alt="CarDefault" style="width:100%" />
-            }
-                <h3 class="card-title">@Html.DisplayFor(modelItem => carViewModel.CarBrandName) &nbsp;-&nbsp; <span
-                        style="font-size: smaller;">@Html.DisplayFor(modelItem => carViewModel.CarModelName)</span></h3>
-                <p>@Html.DisplayFor(modelItem => carViewModel.CarTrimName)</p>
-                <p>@Html.DisplayFor(modelItem => carViewModel.CarMotorName)</p>
-                <p>Année : @Html.DisplayFor(modelItem => carViewModel.Year) - @Html.DisplayFor(modelItem =>
-                carViewModel.Mileage) km</p>
-                <p>@if (carViewModel.IsAvailable)
-                    {
-                        <span style="font-size: smaller;"><text> Disponible le : </text>
-                    @Html.DisplayFor(modelItem => carViewModel.DateOfAvailability)</span>
+        @if (carViewModel.IsAvailable)
+
+        {
+            <div class="car-card">
+
+                @if (User.Identity.IsAuthenticated && UserManager.GetUserAsync(User).Result != null)
+
+
+
+                {
+                    <a asp-controller="Cars" asp-action="Edit" asp-route-id="@carViewModel.Id"><button
+                            class="small-red-button">Editer</button></a>
                 }
-            </p>
-            </a>
-            <h2 class="car-price-landing">@string.Format(new System.Globalization.CultureInfo("fr-FR"), "{0:N0}", carViewModel.SellingPrice) €</h2>
-        </div>
+                <a asp-controller="Cars" asp-action="Details" asp-route-id="@carViewModel.Id">
+                    @if (carViewModel.ImagePaths?.Count > 0)
+
+
+
+                    {
+
+
+
+                        var carImagePath = carViewModel.ImagePaths.First();
+                        <img src="~/@carImagePath" alt="Car" style="width:100%" />
+                    }
+                    @if (carViewModel.ImagePaths?.Count <= 0)
+
+
+
+                    {
+                        <img src="~/Images/Img_Vignette_Default.jpg" alt="CarDefault" style="width:100%" />
+                    }
+                    <h3 class="card-title">@Html.DisplayFor(modelItem => carViewModel.CarBrandName) &nbsp;-&nbsp; <span
+                            style="font-size: smaller;">@Html.DisplayFor(modelItem => carViewModel.CarModelName)</span></h3>
+                    <p>@Html.DisplayFor(modelItem => carViewModel.CarTrimName)</p>
+                    <p>@Html.DisplayFor(modelItem => carViewModel.CarMotorName)</p>
+                    <p>Année : @Html.DisplayFor(modelItem => carViewModel.Year) - @Html.DisplayFor(modelItem =>
+                carViewModel.Mileage) km</p>
+                    <p>@if (carViewModel.IsAvailable)
+
+
+
+                        {
+                            <span style="font-size: smaller;"><text> Disponible le : </text>
+                                @Html.DisplayFor(modelItem => carViewModel.DateOfAvailability)</span>
+                        }
+                    </p>
+                </a>
+                <h2 class="car-price-landing">@string.Format(new System.Globalization.CultureInfo("fr-FR"), "{0:N0}",
+            carViewModel.SellingPrice) €</h2>
+            </div>
+        }
+
+        @if (User.Identity.IsAuthenticated && UserManager.GetUserAsync(User).Result != null && !carViewModel.IsAvailable)
+
+
+
+        {
+            <div class="car-card car-card-unavailable">
+
+                @if (User.Identity.IsAuthenticated && UserManager.GetUserAsync(User).Result != null)
+
+
+
+                {
+                    <a asp-controller="Cars" asp-action="Edit" asp-route-id="@carViewModel.Id"><button
+                            class="small-red-button">Editer</button></a>
+                }
+                <a asp-controller="Cars" asp-action="Details" asp-route-id="@carViewModel.Id">
+                    @if (carViewModel.ImagePaths?.Count > 0)
+
+
+
+                    {
+
+
+
+                        var carImagePath = carViewModel.ImagePaths.First();
+                        <img src="~/@carImagePath" alt="Car" style="width:100%" />
+                    }
+                    @if (carViewModel.ImagePaths?.Count <= 0)
+
+
+
+                    {
+                        <img src="~/Images/Img_Vignette_Default.jpg" alt="CarDefault" style="width:100%" />
+                    }
+                    <h3 class="card-title">@Html.DisplayFor(modelItem => carViewModel.CarBrandName) &nbsp;-&nbsp; <span
+                            style="font-size: smaller;">@Html.DisplayFor(modelItem => carViewModel.CarModelName)</span></h3>
+                    <p>@Html.DisplayFor(modelItem => carViewModel.CarTrimName)</p>
+                    <p>@Html.DisplayFor(modelItem => carViewModel.CarMotorName)</p>
+                    <p>Année : @Html.DisplayFor(modelItem => carViewModel.Year) - @Html.DisplayFor(modelItem =>
+                carViewModel.Mileage) km</p>
+                    <p>@if (carViewModel.IsAvailable)
+
+
+
+                        {
+                            <span style="font-size: smaller;"><text> Disponible le : </text>
+                                @Html.DisplayFor(modelItem => carViewModel.DateOfAvailability)</span>
+                        }
+                    </p>
+                </a>
+                <h2 class="car-price-landing">@string.Format(new System.Globalization.CultureInfo("fr-FR"), "{0:N0}",
+            carViewModel.SellingPrice) €</h2>
+                <div class="not-available-admin">Indisponible</div>
+            </div>
+        }
     }
 </div>
 
@@ -67,9 +151,9 @@
 
             function debounce(func, wait, immediate) {
                 var timeout;
-                return function() {
+                return function () {
                     var context = this, args = arguments;
-                    var later = function() {
+                    var later = function () {
                         timeout = null;
                         if (!immediate) func.apply(context, args);
                     };
@@ -80,15 +164,15 @@
                 };
             };
 
-            $("input[type='search']").on("input", debounce(function() {
+            $("input[type='search']").on("input", debounce(function () {
                 var query = $(this).val();
                 $.ajax({
                     url: '@Url.Action("Search", "Home")',
                     data: { query: query },
-                    success: function(data) {
+                    success: function (data) {
                         $(".container-cars").html(data);
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         alert("Erreur lors de la recherche: " + xhr.responseText);
                     }
                 });

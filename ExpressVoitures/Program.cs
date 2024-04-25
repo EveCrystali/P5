@@ -87,7 +87,6 @@ app.MapGet("Identity/Account/ConfirmEmail", context =>
 });
 
 
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
