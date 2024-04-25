@@ -56,6 +56,38 @@ using (var scope = app.Services.CreateScope())
 
 app.UseStaticFiles();
 
+app.MapGet("Identity/Account/Register", context =>
+{
+    context.Response.Redirect("/");
+    return Task.CompletedTask;
+});
+
+app.MapGet("Identity/Account/Manage", context =>
+{
+    context.Response.Redirect("/");
+    return Task.CompletedTask;
+});
+
+app.MapGet("Identity/Account/ForgotPassword", context =>
+{
+    context.Response.Redirect("/");
+    return Task.CompletedTask;
+});
+
+app.MapGet("Identity/Account/ResetPassword", context =>
+{
+    context.Response.Redirect("/");
+    return Task.CompletedTask;
+});
+
+app.MapGet("Identity/Account/ConfirmEmail", context =>
+{
+    context.Response.Redirect("/");
+    return Task.CompletedTask;
+});
+
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
