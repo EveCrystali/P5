@@ -11,9 +11,6 @@
 }
 <p>
     @if (User.Identity.IsAuthenticated && UserManager.GetUserAsync(User).Result != null)
-
-
-
     {
         <a asp-controller="Cars" asp-action="Create"><button class="large-red-button">Enregistrer une nouvelle
                 voiture</button></a>
@@ -29,37 +26,22 @@
 <div class="container-cars">
 
     @foreach (CarViewModel carViewModel in Model)
-
     {
         @if (carViewModel.IsAvailable)
-
         {
             <div class="car-card">
-
                 @if (User.Identity.IsAuthenticated && UserManager.GetUserAsync(User).Result != null)
-
-
-
                 {
                     <a asp-controller="Cars" asp-action="Edit" asp-route-id="@carViewModel.Id"><button
                             class="small-red-button">Editer</button></a>
                 }
                 <a asp-controller="Cars" asp-action="Details" asp-route-id="@carViewModel.Id">
                     @if (carViewModel.ImagePaths?.Count > 0)
-
-
-
                     {
-
-
-
                         var carImagePath = carViewModel.ImagePaths.First();
                         <img src="~/@carImagePath" alt="Car" style="width:100%" />
                     }
                     @if (carViewModel.ImagePaths?.Count <= 0)
-
-
-
                     {
                         <img src="~/Images/Img_Vignette_Default.jpg" alt="CarDefault" style="width:100%" />
                     }
@@ -67,15 +49,10 @@
                             style="font-size: smaller;">@Html.DisplayFor(modelItem => carViewModel.CarModelName)</span></h3>
                     <p>@Html.DisplayFor(modelItem => carViewModel.CarTrimName)</p>
                     <p>@Html.DisplayFor(modelItem => carViewModel.CarMotorName)</p>
-                    <p>Année : @Html.DisplayFor(modelItem => carViewModel.Year) - @Html.DisplayFor(modelItem =>
-                carViewModel.Mileage) km</p>
+                    <p>Année : @Html.DisplayFor(modelItem => carViewModel.Year) - @Html.DisplayFor(modelItem => carViewModel.Mileage) km</p>
                     <p>@if (carViewModel.IsAvailable)
-
-
-
                         {
-                            <span style="font-size: smaller;"><text> Disponible le : </text>
-                                @Html.DisplayFor(modelItem => carViewModel.DateOfAvailability)</span>
+                            <span style="font-size: smaller;"><text> Disponible le : </text>@Html.DisplayFor(modelItem => carViewModel.DateOfAvailability)</span>
                         }
                     </p>
                 </a>
@@ -83,38 +60,21 @@
             carViewModel.SellingPrice) €</h2>
             </div>
         }
-
         @if (User.Identity.IsAuthenticated && UserManager.GetUserAsync(User).Result != null && !carViewModel.IsAvailable)
-
-
-
         {
             <div class="car-card car-card-unavailable">
-
                 @if (User.Identity.IsAuthenticated && UserManager.GetUserAsync(User).Result != null)
-
-
-
                 {
                     <a asp-controller="Cars" asp-action="Edit" asp-route-id="@carViewModel.Id"><button
                             class="small-red-button">Editer</button></a>
                 }
                 <a asp-controller="Cars" asp-action="Details" asp-route-id="@carViewModel.Id">
                     @if (carViewModel.ImagePaths?.Count > 0)
-
-
-
                     {
-
-
-
                         var carImagePath = carViewModel.ImagePaths.First();
                         <img src="~/@carImagePath" alt="Car" style="width:100%" />
                     }
                     @if (carViewModel.ImagePaths?.Count <= 0)
-
-
-
                     {
                         <img src="~/Images/Img_Vignette_Default.jpg" alt="CarDefault" style="width:100%" />
                     }
@@ -122,12 +82,8 @@
                             style="font-size: smaller;">@Html.DisplayFor(modelItem => carViewModel.CarModelName)</span></h3>
                     <p>@Html.DisplayFor(modelItem => carViewModel.CarTrimName)</p>
                     <p>@Html.DisplayFor(modelItem => carViewModel.CarMotorName)</p>
-                    <p>Année : @Html.DisplayFor(modelItem => carViewModel.Year) - @Html.DisplayFor(modelItem =>
-                carViewModel.Mileage) km</p>
+                    <p>Année : @Html.DisplayFor(modelItem => carViewModel.Year) - @Html.DisplayFor(modelItem => carViewModel.Mileage) km</p>
                     <p>@if (carViewModel.IsAvailable)
-
-
-
                         {
                             <span style="font-size: smaller;"><text> Disponible le : </text>
                                 @Html.DisplayFor(modelItem => carViewModel.DateOfAvailability)</span>
@@ -141,6 +97,8 @@
         }
     }
 </div>
+<div id="sticky-banner">Une voiture vous intéresse ? Une question ? Contactez-nous...</div>
+
 
 @section Scripts {
     @{
@@ -177,6 +135,20 @@
                     }
                 });
             }, 250)); // Attente de 250ms avant d'exécuter la fonction
+        });
+
+        window.addEventListener('scroll', function() {
+            var footer = document.querySelector('footer');
+            var stickyBanner = document.getElementById('sticky-banner');
+            var footerRect = footer.getBoundingClientRect();
+            var isVisible = footerRect.top < window.innerHeight;
+
+            if(isVisible) {
+                stickyBanner.style.bottom = (window.innerHeight - footerRect.top) + 'px';
+            } 
+            else {
+                stickyBanner.style.bottom = '0';
+            }
         });
     </script>
 }
