@@ -129,7 +129,7 @@ namespace ExpressVoitures.Areas.Identity.Pages.Account
                 else
                 {
                      _logger.LogWarning("Else : Invalid login attempt.");
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "La connexion a échoué. Veuillez vérifier que votre adresse e-mail et votre mot de passe sont corrects.");
                     return Page();
                 }
             }
