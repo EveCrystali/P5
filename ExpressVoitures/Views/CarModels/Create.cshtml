@@ -4,33 +4,35 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Créer un nouveau modèle</h1>
 
-<h4>CarModel</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-controller="CarModels" asp-action="Create" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="CarBrandId" class="control-label"></label>
+                Nom de la marque ayant le nouveau modèle :
                 <select asp-for="CarBrandId" class ="form-control" asp-items="ViewBag.CarBrandId"></select>
+                 ou <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "CarBrands")'">
+                        Créer marque
+                    </button>
             </div>
             <div class="form-group">
-                <label asp-for="CarModelName" class="control-label"></label>
+                Nom du nouveau modèle : 
                 <input asp-for="CarModelName" class="form-control" />
                 <span asp-validation-for="CarModelName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Enregistrer" class="btn btn-validate btn-primary" />
+                <div>
+                    <a asp-controller="Cars" asp-action="Create">Annuler : retour à la création de voiture</a>
+                </div>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
