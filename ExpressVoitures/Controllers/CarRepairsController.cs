@@ -1,55 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ExpressVoitures.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ExpressVoitures.Data;
-using Microsoft.AspNetCore.Authorization;
 
 namespace ExpressVoitures.Controllers
 {
     [Authorize]
-    public class CarRepairsController : Controller
+    public class CarRepairsController(ApplicationDbContext context) : Controller
     {
-        private readonly ApplicationDbContext _context;
-
-        public CarRepairsController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
-        // GET: CarRepairs
-        public async Task<IActionResult> Index()
-        {
-            var applicationDbContext = _context.CarRepair.Include(c => c.Car);
-            return View(await applicationDbContext.ToListAsync());
-        }
-
-        // GET: CarRepairs/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var carRepair = await _context.CarRepair
-                .Include(c => c.Car)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (carRepair == null)
-            {
-                return NotFound();
-            }
-
-            return View(carRepair);
-        }
+        private readonly ApplicationDbContext _context = context;
 
         // GET: CarRepairs/Create
         public IActionResult Create()
         {
             ViewData["CarId"] = new SelectList(_context.Car, "Id", "Id");
+
             return View();
         }
 
@@ -65,7 +31,54 @@ namespace ExpressVoitures.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CarId"] = new SelectList(_context.Car, "Id", "Id", carRepair.CarId);
+
             return View(carRepair);
+        }
+
+        // GET: CarRepairs/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            CarRepair? carRepair = await _context.CarRepair
+                .Include(c => c.Car)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            return carRepair == null ? NotFound() : View(carRepair);
+        }
+
+        // POST: CarRepairs/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            CarRepair? carRepair = await _context.CarRepair.FindAsync(id);
+            if (carRepair != null)
+            {
+                _context.CarRepair.Remove(carRepair);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: CarRepairs/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            CarRepair? carRepair = await _context.CarRepair
+                .Include(c => c.Car)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            return carRepair == null ? NotFound() : View(carRepair);
         }
 
         // GET: CarRepairs/Edit/5
@@ -76,18 +89,14 @@ namespace ExpressVoitures.Controllers
                 return NotFound();
             }
 
-            var carRepair = await _context.CarRepair.FindAsync(id);
-            if (carRepair == null)
-            {
-                return NotFound();
-            }
-            ViewData["CarId"] = new SelectList(_context.Car, "Id", "Id", carRepair.CarId);
-            return View(carRepair);
+            CarRepair? carRepair = await _context.CarRepair.FindAsync(id);
+
+            ViewData["CarId"] = new SelectList(_context.Car, "Id", "Id", carRepair?.CarId);
+
+            return carRepair == null ? NotFound() : View(carRepair);
         }
 
         // POST: CarRepairs/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,CarId,RepairCost,RepairDescription")] CarRepair carRepair)
@@ -104,55 +113,21 @@ namespace ExpressVoitures.Controllers
                     _context.Update(carRepair);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException) when (!CarRepairExists(carRepair.Id))
                 {
-                    if (!CarRepairExists(carRepair.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return NotFound();
                 }
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CarId"] = new SelectList(_context.Car, "Id", "Id", carRepair.CarId);
-            return View(carRepair);
-        }
-
-        // GET: CarRepairs/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var carRepair = await _context.CarRepair
-                .Include(c => c.Car)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (carRepair == null)
-            {
-                return NotFound();
-            }
 
             return View(carRepair);
         }
 
-        // POST: CarRepairs/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        // GET: CarRepairs
+        public async Task<IActionResult> Index()
         {
-            var carRepair = await _context.CarRepair.FindAsync(id);
-            if (carRepair != null)
-            {
-                _context.CarRepair.Remove(carRepair);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return View(await _context.CarRepair.Include(c => c.Car).ToListAsync());
         }
 
         private bool CarRepairExists(int id)

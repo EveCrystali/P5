@@ -1,49 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using ExpressVoitures.Data;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using ExpressVoitures.Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExpressVoitures.Controllers
 {
     [Authorize]
-    public class CarBrandsController : Controller
+    public class CarBrandsController(ApplicationDbContext context) : Controller
     {
-        private readonly ApplicationDbContext _context;
-
-        public CarBrandsController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
-        // GET: CarBrands
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.CarBrand.ToListAsync());
-        }
-
-        // GET: CarBrands/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var carBrand = await _context.CarBrand
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (carBrand == null)
-            {
-                return NotFound();
-            }
-
-            return View(carBrand);
-        }
+        private readonly ApplicationDbContext _context = context;
 
         // GET: CarBrands/Create
         public IActionResult Create()
@@ -52,15 +18,13 @@ namespace ExpressVoitures.Controllers
         }
 
         // POST: CarBrands/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(/*[Bind("Id,Brand")]*/ CarBrand carBrand)
         {
             if (!ModelState.IsValid)
             {
-                foreach (var modelState in ViewData.ModelState.Values)
+                foreach (ModelStateEntry modelState in ViewData.ModelState.Values)
                 {
                     foreach (ModelError error in modelState.Errors)
                     {
@@ -78,6 +42,57 @@ namespace ExpressVoitures.Controllers
             return View(carBrand);
         }
 
+        // GET: CarBrands/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            CarBrand? carBrand = await _context.CarBrand
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (carBrand == null)
+            {
+                return NotFound();
+            }
+
+            return View(carBrand);
+        }
+
+        // POST: CarBrands/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            CarBrand? carBrand = await _context.CarBrand.FindAsync(id);
+            if (carBrand != null)
+            {
+                _context.CarBrand.Remove(carBrand);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: CarBrands/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            CarBrand? carBrand = await _context.CarBrand
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (carBrand == null)
+            {
+                return NotFound();
+            }
+
+            return View(carBrand);
+        }
+
         // GET: CarBrands/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -86,7 +101,7 @@ namespace ExpressVoitures.Controllers
                 return NotFound();
             }
 
-            var carBrand = await _context.CarBrand.FindAsync(id);
+            CarBrand? carBrand = await _context.CarBrand.FindAsync(id);
             if (carBrand == null)
             {
                 return NotFound();
@@ -95,8 +110,6 @@ namespace ExpressVoitures.Controllers
         }
 
         // POST: CarBrands/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Brand")] CarBrand carBrand)
@@ -113,55 +126,20 @@ namespace ExpressVoitures.Controllers
                     _context.Update(carBrand);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException) when (!CarBrandExists(carBrand.Id))
                 {
-                    if (!CarBrandExists(carBrand.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return NotFound();
                 }
                 return RedirectToAction(nameof(Index));
             }
             return View(carBrand);
         }
 
-        // GET: CarBrands/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // GET: CarBrands
+        public async Task<IActionResult> Index()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var carBrand = await _context.CarBrand
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (carBrand == null)
-            {
-                return NotFound();
-            }
-
-            return View(carBrand);
+            return View(await _context.CarBrand.ToListAsync());
         }
-
-        // POST: CarBrands/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var carBrand = await _context.CarBrand.FindAsync(id);
-            if (carBrand != null)
-            {
-                _context.CarBrand.Remove(carBrand);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
         private bool CarBrandExists(int id)
         {
             return _context.CarBrand.Any(e => e.Id == id);

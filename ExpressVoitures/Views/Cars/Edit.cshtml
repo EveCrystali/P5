@@ -239,25 +239,24 @@
 
             carModelSelect.change(function () {
                 var carModelId = $(this).val();
-                console.log("Modèle sélectionné val(): ", carModelId);
-                $.ajax(
-                    {
-                        url: '@Url.Action("GetMotorsByModel", "Cars")',
-                        type: "GET",
-                        data: { modelId: carModelId },
-                        success: function (motors) {
-                            console.log(motors);
+                $.ajax({
+                    url: '@Url.Action("GetMotorsByModel", "Cars")',
+                    type: "GET",
+                    data: { modelId: carModelId },
+                    success: function (response) {
+                        if (response.available && response.motors.length > 0) {
                             carMotorSelect.empty().append('<option value="0" disabled selected>Select a motor</option>');
-                            $.each(motors, function (index, motor) {
-                                carMotorSelect.append($('<option>',
-                                    {
-                                        value: motor.id,
-                                        text: motor.carMotorName
-                                    }));
+                            $.each(response.motors, function (index, motor) {
+                                carMotorSelect.append($('<option>', {
+                                    value: motor.id,
+                                    text: motor.carMotorName
+                                }));
                             });
-
+                        } else {
+                            carMotorSelect.empty().append('<option value="0" disabled selected>Aucun moteur disponible</option>');
                         }
-                    });
+                    }
+                });
             });
 
             $('.btn-delete-image').click(function () {

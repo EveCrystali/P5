@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using ExpressVoitures.Data;
 
 namespace ExpressVoitures.Data
 {
@@ -15,6 +14,5 @@ namespace ExpressVoitures.Data
         public string? CarBrandName { get; set; }
 
         public virtual ICollection<CarModel>? CarModels { get; set; }
-
     }
 }

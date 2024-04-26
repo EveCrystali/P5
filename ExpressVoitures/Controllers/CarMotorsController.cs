@@ -1,50 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ExpressVoitures.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ExpressVoitures.Data;
-using Microsoft.AspNetCore.Authorization;
 
 namespace ExpressVoitures.Controllers
 {
     [Authorize]
-    public class CarMotorsController : Controller
+    public class CarMotorsController(ApplicationDbContext context) : Controller
     {
-        private readonly ApplicationDbContext _context;
-
-        public CarMotorsController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
-        // GET: CarMotors
-        public async Task<IActionResult> Index()
-        {
-            var applicationDbContext = _context.CarMotor.Include(c => c.CarModel);
-            return View(await applicationDbContext.ToListAsync());
-        }
-
-        // GET: CarMotors/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var carMotor = await _context.CarMotor
-                .Include(c => c.CarModel)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (carMotor == null)
-            {
-                return NotFound();
-            }
-
-            return View(carMotor);
-        }
+        private readonly ApplicationDbContext _context = context;
 
         // GET: CarMotors/Create
         public IActionResult Create()
@@ -54,8 +19,6 @@ namespace ExpressVoitures.Controllers
         }
 
         // POST: CarMotors/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,CarModelId,CarMotorName")] CarMotor carMotor)
@@ -70,6 +33,51 @@ namespace ExpressVoitures.Controllers
             return View(carMotor);
         }
 
+        // GET: CarMotors/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            CarMotor? carMotor = await _context.CarMotor
+                .Include(c => c.CarModel)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            return carMotor == null ? NotFound() : View(carMotor);
+        }
+
+        // POST: CarMotors/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            CarMotor? carMotor = await _context.CarMotor.FindAsync(id);
+            if (carMotor != null)
+            {
+                _context.CarMotor.Remove(carMotor);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: CarMotors/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            CarMotor? carMotor = await _context.CarMotor
+                .Include(c => c.CarModel)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            return carMotor == null ? NotFound() : View(carMotor);
+        }
+
         // GET: CarMotors/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -78,7 +86,7 @@ namespace ExpressVoitures.Controllers
                 return NotFound();
             }
 
-            var carMotor = await _context.CarMotor.FindAsync(id);
+            CarMotor? carMotor = await _context.CarMotor.FindAsync(id);
             if (carMotor == null)
             {
                 return NotFound();
@@ -88,8 +96,6 @@ namespace ExpressVoitures.Controllers
         }
 
         // POST: CarMotors/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,CarModelId,CarMotorName")] CarMotor carMotor)
@@ -106,55 +112,21 @@ namespace ExpressVoitures.Controllers
                     _context.Update(carMotor);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException) when (!CarMotorExists(carMotor.Id))
                 {
-                    if (!CarMotorExists(carMotor.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return NotFound();
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "CarModelName", carMotor.CarModelId);
             return View(carMotor);
         }
 
-        // GET: CarMotors/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // GET: CarMotors
+        public async Task<IActionResult> Index()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var carMotor = await _context.CarMotor
-                .Include(c => c.CarModel)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (carMotor == null)
-            {
-                return NotFound();
-            }
-
-            return View(carMotor);
-        }
-
-        // POST: CarMotors/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var carMotor = await _context.CarMotor.FindAsync(id);
-            if (carMotor != null)
-            {
-                _context.CarMotor.Remove(carMotor);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return View(await _context.CarMotor.Include(c => c.CarModel).ToListAsync());
         }
 
         private bool CarMotorExists(int id)

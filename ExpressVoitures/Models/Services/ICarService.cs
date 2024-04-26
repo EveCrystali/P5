@@ -16,6 +16,7 @@ namespace ExpressVoitures.Models.Services
         Task<Car> MapToCarEntityAsync(CarViewModel carViewModel);
 
         List<CarViewModel> MapToCarViewModel(IEnumerable<Car> carEntities);
+
         Task<Car> GetCar(int id);
 
         Task<IList<Car>> GetCar();

@@ -1,19 +1,16 @@
+﻿using ExpressVoitures.Controllers;
 using ExpressVoitures.Data;
 using ExpressVoitures.Models.Repositories;
 using ExpressVoitures.Models.Services;
-using ExpressVoitures.Controllers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Hosting;
 
-
-
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -28,64 +25,48 @@ builder.Services.AddScoped<CarsController>();
 builder.Services.AddScoped<ICarService, CarService>();
 builder.Services.AddScoped<ICarRepository, CarRepository>();
 
-
 builder.Services.AddMemoryCache();
 builder.Services.AddSession();
 
 builder.Services.AddMvc();
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 // Resolve UserManager from the service provider
-using (var scope = app.Services.CreateScope())
+using (IServiceScope scope = app.Services.CreateScope())
 {
-    var services = scope.ServiceProvider;
+    IServiceProvider services = scope.ServiceProvider;
     try
     {
-        var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
-        // Assuming DataSeeder is your class and SeedData is a static method within it
-        // Adjust this line according to your actual DataSeeder implementation
+        UserManager<IdentityUser> userManager = services.GetRequiredService<UserManager<IdentityUser>>();
         DataSeeder.SeedData(userManager).Wait();
     }
     catch (Exception ex)
     {
-        var logger = services.GetRequiredService<ILogger<Program>>();
+        ILogger<Program> logger = services.GetRequiredService<ILogger<Program>>();
         logger.LogError(ex, "An error occurred seeding the DB.");
     }
 }
 
 app.UseStaticFiles();
 
-app.MapGet("Identity/Account/Register", context =>
+var identityRoutes = new string[]
 {
-    context.Response.Redirect("/");
-    return Task.CompletedTask;
-});
+    "Identity/Account/Register",
+    "Identity/Account/Manage",
+    "Identity/Account/ForgotPassword",
+    "Identity/Account/ResetPassword",
+    "Identity/Account/ConfirmEmail"
+};
 
-app.MapGet("Identity/Account/Manage", context =>
+foreach (string route in identityRoutes)
 {
-    context.Response.Redirect("/");
-    return Task.CompletedTask;
-});
-
-app.MapGet("Identity/Account/ForgotPassword", context =>
-{
-    context.Response.Redirect("/");
-    return Task.CompletedTask;
-});
-
-app.MapGet("Identity/Account/ResetPassword", context =>
-{
-    context.Response.Redirect("/");
-    return Task.CompletedTask;
-});
-
-app.MapGet("Identity/Account/ConfirmEmail", context =>
-{
-    context.Response.Redirect("/");
-    return Task.CompletedTask;
-});
-
+    app.MapGet(route, context =>
+    {
+        context.Response.Redirect("/");
+        return Task.CompletedTask;
+    });
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -95,7 +76,6 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 

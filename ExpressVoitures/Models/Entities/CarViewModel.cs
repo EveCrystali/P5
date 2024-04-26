@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Security.Permissions;
 using ExpressVoitures.Data;
 
 namespace ExpressVoitures.Models.Entities
@@ -17,7 +16,6 @@ namespace ExpressVoitures.Models.Entities
 
         public CarBrand? CarBrand { get; set; }
 
-        
         public string? CarBrandName { get; set; }
 
         [DisplayName("Modèle* :")]
@@ -29,6 +27,7 @@ namespace ExpressVoitures.Models.Entities
 
         [DisplayName("Finition* :")]
         public int CarTrimId { get; set; }
+
         public CarTrim? CarTrim { get; set; }
 
         public string? CarTrimName { get; set; }
@@ -52,11 +51,11 @@ namespace ExpressVoitures.Models.Entities
 
         [DisplayName("Prix d'achat* :")]
         [Required(ErrorMessage = "Le prix d'achat du véhicule est obligatoire.")]
-        [Range(0.01, Double.MaxValue, ErrorMessage = "La valeur doit être positive.")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "La valeur doit être positive.")]
         public decimal? PurchasePrice { get; set; }
 
         [DisplayName("Prix de vente :")]
-        [Range(0.01, Double.MaxValue, ErrorMessage = "La valeur doit être positive.")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "La valeur doit être positive.")]
         public decimal? SellingPrice { get; set; }
 
         [DisplayName("Disponible** :")]
@@ -76,7 +75,7 @@ namespace ExpressVoitures.Models.Entities
         public string? Description { get; set; }
 
         [DisplayName("Chemin des images :")]
-        public List<String>? ImagePaths { get; set; }
+        public List<string>? ImagePaths { get; set; }
 
         [DisplayName("Images :")]
         public List<IFormFile>? Images { get; set; }

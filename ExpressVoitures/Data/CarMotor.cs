@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using ExpressVoitures.Data;
 
 namespace ExpressVoitures.Data
 {

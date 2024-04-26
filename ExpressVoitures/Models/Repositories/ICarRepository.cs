@@ -1,6 +1,4 @@
-﻿using ExpressVoitures.Models.Entities;
-using ExpressVoitures.Models.Repositories;
-using ExpressVoitures.Data;
+﻿using ExpressVoitures.Data;
 
 namespace ExpressVoitures.Models.Repositories
 {
@@ -17,7 +15,7 @@ namespace ExpressVoitures.Models.Repositories
         Task<CarBrand> GetCarBrandById(int id);
 
         IEnumerable<CarModel> GetAllCarModels();
-        
+
         Task<CarModel> GetCarModelById(int id);
 
         void SaveCar(Car car);

@@ -1,6 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel;
-using ExpressVoitures.Data;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace ExpressVoitures.Data
 {
@@ -14,7 +13,7 @@ namespace ExpressVoitures.Data
 
         [Required]
         [DisplayName("Coût de la réparation")]
-        [Range(0.01, Double.MaxValue, ErrorMessage = "La valeur doit être positive.")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "La valeur doit être positive.")]
         public decimal? RepairCost { get; set; }
 
         [Required]

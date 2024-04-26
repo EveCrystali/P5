@@ -1,36 +1,36 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ExpressVoitures</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/ExpressVoitures.styles.css" asp-append-version="true" />
-</head>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@ViewData["Title"] - ExpressVoitures</title>
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/ExpressVoitures.styles.css" asp-append-version="true" />
+    </head>
 
-<body>
-    <header class="main-header">
-        <div class="navbar-brand">
-            <a asp-area="" asp-controller="Home" asp-action="Index"><img src="~/images/logoExpressVoitures.png" height="100"></a>
-            <h1>ExpressVoitures</h1>
+    <body>
+        <header class="main-header">
+            <div class="navbar-brand">
+                <a asp-area="" asp-controller="Home" asp-action="Index"><img src="~/images/logoExpressVoitures.png" height="100"></a>
+                <h1>ExpressVoitures</h1>
+            </div>
+            <partial name="_LoginPartial" />
+        </header>
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
         </div>
-        <partial name="_LoginPartial" />
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        &copy; 2024 - ExpressVoitures
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+        <footer class="border-top footer text-muted">
+            &copy; 2024 - ExpressVoitures
+        </footer>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @await RenderSectionAsync("Scripts", required: false)
 
-</body>
+    </body>
 </html>

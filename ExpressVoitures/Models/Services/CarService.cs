@@ -1,125 +1,73 @@
 ﻿using ExpressVoitures.Data;
 using ExpressVoitures.Models.Entities;
 using ExpressVoitures.Models.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace ExpressVoitures.Models.Services
 {
-    public class CarService : ICarService
+    public class CarService(ICarRepository carRepository) : ICarService
     {
-        private readonly ICarRepository _carRepository;
+        private readonly ICarRepository _carRepository = carRepository;
 
-        public CarService(ICarRepository carRepository)
+        public void DeleteCar(int id)
         {
-            _carRepository = carRepository;
-        }
-
-        public List<CarViewModel> GetAllCarsViewModel()
-        {
-            IEnumerable<Car> carEntities = GetAllCars();
-            return MapToCarViewModel(carEntities);
-        }
-
-        public List<CarViewModel> MapToCarViewModel(IEnumerable<Car> carEntities)
-        {
-            List<CarViewModel> carsViewModel = new();
-            foreach (Car car in carEntities)
-            {
-                carsViewModel.Add(new CarViewModel
-                {
-                    Id = car.Id,
-                    CodeVIN = car.CodeVIN,
-                    CarBrandId = car.CarBrandId,
-                    CarBrand = car.CarBrand,
-                    CarBrandName = car.CarBrand?.CarBrandName ?? "Marque inconnu",
-                    CarModelId = car.CarModelId,
-                    CarModel = car.CarModel,
-                    CarModelName = car.CarModel?.CarModelName ?? "Modèle inconnu",
-                    CarTrimId = car.CarTrimId,
-                    CarTrim = car.CarTrim,
-                    CarTrimName = car.CarTrim?.CarTrimName ?? "Version inconnue",
-                    CarMotorId = car.CarMotorId,
-                    CarMotor = car.CarMotor,
-                    CarMotorName = car.CarMotor?.CarMotorName ?? "Moteur inconnu",
-                    CarRepairs = car.CarRepairs ?? new List<CarRepair>(),
-                    Year = car.Year,
-                    Mileage = car.Mileage,
-                    PurchasePrice = car.PurchasePrice,
-                    SellingPrice = car.SellingPrice,
-                    IsAvailable = car.IsAvailable,
-                    PurchaseDate = car.PurchaseDate,
-                    DateOfAvailability = car.DateOfAvailability,
-                    SaleDate = car.SaleDate,
-                    Description = car.Description,
-                    ImagePaths = car.ImagePaths,
-                });
-            }
-            return carsViewModel;
-        }
-
-        public List<Car> GetAllCars()
-        {
-            IEnumerable<Car> carEntities = _carRepository.GetAllCars();
-            return carEntities.ToList();
-        }
-
-        public CarViewModel GetCarViewModelById(int id)
-        {
-            List<CarViewModel> carViewModels = GetAllCarsViewModel().ToList();
-            return carViewModels.Find(c => c.Id == id);
-        }
-
-        public async Task<Car> GetCarById(int id)
-        {
-            List<Car> cars = GetAllCars().ToList();
-            return cars.Find(c => c.Id == id);
+            _carRepository.DeleteCar(id);
         }
 
         public List<CarBrand> GetAllCarBrands()
         {
-            IEnumerable<CarBrand> carBrands = _carRepository.GetAllCarBrands();
-            return carBrands.ToList();
+            return _carRepository.GetAllCarBrands().ToList();
         }
 
-        public CarBrand GetCarBrandById(int id)
+        public List<Car> GetAllCars()
         {
-            List<CarBrand> carBrands = GetAllCarBrands().ToList();
-            return carBrands.Find(c => c.Id == id);
+            return _carRepository.GetAllCars().ToList();
+        }
+
+        public List<CarViewModel> GetAllCarsViewModel()
+        {
+            return MapToCarViewModel(GetAllCars());
         }
 
         public async Task<Car> GetCar(int id)
         {
-            var cars = await GetCarById(id);
-            return cars;
+            return await GetCarById(id);
         }
 
         public async Task<IList<Car>> GetCar()
         {
-            var cars = await _carRepository.GetCar();
-            return cars;
+            return await _carRepository.GetCar();
         }
 
-        private async Task<bool> CarExistAsync(int id)
+        public CarBrand GetCarBrandById(int id)
         {
-            var existingCar = await GetCar(id);
-            return existingCar != null;
+            return GetAllCarBrands().ToList().Find(c => c.Id == id);
+        }
+
+        public async Task<Car> GetCarById(int id)
+        {
+            return GetAllCars().ToList().Find(c => c.Id == id);
+        }
+
+        public CarViewModel GetCarViewModelById(int id)
+        {
+            return GetAllCarsViewModel().ToList().Find(c => c.Id == id);
         }
 
         public async Task<Car> MapToCarEntityAsync(CarViewModel carViewModel)
         {
             if (await CarExistAsync(carViewModel.Id))
             {
-                var existingCar = await GetCar(carViewModel.Id);
+                Car existingCar = await GetCar(carViewModel.Id);
                 existingCar.CodeVIN = carViewModel.CodeVIN;
                 existingCar.CarBrandId = carViewModel.CarBrandId;
                 existingCar.CarModelId = carViewModel.CarModelId;
                 existingCar.CarTrimId = carViewModel.CarTrimId;
                 existingCar.CarMotorId = carViewModel.CarMotorId;
+                existingCar.CarRepairs = [];
 
-                existingCar.CarRepairs = new List<CarRepair>();
-                foreach (var repairViewModel in carViewModel.CarRepairs)
+                foreach (CarRepair repairViewModel in carViewModel.CarRepairs)
                 {
-                    var repair = existingCar.CarRepairs.FirstOrDefault(r => r.Id == repairViewModel.Id);
+                    CarRepair? repair = existingCar.CarRepairs.Find(r => r.Id == repairViewModel.Id);
                     if (repair != null)
                     {
                         // Update existing repair details
@@ -147,7 +95,6 @@ namespace ExpressVoitures.Models.Services
                 existingCar.DateOfAvailability = carViewModel.DateOfAvailability;
                 existingCar.SaleDate = carViewModel.SaleDate;
                 existingCar.Description = carViewModel.Description;
-                //existingCar.ImagePaths = carViewModel.ImagePaths;
 
                 return existingCar;
             }
@@ -176,15 +123,53 @@ namespace ExpressVoitures.Models.Services
             }
         }
 
+        public List<CarViewModel> MapToCarViewModel(IEnumerable<Car> carEntities)
+        {
+            List<CarViewModel> carsViewModel = [];
+            foreach (Car car in carEntities)
+            {
+                carsViewModel.Add(new CarViewModel
+                {
+                    Id = car.Id,
+                    CodeVIN = car.CodeVIN,
+                    CarBrandId = car.CarBrandId,
+                    CarBrand = car.CarBrand,
+                    CarBrandName = car.CarBrand?.CarBrandName ?? "Marque inconnu",
+                    CarModelId = car.CarModelId,
+                    CarModel = car.CarModel,
+                    CarModelName = car.CarModel?.CarModelName ?? "Modèle inconnu",
+                    CarTrimId = car.CarTrimId,
+                    CarTrim = car.CarTrim,
+                    CarTrimName = car.CarTrim?.CarTrimName ?? "Version inconnue",
+                    CarMotorId = car.CarMotorId,
+                    CarMotor = car.CarMotor,
+                    CarMotorName = car.CarMotor?.CarMotorName ?? "Moteur inconnu",
+                    CarRepairs = car.CarRepairs ?? [],
+                    Year = car.Year,
+                    Mileage = car.Mileage,
+                    PurchasePrice = car.PurchasePrice,
+                    SellingPrice = car.SellingPrice,
+                    IsAvailable = car.IsAvailable,
+                    PurchaseDate = car.PurchaseDate,
+                    DateOfAvailability = car.DateOfAvailability,
+                    SaleDate = car.SaleDate,
+                    Description = car.Description,
+                    ImagePaths = car.ImagePaths,
+                });
+            }
+            return carsViewModel;
+        }
+
         public async Task SaveCar(CarViewModel car)
         {
-            var carToAdd = await MapToCarEntityAsync(car);
+            Car carToAdd = await MapToCarEntityAsync(car);
             _carRepository.SaveCar(carToAdd);
         }
 
-        public void DeleteCar(int id)
+        private async Task<bool> CarExistAsync(int id)
         {
-            _carRepository.DeleteCar(id);
+            Car existingCar = await GetCar(id);
+            return existingCar != null;
         }
     }
 }

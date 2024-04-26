@@ -10,9 +10,7 @@ namespace ExpressVoitures.Data
 
         public virtual CarModel? CarModel { get; set; }
 
-
         [DisplayName("Finition")]
         public string? CarTrimName { get; set; }
-
     }
 }
