@@ -49,11 +49,31 @@
         <div class="col-md-3 car-info">
             <h3>@Model.CarBrand.CarBrandName - @Model.CarModel.CarModelName</h3>
             <ul class="list-unstyled">
-                <li> 
                 @if (User.Identity.IsAuthenticated && UserManager.GetUserAsync(User).Result != null)
                 {
-                    <strong>Code VIN :</strong> @Model.CodeVIN                }
-                </li>
+                    <li><strong>Code VIN :</strong> @Model.CodeVIN</li>
+                    <li><strong>Date d'achat :</strong> @Model.PurchaseDate?.ToString("dd/MM/yyyy")</li>
+                    <li><strong>Prix d'achat :</strong> @Model.PurchasePrice €</li>
+                    <li><strong>Date de vente :</strong> @Model.SaleDate?.ToString("dd/MM/yyyy")</li>
+                    @if (Model.CarRepairs != null && Model.CarRepairs.Count > 0)
+                    {
+                        <li>
+                            <strong>Réparations :</strong>
+                            <ul>
+                                @foreach (var repair in Model.CarRepairs)
+                                {
+                                    <li>@repair.RepairDescription : @repair.RepairCost €</li>
+                                }
+                            </ul>
+                        </li>
+                        <li>
+                            @{
+                                double total = ((double)Model.CarRepairs.Sum(repair => repair.RepairCost) + (double)Model.PurchasePrice);
+                            }
+                            <strong>Coût total (achat + réparations) :</strong> @total €
+                        </li>
+                    }
+                }
                 <li><strong>Finition :</strong> @Model.CarTrim.CarTrimName</li>
                 <li><strong>Motorisation :</strong> @(string.IsNullOrEmpty(Model.CarMotor?.CarMotorName) ? "Inconnu" : Model.CarMotor.CarMotorName)</li>
                 <li><strong>Kilométrage :</strong> @Model.Mileage km</li>
@@ -70,7 +90,10 @@
         <p>@Model.Description</p>
     </div>
 </div>
-<div id="sticky-banner">Une voiture vous intéresse ? Une question ? Contactez-nous...</div>
+@if (!User.Identity.IsAuthenticated && UserManager.GetUserAsync(User).Result == null)
+{
+    <div id="sticky-banner">Une voiture vous intéresse ? Une question ? Contactez-nous...</div>
+}
 
 <!-- Modal Lightbox -->
 <div id="myModal" class="modal">

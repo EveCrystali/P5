@@ -132,7 +132,10 @@
         }
     }
 </div>
-<div id="sticky-banner">Une voiture vous intéresse ? Une question ? Contactez-nous...</div>
+@if (!User.Identity.IsAuthenticated && UserManager.GetUserAsync(User).Result == null)
+{
+    <div id="sticky-banner">Une voiture vous intéresse ? Une question ? Contactez-nous...</div>
+}
 
 @section Scripts {
     @{
