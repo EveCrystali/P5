@@ -285,6 +285,19 @@ body {
   background-color: #060ea307;
 }
 
+#sticky-banner {
+  position: fixed;
+  bottom: 7%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20%;
+  background-color:#031428;
+  color: white;
+  z-index: 10;
+  padding: 10px;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+}
+
 /*--- Car not available ---*/
 
 .car-card-unavailable {
@@ -311,17 +324,30 @@ body {
   font-style: normal;
 }
 
-#sticky-banner {
-  position: fixed;
-  bottom: 7%;
+/* -------- Car sold -------- */
+
+.car-card-sold {
+  position: relative;
+}
+
+.car-card-sold::before {
+  content: "";
+  position: absolute;
+  top: -6.5%;
   left: 50%;
-  transform: translateX(-50%);
-  width: 20%;
-  background-color:#031428;
-  color: white;
-  z-index: 10;
-  padding: 10px;
-  box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+  width: 2%;
+  height: 115%;
+  background: rgba(255, 0, 0, 0.4);
+  transform: rotate(-32deg);
+}
+
+.sold-admin {
+  font-weight: 600;
+  color: rgba(255, 0, 0, 0.6);
+  font-size: 1.2em;
+  text-align: center;
+  margin-top: -0px;
+  font-style: normal;
 }
 
 /* --------DETAILS---------- */
