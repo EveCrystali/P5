@@ -564,6 +564,22 @@ h2 {
   height: 40px;
 }
 
+.btn-login.btn-primary {
+  width: 25%;
+  position: absolute;
+  left: 50%;
+  background-color: rgba(255, 0, 0, 0.75);
+  transform: translateX(-50%);
+  margin-top: 25px;
+  border-color: white;
+  border-radius: 9px;
+  align-items: center;
+  justify-items: center;
+  font-weight: bold;
+  font-variant: small-caps;
+  height: 40px;
+}
+
 .form-control {
   display: inline-block;
   margin-bottom: 10px;
