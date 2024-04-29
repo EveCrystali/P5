@@ -297,7 +297,7 @@ namespace ExpressVoitures.Controllers
                 return Json(new { available = false });
             }
 
-            return Json(new { available = true, motors });
+            return Json(motors);
         }
 
         [Authorize]

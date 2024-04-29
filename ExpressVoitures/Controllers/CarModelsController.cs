@@ -30,16 +30,22 @@ namespace ExpressVoitures.Controllers
                 {
                     foreach (ModelError error in modelState.Errors)
                     {
-                        // Log or print the error
                         Console.WriteLine(error.ErrorMessage);
                     }
                 }
             }
             else if (ModelState.IsValid)
             {
-                _context.Add(carModel);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (_context.CarModel.Any(cm => cm.CarModelName == carModel.CarModelName))
+                {
+                    ModelState.AddModelError("CarModelName", "Le modèle existe déjà !");
+                }
+                else
+                {
+                    _context.Add(carModel);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Create", "Cars");
+                }
             }
             ViewData["CarBrandId"] = new SelectList(_context.CarBrand, "Id", "CarBrandName", carModel.CarBrandId);
             return View(carModel);

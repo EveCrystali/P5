@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressVoitures.Controllers
@@ -23,11 +24,28 @@ namespace ExpressVoitures.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,CarModelId,CarTrimName")] CarTrim carTrim)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(carTrim);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                foreach (ModelStateEntry modelState in ViewData.ModelState.Values)
+                {
+                    foreach (ModelError error in modelState.Errors)
+                    {
+                        Console.WriteLine(error.ErrorMessage);
+                    }
+                }
+            }
+            else if (ModelState.IsValid)
+            {
+                if (_context.CarTrim.Any(ct => ct.CarTrimName == carTrim.CarTrimName))
+                {
+                   ModelState.AddModelError("CarTrimName", "La finition existe déjà !");
+                }
+                else
+                {
+                    _context.Add(carTrim);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Create", "Cars");
+                }
             }
 
             ViewData["CarModelId"] = new SelectList(_context.CarModel, "Id", "CarModelName", carTrim.CarModelId);

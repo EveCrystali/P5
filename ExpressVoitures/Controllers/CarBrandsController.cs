@@ -28,17 +28,25 @@ namespace ExpressVoitures.Controllers
                 {
                     foreach (ModelError error in modelState.Errors)
                     {
-                        // Log or print the error
                         Console.WriteLine(error.ErrorMessage);
                     }
                 }
             }
             else if (ModelState.IsValid)
             {
-                _context.Add(carBrand);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (_context.CarBrand.Any(cb => cb.CarBrandName == carBrand.CarBrandName))
+                {
+                   ModelState.AddModelError("CarBrandName", "La marque existe déjà !");
+                   
+                }
+                else
+                {
+                    _context.Add(carBrand);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Create", "Cars");
+                }
             }
+
             return View(carBrand);
         }
 
