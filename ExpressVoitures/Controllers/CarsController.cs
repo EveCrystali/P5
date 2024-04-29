@@ -184,6 +184,7 @@ namespace ExpressVoitures.Controllers
         public async Task<IActionResult> Details(int id)
         {
             await _context.Car.FirstAsync(c => c.Id == id);
+            await _context.Car.Include(car => car.CarRepairs).FirstAsync(c => c.Id == id);
             CarViewModel carViewModel = _carService.GetCarViewModelById(id);
 
             return View(carViewModel);
