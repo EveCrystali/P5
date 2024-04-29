@@ -550,7 +550,7 @@ h2 {
 
 .btn-validate.btn-primary {
   width: 25%;
-  position: absolute;
+  position: relative;
   left: 50%;
   background-color: rgba(255, 0, 0, 0.75);
   transform: translateX(-50%);
