@@ -172,6 +172,14 @@
                     }
                 });
             }, 250)); // Attente de 250ms avant d'exécuter la fonction
+
+            $("input[type='search']").keydown(function(event) {
+                if (event.keyCode == 13) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+
         });
 
         window.addEventListener('scroll', function() {
