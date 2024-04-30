@@ -1,13 +1,13 @@
 ﻿using System;
 using ExpressVoitures.Data;
 using ExpressVoitures.Models.Entities;
-using ExpressVoitures.Models.Repositories;
 using ExpressVoitures.Models.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace ExpressVoitures.Controllers
 {
@@ -176,7 +176,7 @@ namespace ExpressVoitures.Controllers
                 return View("Error", new { errorMessage = "An error occurred while trying to delete the image." });
             }
 
-            // Redirect back to the edit page
+            // Redirect back to the edit page - secure
             return RedirectToAction("Edit", new { id = carId });
         }
 

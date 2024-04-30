@@ -15,7 +15,11 @@ namespace ExpressVoitures.Data
         public List<CarRepair>? CarRepairs { get; set; }
         public CarTrim? CarTrim { get; set; }
         public int CarTrimId { get; set; }
+
+        [DisplayName("Code VIN :")]
+        [StringLength(17, MinimumLength = 17, ErrorMessage = "Le code VIN doit avoir 17 caractères.")]
         public string? CodeVIN { get; set; }
+
         [DisplayName("Date de disponibilité à la vente")]
         public DateOnly? DateOfAvailability { get; set; }
 
@@ -23,10 +27,12 @@ namespace ExpressVoitures.Data
         public string? Description { get; set; }
 
         public int Id { get; set; }
-        [DisplayName("Chemin des images")]
+
+        [DisplayName("Chemin des images :")]
         public List<string>? ImagePaths { get; set; }
 
         [NotMapped]
+        [DisplayName("Images :")]
         public List<IFormFile>? Images { get; set; }
 
         [DisplayName("Disponibile")]

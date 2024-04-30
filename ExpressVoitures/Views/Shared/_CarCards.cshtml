@@ -8,33 +8,107 @@
 
 @foreach (CarViewModel carViewModel in Model)
 {
-<div class="car-card">
-            <a asp-controller="Cars" asp-action="Details" asp-route-id="@carViewModel.Id">
-            @if (User.Identity.IsAuthenticated && UserManager.GetUserAsync(User).Result != null)
-            {<a asp-controller="Cars" asp-action="Edit" asp-route-id="@carViewModel.Id"><button class="small-red-button">Editer</button></a>
-            }  
-            @if (carViewModel.ImagePaths?.Count > 0)
-            {
-                var carImagePath = carViewModel.ImagePaths.First();
-                <img src="~/@carImagePath" alt="Car" style="width:100%" />
-            }
-            @if (carViewModel.ImagePaths?.Count <= 0)
-            {
-                <img src="~/Images/Img_Vignette_Default.jpg" alt="CarDefault" style="width:100%" />
-            }
-                <h3 class="card-title">@Html.DisplayFor(modelItem => carViewModel.CarBrandName) &nbsp;-&nbsp; <span
-                        style="font-size: smaller;">@Html.DisplayFor(modelItem => carViewModel.CarModelName)</span></h3>
-                <p>@Html.DisplayFor(modelItem => carViewModel.CarTrimName)</p>
-                <p>@Html.DisplayFor(modelItem => carViewModel.CarMotorName)</p>
-                <p>Année : @Html.DisplayFor(modelItem => carViewModel.Year) - @Html.DisplayFor(modelItem =>
-                carViewModel.Mileage) km</p>
-                <p>@if (carViewModel.IsAvailable)
-                    {
-                        <span style="font-size: smaller;"><text> Disponible le : </text>
-                    @Html.DisplayFor(modelItem => carViewModel.DateOfAvailability)</span>
+@if (carViewModel.IsAvailable)
+        {
+            <div class="car-card">
+                @if (User.Identity.IsAuthenticated && UserManager.GetUserAsync(User).Result != null)
+                {
+                    <a asp-controller="Cars" asp-action="Edit" asp-route-id="@carViewModel.Id"><button
+                            class="small-red-button">Editer</button></a>
                 }
-            </p>
-            </a>
-            <h2 class="car-price-landing">@string.Format(new System.Globalization.CultureInfo("fr-FR"), "{0:N0}", carViewModel.SellingPrice) €</h2>
-</div>
+                <a asp-controller="Cars" asp-action="Details" asp-route-id="@carViewModel.Id">
+                    @if (carViewModel.ImagePaths?.Count > 0)
+                    {
+                        var carImagePath = carViewModel.ImagePaths.First();
+                        <img src="~/@carImagePath" alt="Car" style="width:100%" />
+                    }
+                    @if (carViewModel.ImagePaths?.Count <= 0)
+                    {
+                        <img src="~/Images/Img_Vignette_Default.jpg" alt="CarDefault" style="width:100%" />
+                    }
+                    <h3 class="card-title">@Html.DisplayFor(modelItem => carViewModel.CarBrandName) &nbsp;-&nbsp; <span
+                            style="font-size: smaller;">@Html.DisplayFor(modelItem => carViewModel.CarModelName)</span></h3>
+                    <p>@Html.DisplayFor(modelItem => carViewModel.CarTrimName)</p>
+                    <p>@Html.DisplayFor(modelItem => carViewModel.CarMotorName)</p>
+                    <p>Année : @Html.DisplayFor(modelItem => carViewModel.Year) - @Html.DisplayFor(modelItem => carViewModel.Mileage) km</p>
+                    <p>@if (carViewModel.IsAvailable)
+                        {
+                            <span style="font-size: smaller;"><text> Disponible le : </text>@Html.DisplayFor(modelItem => carViewModel.DateOfAvailability)</span>
+                        }
+                    </p>
+                </a>
+                <h2 class="car-price-landing">@string.Format(new System.Globalization.CultureInfo("fr-FR"), "{0:N0}",
+            carViewModel.SellingPrice) €</h2>
+            </div>
+        }
+        @if (User.Identity.IsAuthenticated && UserManager.GetUserAsync(User).Result != null && !carViewModel.IsAvailable)
+        {
+            <div class="car-card car-card-unavailable">
+                @if (User.Identity.IsAuthenticated && UserManager.GetUserAsync(User).Result != null)
+                {
+                    <a asp-controller="Cars" asp-action="Edit" asp-route-id="@carViewModel.Id"><button
+                            class="small-red-button">Editer</button></a>
+                }
+                <a asp-controller="Cars" asp-action="Details" asp-route-id="@carViewModel.Id">
+                    @if (carViewModel.ImagePaths?.Count > 0)
+                    {
+                        var carImagePath = carViewModel.ImagePaths.First();
+                        <img src="~/@carImagePath" alt="Car" style="width:100%" />
+                    }
+                    @if (carViewModel.ImagePaths?.Count <= 0)
+                    {
+                        <img src="~/Images/Img_Vignette_Default.jpg" alt="CarDefault" style="width:100%" />
+                    }
+                    <h3 class="card-title">@Html.DisplayFor(modelItem => carViewModel.CarBrandName) &nbsp;-&nbsp; <span
+                            style="font-size: smaller;">@Html.DisplayFor(modelItem => carViewModel.CarModelName)</span></h3>
+                    <p>@Html.DisplayFor(modelItem => carViewModel.CarTrimName)</p>
+                    <p>@Html.DisplayFor(modelItem => carViewModel.CarMotorName)</p>
+                    <p>Année : @Html.DisplayFor(modelItem => carViewModel.Year) - @Html.DisplayFor(modelItem => carViewModel.Mileage) km</p>
+                    <p>@if (carViewModel.IsAvailable)
+                        {
+                            <span style="font-size: smaller;"><text> Disponible le : </text>
+                                @Html.DisplayFor(modelItem => carViewModel.DateOfAvailability)</span>
+                        }
+                    </p>
+                </a>
+                <h2 class="car-price-landing">@string.Format(new System.Globalization.CultureInfo("fr-FR"), "{0:N0}",
+            carViewModel.SellingPrice) €</h2>
+                <div class="not-available-admin">Indisponible</div>
+            </div>
+        }
+        @if (User.Identity.IsAuthenticated && UserManager.GetUserAsync(User).Result != null && carViewModel.SaleDate.HasValue)
+        {
+            <div class="car-card car-card-sold">
+                @if (User.Identity.IsAuthenticated && UserManager.GetUserAsync(User).Result != null)
+                {
+                    <a asp-controller="Cars" asp-action="Edit" asp-route-id="@carViewModel.Id"><button
+                            class="small-red-button">Editer</button></a>
+                }
+                <a asp-controller="Cars" asp-action="Details" asp-route-id="@carViewModel.Id">
+                    @if (carViewModel.ImagePaths?.Count > 0)
+                    {
+                        var carImagePath = carViewModel.ImagePaths.First();
+                        <img src="~/@carImagePath" alt="Car" style="width:100%" />
+                    }
+                    @if (carViewModel.ImagePaths?.Count <= 0)
+                    {
+                        <img src="~/Images/Img_Vignette_Default.jpg" alt="CarDefault" style="width:100%" />
+                    }
+                    <h3 class="card-title">@Html.DisplayFor(modelItem => carViewModel.CarBrandName) &nbsp;-&nbsp; <span
+                            style="font-size: smaller;">@Html.DisplayFor(modelItem => carViewModel.CarModelName)</span></h3>
+                    <p>@Html.DisplayFor(modelItem => carViewModel.CarTrimName)</p>
+                    <p>@Html.DisplayFor(modelItem => carViewModel.CarMotorName)</p>
+                    <p>Année : @Html.DisplayFor(modelItem => carViewModel.Year) - @Html.DisplayFor(modelItem => carViewModel.Mileage) km</p>
+                    <p>@if (carViewModel.IsAvailable)
+                        {
+                            <span style="font-size: smaller;"><text> Disponible le : </text>
+                                @Html.DisplayFor(modelItem => carViewModel.DateOfAvailability)</span>
+                        }
+                    </p>
+                </a>
+                <h2 class="car-price-landing">@string.Format(new System.Globalization.CultureInfo("fr-FR"), "{0:N0}",
+            carViewModel.SellingPrice) €</h2>
+                <div class="sold-admin">Vendue le : @Html.DisplayFor(modelItem => carViewModel.SaleDate)</div>
+            </div>
+        }
 }
