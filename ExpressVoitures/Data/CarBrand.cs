@@ -11,6 +11,7 @@ namespace ExpressVoitures.Data
 
         [DisplayName("Marque")]
         [Required(ErrorMessage = "La marque est obligatoire.")]
+        [StringLength(25, ErrorMessage = "Le nom de la marque ne peut pas dépasser 25 caractères.")]
         public string? CarBrandName { get; set; }
 
         public virtual ICollection<CarModel>? CarModels { get; set; }

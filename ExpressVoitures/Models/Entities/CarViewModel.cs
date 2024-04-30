@@ -17,7 +17,6 @@ namespace ExpressVoitures.Models.Entities
 
         public CarBrand? CarBrand { get; set; }
 
-        [StringLength(25, ErrorMessage = "Le nom de la marque ne peut pas dépasser 25 caractères.")]
         public string? CarBrandName { get; set; }
 
         [DisplayName("Modèle* :")]
@@ -25,7 +24,6 @@ namespace ExpressVoitures.Models.Entities
 
         public CarModel? CarModel { get; set; }
 
-        [StringLength(25, ErrorMessage = "Le nom du modèle ne peut pas dépasser 25 caractères.")]
         public string? CarModelName { get; set; }
 
         [DisplayName("Finition* :")]
@@ -33,7 +31,6 @@ namespace ExpressVoitures.Models.Entities
 
         public CarTrim? CarTrim { get; set; }
 
-        [StringLength(25, ErrorMessage = "Le nom de la finition ne peut pas dépasser 25 caractères.")]
         public string? CarTrimName { get; set; }
 
         [DisplayName("Motorisation :")]
@@ -41,7 +38,6 @@ namespace ExpressVoitures.Models.Entities
 
         public CarMotor? CarMotor { get; set; }
 
-        [StringLength(25, ErrorMessage = "Le nom de la motorisation ne peut pas dépasser 25 caractères.")]
         public string? CarMotorName { get; set; }
 
         public List<CarRepair> CarRepairs { get; set; } = [];

@@ -18,6 +18,7 @@ namespace ExpressVoitures.Data
 
         [Required]
         [DisplayName("Description de la réparation")]
+        [StringLength(40, ErrorMessage = "La description de la réparation ne doit pas depasser 40 caractères.")]
         public string? RepairDescription { get; set; }
     }
 }
