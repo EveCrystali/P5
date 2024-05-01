@@ -264,10 +264,14 @@
                 var imagePath = button.data('imagepath');
                 var imageId = button.data('imageid');
                 var carId = '@Model.Id';
+                var token = $('input[name="__RequestVerificationToken"]').val();
 
                 $.ajax({
                     url: '/Cars/DeleteImage',
                     type: 'POST',
+                    headers: {
+                        'RequestVerificationToken': token
+                    },
                     data: {
                         carId: carId,
                         imagePath: imagePath

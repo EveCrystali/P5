@@ -37,8 +37,8 @@ namespace ExpressVoitures.Controllers
             return View(carViewModel);
         }
 
-        [Authorize]
         // POST: Cars/Create
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CarViewModel carViewModel)
@@ -142,6 +142,7 @@ namespace ExpressVoitures.Controllers
 
         [Authorize]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult DeleteImage(int carId, string imagePath)
         {
             if (string.IsNullOrEmpty(imagePath) || carId <= 0)
