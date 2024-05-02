@@ -18,9 +18,16 @@
 </p>
 <nav>
     <form method="get" class="d-flex" aspcontroller="Home" asp-action="Search">
-        <input class="form-control me-2" type="search" placeholder="Rechercher un modèle de voiture" aria-label="Search"
-            name="query">
+        <input class="form-control me-2" type="search" placeholder="Rechercher un modèle de voiture" aria-label="Search" name="query">
+        
     </form>
+    <div class="filterCarsByAvailabilityCheckbox">
+        @if (User.Identity.IsAuthenticated && UserManager.GetUserAsync(User).Result != null)
+        {
+            <input type="checkbox" id="filterCarsByAvailabilityCheckbox" @(ViewBag.Trier != null && ViewBag.Trier ? "checked='checked'" : "") />
+            <label for="filterCarsByAvailabilityCheckbox">Afficher uniquement les voitures disponibles</label>
+        }
+   </div>
 </nav>
 
 <div class="container-cars">
@@ -180,6 +187,21 @@
                 }
             });
 
+        });
+
+        $('#filterCarsByAvailabilityCheckbox').change(function() {
+            var onlyAvailable = $(this).is(':checked');
+            $.ajax({
+                url: '@Url.Action("FilterCarsByAvailability", "Home")', 
+                type: 'GET',
+                data: {  onlyAvailable: onlyAvailable },
+                success: function(data) {
+                    $('.container-cars').html(data);
+                },
+                error: function(xhr, status, error) {
+                    alert('Erreur lors du chargement des données: ' + xhr.responseText);
+                }
+            });
         });
 
         window.addEventListener('scroll', function() {

@@ -205,6 +205,12 @@ body {
   margin-bottom: 15px;
 }
 
+.filterCarsByAvailabilityCheckbox
+{
+  margin-top:-15px;
+  margin-bottom: 20px;
+}
+
 .container-cars {
   display: flex;
   flex-wrap: wrap;

@@ -22,8 +22,8 @@ namespace ExpressVoitures.Controllers
         public IActionResult Index()
         {
             _context.Car
-                .Include(c => c.CarModel) 
-                .Include(c => c.CarBrand); 
+                .Include(c => c.CarModel)
+                .Include(c => c.CarBrand);
             IEnumerable<CarViewModel> carViewModels = _carService.GetAllCarsViewModel();
 
             return View(carViewModels);
@@ -42,8 +42,8 @@ namespace ExpressVoitures.Controllers
                 if (string.IsNullOrEmpty(query) || string.IsNullOrWhiteSpace(query))
                 {
                     _context.Car
-                    .Include(c => c.CarModel) 
-                    .Include(c => c.CarBrand); 
+                    .Include(c => c.CarModel)
+                    .Include(c => c.CarBrand);
                     return PartialView("_CarCards", _carService.GetAllCarsViewModel());
                 }
 
@@ -52,6 +52,28 @@ namespace ExpressVoitures.Controllers
             catch (Exception ex)
             {
                 _logger.LogError("An error occurred during search: {Error}", ex.Message);
+                return StatusCode(500, "Internal Server Error: " + ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult FilterCarsByAvailability(bool? onlyAvailable)
+        {
+            try
+            {
+                List<CarViewModel> cars = _carService.GetAllCarsViewModel();
+                bool filterApplied = onlyAvailable.GetValueOrDefault();
+                if (filterApplied)
+                {
+                    cars = cars.Where(c => c.IsAvailable).ToList();
+                }
+
+                ViewBag.Trier = filterApplied;
+                return PartialView("_CarCards", cars.ToList());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("An error occurred during filtering: {Error}", ex.Message);
                 return StatusCode(500, "Internal Server Error: " + ex.Message);
             }
         }
