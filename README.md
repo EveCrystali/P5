@@ -48,7 +48,7 @@ Dans le projet **ExpressVoiture**, ouvrez le fichier `appsettings.json` à la ra
 
 ### 4. Restaurer la base de données
 
-Un backup de la base de données est fourni à la racine du projet. Pour restaurer cette base de données :
+Un backup de la base de données est fourni à la racine du projet `ExpressVoituresDb.bak`. Pour restaurer cette base de données :
 
 1. Ouvrez SQL Server Management Studio (SSMS).
 2. Connectez-vous à `(localdb)\mssqllocaldb` avec **l'authentification Windows**.
