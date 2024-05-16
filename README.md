@@ -4,7 +4,11 @@
 
 Avant de commencer, assurez-vous d'avoir installé les éléments suivants :
 
-- [Visual Studio 2019 ou plus récent](https://visualstudio.microsoft.com/) avec le workload **ASP.NET et développement web**
+- [Visual Studio 2019 ou une version plus récente](https://visualstudio.microsoft.com/) avec la charge de travail **Développement ASP.NET et développement web**. Pour installer cette charge de travail :
+  1. Lancez l'installateur de Visual Studio.
+  2. Sélectionnez **Modifier** pour votre installation actuelle de Visual Studio.
+  3. Dans la liste des charges de travail, cochez **Développement ASP.NET et développement web**.
+  4. Cliquez sur **Modifier** pour installer la charge de travail sélectionnée.
 - [SQL Server Management Studio (SSMS)](https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms)
 
 ## Étapes d'installation
@@ -48,8 +52,8 @@ Un backup de la base de données est fourni à la racine du projet. Pour restaur
 
 1. Ouvrez SQL Server Management Studio (SSMS).
 2. Connectez-vous à `(localdb)\mssqllocaldb` avec **l'authentification Windows**.
-3. Cliquez droit sur **Databases** et sélectionnez **Restore Database...**.
-4. Dans la fenêtre de restauration, sélectionnez **Device** puis **Add**.
+3. Cliquez droit sur **Bases de données** et sélectionnez **Restaurer la base de données...**.
+4. Dans la fenêtre de restauration, sélectionnez **Support**, cliquez sur **...** puis **Ajouter**.
 5. Parcourez jusqu'à l'emplacement du fichier de backup (`.bak`) fourni dans le projet et sélectionnez-le.
 6. Complétez le processus de restauration en suivant les instructions à l'écran.
 
@@ -63,7 +67,7 @@ Si vous avez utilisé un nom de base de données différent lors de la restaurat
 
 ### 6. Mettre à jour les migrations et la base de données
 
-Dans Visual Studio, ouvrez la **Console du Gestionnaire de Package** (Tools > NuGet Package Manager > Package Manager Console) et exécutez les commandes suivantes :
+Dans Visual Studio, ouvrez la **Console du Gestionnaire de Package** (Outils > Gestionnaire de package NuGet > Console du Gestionnaire de package) et exécutez les commandes suivantes :
 
 ```sh
 Update-Database
@@ -71,14 +75,14 @@ Update-Database
 
 ### 7. Exécuter l'application
 
-Appuyez sur **F5** ou cliquez sur le bouton **IIS Express** pour démarrer l'application.
+Appuyez sur **F5** pour démarrer l'application.
 
 ### 8. Connexion en tant qu'administrateur
 
-Pour vous connecter en tant qu'administrateur, utilisez les identifiants suivants :
+Pour vous connecter en tant qu'administrateur dans l'application, utilisez les identifiants suivants :
 
-- **Email** : admin@email.com
-- **Mot de passe** : 9vBZBB.QH83GeE
+- **Email** : `admin@email.com`
+- **Mot de passe** : `9vBZBB.QH83GeE.`
 
 ### 9. Résolution des problèmes de connexion
 
