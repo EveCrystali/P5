@@ -65,25 +65,17 @@ Si vous avez utilisé un nom de base de données différent lors de la restaurat
 "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=NomDeVotreBaseDeDonnees;Trusted_Connection=True;MultipleActiveResultSets=true"
 ```
 
-### 6. Mettre à jour les migrations et la base de données
-
-Dans Visual Studio, ouvrez la **Console du Gestionnaire de Package** (Outils > Gestionnaire de package NuGet > Console du Gestionnaire de package) et exécutez les commandes suivantes :
-
-```sh
-Update-Database
-```
-
-### 7. Exécuter l'application
+### 6. Exécuter l'application
 
 Appuyez sur **F5** pour démarrer l'application.
 
-### 8. Connexion en tant qu'administrateur
+### 7. Connexion en tant qu'administrateur
 
 Pour vous connecter en tant qu'administrateur dans l'application, utilisez les identifiants suivants :
 
 - **Email** : `admin@email.com`
 - **Mot de passe** : `9vBZBB.QH83GeE.`
 
-### 9. Résolution des problèmes de connexion
+### 8. Résolution des problèmes de connexion
 
 Si vous avez des difficultés à vous connecter, essayez d’abord de vous connecter à l’aide de Microsoft SQL Server Management Studio (assurez-vous que le type d’authentification est « Authentification Windows »), ou consultez le site [What's my SQL Server Name?](https://sqlserver-help.com/2011/06/19/help-whats-my-sql-server-name/).

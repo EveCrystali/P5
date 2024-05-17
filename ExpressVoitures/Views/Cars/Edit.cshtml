@@ -65,7 +65,7 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label asp-for="PurchasePrice" class="control-label"></label>
-                    <input asp-for="PurchasePrice" class="form-control" />
+                    <input asp-for="PurchasePrice" class="form-control" />€
                     <span asp-validation-for="PurchasePrice" class="text-danger"></span>
                 </div>
                 <div id="repairs">
@@ -91,14 +91,11 @@
                                     <label asp-for="CarRepairs[i].RepairCost" class="control-label">
                                         Coût :
                                     </label>
-                                    <input asp-for="CarRepairs[i].RepairCost" class="form-control" placeholder="Entrez le coût" />
-                                    <span asp-validation-for="CarRepairs[i].RepairCost" class="text-danger"></span>€
+                                    <input asp-for="CarRepairs[i].RepairCost" class="form-control" placeholder="Entrez le coût" />€
+                                    <span asp-validation-for="CarRepairs[i].RepairCost" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
-
-                        <span asp-validation-for="CarRepairs[i].RepairDescription" class="text-danger"></span>
-                        <span asp-validation-for="CarRepairs[i].RepairCost" class="text-danger"></span>
                     }
                 </div>
                 <button type="button" id="addRepair" class="btn btn-primary">Ajouter</button>
