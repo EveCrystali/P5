@@ -24,7 +24,7 @@
                     <div class="form-group">
                         @Html.LabelFor(model => model.CarBrandId, new { @class = "control-label" })
                         @Html.DropDownListFor(model => model.CarBrandId, (SelectList)ViewData["CarBrandId"], "Choisir une marque", new { id = "CarBrandId", @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.CarBrandId)  
+                        @Html.ValidationMessageFor(model => model.CarBrandId, "", new { @class = "text-danger" })  
                             <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "CarBrands")'">
                                Créer marque
                             </button>
@@ -32,7 +32,7 @@
                     <div class="form-group">
                         @Html.LabelFor(model => model.CarModelId, new { @class = "control-label" })
                         @Html.DropDownListFor(model => model.CarModelId, (SelectList)ViewData["CarModelId"], "Choisir un modèle", new { id = "CarModelId", @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.CarModelId)
+                        @Html.ValidationMessageFor(model => model.CarModelId, "", new { @class = "text-danger" })
                             <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "CarModels")'">
                                  Créer modèle
                             </button>
@@ -178,22 +178,22 @@
                 var carBrandId = $(this).val();
                 $.ajax(
                     {
-                        url: '@Url.Action("GetModelsByBrand", "Cars")',
-                        type: "GET",
-                        data: { brandId: carBrandId },
-                        success: function (models) {
-                            console.log(models);
-                            carModelSelect.empty().append('<option value="0" disabled selected>Select a model</option>');
-                            $.each(models, function (index, model) {
+                    url: '@Url.Action("GetModelsByBrand", "Cars")',
+                    type: "GET",
+                    data: { brandId: carBrandId },
+                    success: function (models) {
+                        console.log(models);
+                        carModelSelect.empty().append('<option value="0" disabled selected>Select a model</option>');
+                        $.each(models, function (index, model) {
                                 carModelSelect.append($('<option>',
                                     {
-                                        value: model.id,
-                                        text: model.carModelName
-                                    }));
-                            });
+                                value: model.id,
+                                text: model.carModelName
+                            }));
+                        });
 
-                        }
-                    });
+                    }
+                });
             });
 
             carModelSelect.change(function () {
@@ -201,19 +201,19 @@
                 console.log("Modèle sélectionné val(): ", carModelId);
                 $.ajax(
                     {
-                        url: '@Url.Action("GetTrimsByModel", "Cars")',
-                        type: "GET",
-                        data: { modelId: carModelId },
-                        success: function (trims) {
-                            console.log(trims);
-                            carTrimSelect.empty().append('<option value="0" disabled selected>Select a trim</option>');
-                            $.each(trims, function (index, trim) {
+                    url: '@Url.Action("GetTrimsByModel", "Cars")',
+                    type: "GET",
+                    data: { modelId: carModelId },
+                    success: function (trims) {
+                        console.log(trims);
+                        carTrimSelect.empty().append('<option value="0" disabled selected>Select a trim</option>');
+                        $.each(trims, function (index, trim) {
                                 carTrimSelect.append($('<option>',
                                     {
-                                        value: trim.id,
-                                        text: trim.carTrimName
-                                    }));
-                            });
+                                value: trim.id,
+                                text: trim.carTrimName
+                            }));
+                        });
 
                         }
                     }
@@ -234,9 +234,9 @@
                         $.each(motors, function (index, motor) {
                             carMotorSelect.append($('<option>',
                                 {
-                                    value: motor.id,
-                                    text: motor.carMotorName
-                                }));
+                                value: motor.id,
+                                text: motor.carMotorName
+                            }));
                         });
 
                     }
@@ -248,23 +248,23 @@
                 var repairIndex = repairsDiv.find('.car-repair-card').length;
                 var newRepairDiv = $('<div>').addClass('car-repair-card mb-3');
                 newRepairDiv.html(`
-                                            <div class="car-repair-header">
-                                                Réparation ${repairIndex + 1}
-                                                <button type="button" class="close deleteRepair" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="car-repair-card-body">
-                                                <div class="form-group">
-                                                    <label>Réparation :</label>
-                                                    <input class="form-control" name="CarRepairs[${repairIndex}].RepairDescription" placeholder="Entrez la description" />
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Coût :</label>
-                                                    <input class="form-control" name="CarRepairs[${repairIndex}].RepairCost" placeholder="Entrez le coût" />€
-                                                </div>
-                                            </div>
-                                        `);
+                    <div class="car-repair-header">
+                        Réparation ${repairIndex + 1}
+                        <button type="button" class="close deleteRepair" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="car-repair-card-body">
+                        <div class="form-group">
+                            <label>Réparation :</label>
+                            <input class="form-control" name="CarRepairs[${repairIndex}].RepairDescription" placeholder="Entrez la description" />
+                        </div>
+                        <div class="form-group">
+                            <label>Coût :</label>
+                            <input class="form-control" name="CarRepairs[${repairIndex}].RepairCost" placeholder="Entrez le coût" />€
+                        </div>
+                    </div>
+                `);
                 repairsDiv.append(newRepairDiv);
                 $('#deleteRepair').show();
             });
