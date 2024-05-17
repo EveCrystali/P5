@@ -54,7 +54,7 @@ namespace ExpressVoitures.Models.Entities
         public int? Mileage { get; set; }
 
         [DisplayName("Prix d'achat* :")]
-        [RegularExpression(@"^\d+(.|,|)\d{0,2}", ErrorMessage = "Le prix doit être un nombre avec au maximum deux chiffres apres le séparateur décimal.")]
+        [RegularExpression(@"^\d+([.,]\d{0,2})?$", ErrorMessage = "Le prix doit être un nombre avec au maximum deux chiffres apres le séparateur décimal.")]
         [Required(ErrorMessage = "Le prix d'achat du véhicule est obligatoire.")]
         [Range(0.01, double.MaxValue, ErrorMessage = "La valeur doit être positive.")]
         public decimal? PurchasePrice { get; set; }
