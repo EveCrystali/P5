@@ -10,7 +10,7 @@
 
 <h2>Enregistrement d' une nouvelle voiture</h2>
 
- <form method="post" enctype="multipart/form-data" asp-controller="Cars" asp-action="Create">
+ <form id="carForm" method="post" enctype="multipart/form-data" asp-controller="Cars" asp-action="Create">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="container">
 
@@ -48,7 +48,7 @@
                     <div class="form-group">
                         @Html.LabelFor(model => model.CarTrimId, new { @class = "control-label" })
                         @Html.DropDownListFor(model => model.CarTrimId, (SelectList)ViewData["CarTrimId"], "Choisir une finition", new { id = "CarTrimId", @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.CarTrimId)    
+                        @Html.ValidationMessageFor(model => model.CarTrimId, "", new { @class = "text-danger" })    
                             <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "CarTrims")'">
                                 Créer finition
                             </button>
@@ -68,8 +68,8 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label asp-for="PurchasePrice" class="control-label"></label>
-                        <input asp-for="PurchasePrice" class="form-control" />
-                        <span asp-validation-for="PurchasePrice" class="text-danger"></span>€
+                        <input asp-for="PurchasePrice" class="form-control" />€
+                        <span asp-validation-for="PurchasePrice" class="text-danger"></span>
                     </div>
                     <div id="repairs">
                         Réparations :
@@ -94,8 +94,8 @@
                                         <label asp-for="CarRepairs[i].RepairCost" class="control-label">
                                             Coût :
                                         </label>
-                                        <input asp-for="CarRepairs[i].RepairCost" class="form-control" placeholder="Entrez le coût" />
-                                        <span asp-validation-for="CarRepairs[i].RepairCost" class="text-danger"></span>€
+                                    <input asp-for="CarRepairs[i].RepairCost" class="form-control" placeholder="Entrez le coût" />€
+                                        <span asp-validation-for="CarRepairs[i].RepairCost" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
@@ -167,7 +167,7 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    <script>
+        <script>
         jQuery(document).ready(function () {
             var carBrandSelect = $("#CarBrandId");
             var carModelSelect = $("#CarModelId");
@@ -178,22 +178,22 @@
                 var carBrandId = $(this).val();
                 $.ajax(
                     {
-                    url: '@Url.Action("GetModelsByBrand", "Cars")',
-                    type: "GET",
-                    data: { brandId: carBrandId },
-                    success: function (models) {
-                        console.log(models);
-                        carModelSelect.empty().append('<option value="0" disabled selected>Select a model</option>');
-                        $.each(models, function (index, model) {
+                        url: '@Url.Action("GetModelsByBrand", "Cars")',
+                        type: "GET",
+                        data: { brandId: carBrandId },
+                        success: function (models) {
+                            console.log(models);
+                            carModelSelect.empty().append('<option value="0" disabled selected>Select a model</option>');
+                            $.each(models, function (index, model) {
                                 carModelSelect.append($('<option>',
                                     {
-                                value: model.id,
-                                text: model.carModelName
-                            }));
-                        });
+                                        value: model.id,
+                                        text: model.carModelName
+                                    }));
+                            });
 
-                    }
-                });
+                        }
+                    });
             });
 
             carModelSelect.change(function () {
@@ -201,19 +201,19 @@
                 console.log("Modèle sélectionné val(): ", carModelId);
                 $.ajax(
                     {
-                    url: '@Url.Action("GetTrimsByModel", "Cars")',
-                    type: "GET",
-                    data: { modelId: carModelId },
-                    success: function (trims) {
-                        console.log(trims);
-                        carTrimSelect.empty().append('<option value="0" disabled selected>Select a trim</option>');
-                        $.each(trims, function (index, trim) {
+                        url: '@Url.Action("GetTrimsByModel", "Cars")',
+                        type: "GET",
+                        data: { modelId: carModelId },
+                        success: function (trims) {
+                            console.log(trims);
+                            carTrimSelect.empty().append('<option value="0" disabled selected>Select a trim</option>');
+                            $.each(trims, function (index, trim) {
                                 carTrimSelect.append($('<option>',
                                     {
-                                value: trim.id,
-                                text: trim.carTrimName
-                            }));
-                        });
+                                        value: trim.id,
+                                        text: trim.carTrimName
+                                    }));
+                            });
 
                         }
                     }
@@ -224,24 +224,74 @@
                 var carModelId = $(this).val();
                 console.log("Modèle sélectionné val(): ", carModelId);
                 $.ajax(
-                {
-                    url: '@Url.Action("GetMotorsByModel", "Cars")',
-                    type: "GET",
-                    data: { modelId: carModelId },
-                    success: function (motors) {
-                        console.log(motors);
-                        carMotorSelect.empty().append('<option value="0" disabled selected>Select a motor</option>');
-                        $.each(motors, function (index, motor) {
-                            carMotorSelect.append($('<option>',
-                                {
-                                value: motor.id,
-                                text: motor.carMotorName
-                            }));
-                        });
+                    {
+                        url: '@Url.Action("GetMotorsByModel", "Cars")',
+                        type: "GET",
+                        data: { modelId: carModelId },
+                        success: function (motors) {
+                            console.log(motors);
+                            carMotorSelect.empty().append('<option value="0" disabled selected>Select a motor</option>');
+                            $.each(motors, function (index, motor) {
+                                carMotorSelect.append($('<option>',
+                                    {
+                                        value: motor.id,
+                                        text: motor.carMotorName
+                                    }));
+                            });
 
+                        }
+                    });
+            });
+
+            // Applique la validation jQuery validate au formulaire existant
+            $("#carForm").validate({
+                rules: {
+                    PurchasePrice: {
+                        required: true,
+                        customdecimal: true
+                    },
+                    'CarRepairs[].RepairCost': {
+                        customdecimal: true
+                    }
+                },
+                messages: {
+                    PurchasePrice: {
+                        required: "Le prix d'achat du véhicule est obligatoire.",
+                        customdecimal: "Le prix doit être un nombre avec au maximum deux chiffres après le séparateur décimal."
+                    },
+                    'CarRepairs[].RepairCost': {
+                        customdecimal: "Le coût de réparation doit être un nombre avec au maximum deux chiffres après le séparateur décimal."
+                    }
+                },
+                errorClass: "text-danger",
+                errorPlacement: function (error, element) {
+                    error.insertAfter(element);
+                }
+            });
+
+            // Méthode de validation personnalisée pour les nombres décimaux
+            $.validator.addMethod("customdecimal", function (value, element) {
+                // Permet les nombres avec une virgule ou un point comme séparateur décimal
+                return this.optional(element) || /^\d+([.,]\d{0,2})?$/.test(value);
+            }, "Le prix doit être un nombre avec au maximum deux chiffres après le séparateur décimal.");
+
+            function replaceDecimalSeparators(value) {
+                return value.replace(',', '.');
+            }
+
+            function calculateSellingPrice() {
+                var purchasePrice = parseFloat(replaceDecimalSeparators($('#PurchasePrice').val())) || 0;
+                var repairCosts = 0;
+                $('input[name^="CarRepairs["]').each(function () {
+                    if ($(this).attr('name').endsWith('].RepairCost')) {
+                        repairCosts += parseFloat(replaceDecimalSeparators($(this).val())) || 0;
                     }
                 });
-            });
+                var sellingPrice = purchasePrice + repairCosts + 500;
+                $('#SellingPrice').val(sellingPrice.toFixed(2));
+                $('.calc-selling-price').prev('input').val(sellingPrice.toFixed(2));
+            }
+
 
             $('#addRepair').click(function () {
                 var repairsDiv = $('#repairs');
@@ -258,55 +308,41 @@
                         <div class="form-group">
                             <label>Réparation :</label>
                             <input class="form-control" name="CarRepairs[${repairIndex}].RepairDescription" placeholder="Entrez la description" />
+                            <span class="text-danger field-validation-valid" data-valmsg-for="CarRepairs[${repairIndex}].RepairDescription" data-valmsg-replace="true"></span>
                         </div>
                         <div class="form-group">
                             <label>Coût :</label>
-                            <input class="form-control" name="CarRepairs[${repairIndex}].RepairCost" placeholder="Entrez le coût" />€
+                            <input class="form-control customdecimal-validation" name="CarRepairs[${repairIndex}].RepairCost" placeholder="Entrez le coût" />€
+                            <span class="text-danger field-validation-valid" data-valmsg-for="CarRepairs[${repairIndex}].RepairCost" data-valmsg-replace="true"></span>
                         </div>
                     </div>
                 `);
                 repairsDiv.append(newRepairDiv);
-                $('#deleteRepair').show();
+                $.validator.unobtrusive.parse(newRepairDiv);
             });
 
             $('#repairs').on('click', '.deleteRepair', function () {
                 $(this).closest('.car-repair-card').remove();
+                calculateSellingPrice();
             });
 
-            function calculateSellingPrice() {
-                var purchasePrice = parseFloat($('#PurchasePrice').val()) || 0;
-                var repairCosts = 0;
-                $('input[name^="CarRepairs["]').each(function () {
-                    if ($(this).attr('name').endsWith('].RepairCost')) {
-                        repairCosts += parseFloat($(this).val()) || 0;
-                    }
-                });
-                var sellingPrice = purchasePrice + repairCosts + 500;
-                $('#SellingPrice').val(sellingPrice.toFixed(2));
-                $('.calc-selling-price').prev('input').val(sellingPrice.toFixed(2)); // Met à jour l'affichage du prix de vente calculé
-            }
+            $('#PurchasePrice').addClass("customdecimal-validation").on('change keyup', function () {
+                $(this).val(replaceDecimalSeparators($(this).val()));
+                calculateSellingPrice();
+            });
 
-            $('#PurchasePrice').on('change keyup', function () { calculateSellingPrice(); });
+            $('#repairs').on('change keyup', 'input', function () {
+                $(this).val(replaceDecimalSeparators($(this).val()));
+                calculateSellingPrice();
+            });
+
 
             // Déclenche manuellement l'événement pour calculer le prix de vente au chargement de la page
             calculateSellingPrice();
 
-            $('#PurchasePrice, #repairs').on('change keyup', 'input', function () {
-                calculateSellingPrice();
-            });
-
-            $('#addRepair').click(function () {
-                calculateSellingPrice(); // Recalcule le prix de vente après l'ajout d'une réparation
-            });
-
-            $('#repairs').on('click', '.deleteRepair', function () {
-                calculateSellingPrice(); // Recalcule le prix de vente après la suppression d'une réparation
-            });
-
             $('.calc-selling-price').click(function (e) {
                 e.preventDefault();
                 $(this).hide().closest('.form-group').next('.selling-price-editor').removeClass('d-none');
-                // Annule le calcul automatique et permet l'édition manuelle
             });
 
             $('.cancel-selling-price-editor').click(function (e) {
