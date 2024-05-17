@@ -1,8 +1,8 @@
 ﻿using ExpressVoitures.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressVoitures.Controllers
@@ -38,7 +38,7 @@ namespace ExpressVoitures.Controllers
             {
                 if (_context.CarTrim.Any(ct => ct.CarTrimName == carTrim.CarTrimName))
                 {
-                   ModelState.AddModelError("CarTrimName", "La finition existe déjà !");
+                    ModelState.AddModelError("CarTrimName", "La finition existe déjà !");
                 }
                 else
                 {

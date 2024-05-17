@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using ExpressVoitures.Data;
 using ExpressVoitures.Models;
 using ExpressVoitures.Models.Entities;
@@ -13,6 +13,7 @@ namespace ExpressVoitures.Controllers
         private readonly ICarService _carService = carService;
         private readonly ApplicationDbContext _context = context;
         private readonly ILogger<HomeController> _logger = logger;
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

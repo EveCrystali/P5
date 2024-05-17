@@ -348,8 +348,7 @@
             $('.cancel-selling-price-editor').click(function (e) {
                 e.preventDefault();
                 $(this).closest('.selling-price-editor').addClass('d-none').prev('.form-group').find('.calc-selling-price').show();
-                calculateSellingPrice(); // Optionnel : Recalcule et réaffiche le prix de vente calculé lorsque l'édition est annulée
-            });
+                calculateSellingPrice(); 
         });
 
     </script>

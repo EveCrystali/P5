@@ -1,5 +1,4 @@
-﻿using System;
-using ExpressVoitures.Data;
+﻿using ExpressVoitures.Data;
 using ExpressVoitures.Models.Entities;
 using ExpressVoitures.Models.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-
 
 namespace ExpressVoitures.Controllers
 {
@@ -88,7 +86,7 @@ namespace ExpressVoitures.Controllers
         public string CreateUniqueFileName(string originalFileName)
         {
             string timestamp = DateTimeOffset.Now.ToString("MMddHHmmss");
-            string guidPart = Guid.NewGuid().ToString().Substring(0, 8); 
+            string guidPart = Guid.NewGuid().ToString().Substring(0, 8);
             return $"Img_{timestamp}_{guidPart}" + Path.GetExtension(originalFileName);
         }
 
@@ -293,7 +291,7 @@ namespace ExpressVoitures.Controllers
                 .Select(m => new { m.Id, m.CarMotorName })
                 .ToList();
 
-            if (motors.Count == 0) 
+            if (motors.Count == 0)
             {
                 _logger.LogInformation("No motors found for the model with Id: " + modelId);
                 return Json(new { available = false });

@@ -1,14 +1,14 @@
 html {
-  font-size: 14px;
-  position: relative;
-  min-height: 100%;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-    color: #031428;
-  }
+    html {
+        font-size: 16px;
+        color: #031428;
+    }
 }
 
 .btn:focus,
@@ -16,679 +16,670 @@ html {
 .btn-link.nav-link:focus,
 .form-control:focus,
 .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 body {
-  margin-bottom: 60px;
-  color: #031428;
+    margin-bottom: 60px;
+    color: #031428;
 }
 
 .main-header {
-  background-color: #031428;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100px;
+    background-color: #031428;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
 }
-
-
 
 .footer {
-  background-color: #031428;
-  display: flex;
-  align-items: center;
-  height: 70px;
-  margin-top: 10px;
+    background-color: #031428;
+    display: flex;
+    align-items: center;
+    height: 70px;
+    margin-top: 10px;
 }
 
-.footer a {
-  background-color: #031428;
-  color: white;
-  display: flex;
-  align-items: center;
-}
+    .footer a {
+        background-color: #031428;
+        color: white;
+        display: flex;
+        align-items: center;
+    }
 
 .text-muted {
-  align-items: center;
-  justify-items: center;
-  flex-direction: column;
+    align-items: center;
+    justify-items: center;
+    flex-direction: column;
 }
 
 .main-header h1 {
-  background-color: #031428;
-  color: white;
-  font-size: 50px;
-  font-weight: bold;
-  position: absolute;
-  left: 50%;
-  font-style: italic;
-  font-variant: small-caps;
-  transform: translateX(-50%);
+    background-color: #031428;
+    color: white;
+    font-size: 50px;
+    font-weight: bold;
+    position: absolute;
+    left: 50%;
+    font-style: italic;
+    font-variant: small-caps;
+    transform: translateX(-50%);
 }
 
 .navbar-brand {
-  background-color: #031428;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100px;
+    background-color: #031428;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
 }
 
-.navbar-brand a {
-  position: absolute;
-  left: 10%;
-}
-
+    .navbar-brand a {
+        position: absolute;
+        left: 10%;
+    }
 
 .navbar-nav {
-  display: flex;
-  width: 100%;
-  align-items: flex-end;
-  justify-content: center;
-  height: 100px;
-  padding-right: 10%;
+    display: flex;
+    width: 100%;
+    align-items: flex-end;
+    justify-content: center;
+    height: 100px;
+    padding-right: 10%;
 }
 
 .nav-item {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .nav-link {
-  color: white;
-  font-style: italic;
-  text-decoration: none;
+    color: white;
+    font-style: italic;
+    text-decoration: none;
 }
 
-.nav-link a {
-  color: white;
-  font-style: italic;
-  text-decoration: none;
-}
+    .nav-link a {
+        color: white;
+        font-style: italic;
+        text-decoration: none;
+    }
 
 .btn-link {
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  top: -25px;
-  position: relative;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    top: -25px;
+    position: relative;
 }
 
 .small-red-button {
-  background-color: #FF0000;
-  color: white;
-  border: none;
-  position: absolute;
-  left: 50%;
-  top: -5px;
-  transform: translateX(-50%);
-  padding: 5px 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: background-color 0.2s, transform 0.2s;
+    background-color: #FF0000;
+    color: white;
+    border: none;
+    position: absolute;
+    left: 50%;
+    top: -5px;
+    transform: translateX(-50%);
+    padding: 5px 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
 }
 
-.small-red-button:hover {
-  background-color: #E60000;
-  transform: translate(-50%, -5px);
-}
+    .small-red-button:hover {
+        background-color: #E60000;
+        transform: translate(-50%, -5px);
+    }
 
-.small-red-button:active {
-  background-color: #CC0000;
-  transform: translateY(1px);
-}
+    .small-red-button:active {
+        background-color: #CC0000;
+        transform: translateY(1px);
+    }
 
-.small-red-button a {
-  text-decoration: none;
-  color: white;
-}
+    .small-red-button a {
+        text-decoration: none;
+        color: white;
+    }
 
 .large-red-button {
-  background-color: #FF0000;
-  color: white;
-  border: none;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-top: 10px;
-  padding: 10px 20px;
-  text-transform: uppercase;
-  font-weight: bold;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: background-color 0.2s, transform 0.2s;
+    background-color: #FF0000;
+    color: white;
+    border: none;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 10px;
+    padding: 10px 20px;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
 }
 
-.large-red-button:hover {
-  background-color: #E60000;
-  transform: translate(-50%, -5px);
-}
+    .large-red-button:hover {
+        background-color: #E60000;
+        transform: translate(-50%, -5px);
+    }
 
-.large-red-button:active {
-  background-color: #CC0000;
-  transform: translateY(1px);
-}
+    .large-red-button:active {
+        background-color: #CC0000;
+        transform: translateY(1px);
+    }
 
-.large-red-button a {
-  text-decoration: none;
-  color: white;
-}
+    .large-red-button a {
+        text-decoration: none;
+        color: white;
+    }
 
 #sticky-banner {
-  position: fixed;
-  width: 270px;
-  height: 65px;
-  left: calc(50%);
-  transform: translateX(-50%);
-  background:  #031428;
-  text-align: center;
-  color: white;
-  box-shadow: -4px 8px 20px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  z-index: 10;
-  padding: 0.5em;
+    position: fixed;
+    width: 270px;
+    height: 65px;
+    left: calc(50%);
+    transform: translateX(-50%);
+    background: #031428;
+    text-align: center;
+    color: white;
+    box-shadow: -4px 8px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    z-index: 10;
+    padding: 0.5em;
 }
 
 /* ----- LANDING ----- */
 
 .d-flex {
-  display: flex;
-  width: auto;
-  margin-bottom: 15px;
+    display: flex;
+    width: auto;
+    margin-bottom: 15px;
 }
 
-.filterCarsByAvailabilityCheckbox
-{
-  margin-top:-15px;
-  margin-bottom: 20px;
+.filterCarsByAvailabilityCheckbox {
+    margin-top: -15px;
+    margin-bottom: 20px;
 }
 
 .container-cars {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  margin: 0;
-  margin-bottom: 5%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin: 0;
+    margin-bottom: 5%;
 }
 
-.container-cars>div {
-  width: calc(20% - 10px);
-  margin: 5px;
-}
+    .container-cars > div {
+        width: calc(20% - 10px);
+        margin: 5px;
+    }
 
 .car-card {
-  padding: 8px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-  background: rgba(3, 20, 40, 0.11);
-  border-radius: 10px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  position: relative;
+    padding: 8px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    background: rgba(3, 20, 40, 0.11);
+    border-radius: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
 }
 
-.car-card img {
-  width: 185px;
-  height: 185px;
-  object-fit: contain;
-  border-radius: 9px;
-  border: 1px solid #d2d2d2;
-  display: block;
-  margin: auto;
-  box-sizing: border-box;
-  background-color: white;
-}
+    .car-card img {
+        width: 185px;
+        height: 185px;
+        object-fit: contain;
+        border-radius: 9px;
+        border: 1px solid #d2d2d2;
+        display: block;
+        margin: auto;
+        box-sizing: border-box;
+        background-color: white;
+    }
 
-.car-card h3 {
-  font-weight: 700;
-  font-size: 1.1rem;
-  line-height: 125%;
-  display: flex;
-  align-items: center;
-  color: #031428;
-  margin: 0.5rem;
-}
+    .car-card h3 {
+        font-weight: 700;
+        font-size: 1.1rem;
+        line-height: 125%;
+        display: flex;
+        align-items: center;
+        color: #031428;
+        margin: 0.5rem;
+    }
 
 .car-price-landing {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #031428;
-  margin: 0.01rem 0;
-  text-align: center;
-  margin-top: auto;
-  font-style: normal;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #031428;
+    margin: 0.01rem 0;
+    text-align: center;
+    margin-top: auto;
+    font-style: normal;
 }
 
 .car-card p {
-  font-size: 0.9rem;
-  color: #666;
-  margin: 0 0.5em 0.5em;
-  line-height: 100%;
-  text-align: left;
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0 0.5em 0.5em;
+    line-height: 100%;
+    text-align: left;
 }
 
 .car-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
 }
 
 .car-card a {
-  text-decoration: none;
-  color: inherit;
+    text-decoration: none;
+    color: inherit;
 }
 
-.car-card a:hover {
-  background-color: #060ea307;
-}
+    .car-card a:hover {
+        background-color: #060ea307;
+    }
 
 #sticky-banner {
-  position: fixed;
-  bottom: 7%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 20%;
-  background-color:#031428;
-  color: white;
-  z-index: 10;
-  padding: 10px;
-  box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+    position: fixed;
+    bottom: 7%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20%;
+    background-color: #031428;
+    color: white;
+    z-index: 10;
+    padding: 10px;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
 }
 
 /*--- Car not available ---*/
 
 .car-card-unavailable {
-  position: relative;
+    position: relative;
 }
 
-.car-card-unavailable::before {
-  content: "";
-  position: absolute;
-  top: -6.5%;
-  left: 50%;
-  width: 2%;
-  height: 115%;
-  background: rgba(255, 0, 0, 0.4);
-  transform: rotate(-32deg);
-}
+    .car-card-unavailable::before {
+        content: "";
+        position: absolute;
+        top: -6.5%;
+        left: 50%;
+        width: 2%;
+        height: 115%;
+        background: rgba(255, 0, 0, 0.4);
+        transform: rotate(-32deg);
+    }
 
 .not-available-admin {
-  font-weight: 600;
-  color: rgba(255, 0, 0, 0.6);
-  font-size: 1.2em;
-  text-align: center;
-  margin-top: -0px;
-  font-style: normal;
+    font-weight: 600;
+    color: rgba(255, 0, 0, 0.6);
+    font-size: 1.2em;
+    text-align: center;
+    margin-top: -0px;
+    font-style: normal;
 }
 
 /* -------- Car sold -------- */
 
 .car-card-sold {
-  position: relative;
+    position: relative;
 }
 
-.car-card-sold::before {
-  content: "";
-  position: absolute;
-  top: -6.5%;
-  left: 50%;
-  width: 2%;
-  height: 115%;
-  background: rgba(255, 0, 0, 0.4);
-  transform: rotate(-32deg);
-}
+    .car-card-sold::before {
+        content: "";
+        position: absolute;
+        top: -6.5%;
+        left: 50%;
+        width: 2%;
+        height: 115%;
+        background: rgba(255, 0, 0, 0.4);
+        transform: rotate(-32deg);
+    }
 
 .sold-admin {
-  font-weight: 600;
-  color: rgba(255, 0, 0, 0.6);
-  font-size: 1.2em;
-  text-align: center;
-  margin-top: -0px;
-  font-style: normal;
+    font-weight: 600;
+    color: rgba(255, 0, 0, 0.6);
+    font-size: 1.2em;
+    text-align: center;
+    margin-top: -0px;
+    font-style: normal;
 }
 
 /* --------DETAILS---------- */
 
 /* Marque - Modèle */
 h3 {
-  font-style: normal;
-  font-weight: 500;
-  font-size: 26px;
-  line-height: 150%;
-  color: #000000;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 26px;
+    line-height: 150%;
+    color: #000000;
 }
 
 .container-cars-details {
-  margin-top: 5%;
-  display: flex;
-  flex-direction: column;
+    margin-top: 5%;
+    display: flex;
+    flex-direction: column;
 }
 
 .carousel-thumbnails {
-  display: row;
-  flex-direction: column;
-  gap: 10px;
-  max-height: 400px;
-  max-width: 200px;
-  overflow-y: auto;
-  border: 9px;
+    display: row;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 400px;
+    max-width: 200px;
+    overflow-y: auto;
+    border: 9px;
 }
 
 .img-thumbnail {
-  width: 100%;
-  cursor: pointer;
-  border: none;
-  border-radius: 9px;
-  margin-bottom: 5px;
-  display: flex;
-  flex-direction: column;
+    width: 100%;
+    cursor: pointer;
+    border: none;
+    border-radius: 9px;
+    margin-bottom: 5px;
+    display: flex;
+    flex-direction: column;
 }
 
-.img-thumbnail:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 5px 24px rgba(0, 0, 0, 0.2);
-}
+    .img-thumbnail:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 24px rgba(0, 0, 0, 0.2);
+    }
 
 .card-img-top {
-  border-radius: 9px;
-  width: 100%;
+    border-radius: 9px;
+    width: 100%;
 }
 
-.card-img-top:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
-}
+    .card-img-top:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+    }
 
 .car-description {
-  margin: 20px;
+    margin: 20px;
 }
 
 .car-info {
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 160%;
-  color: #454545;
-  margin-top: 5px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 160%;
+    color: #454545;
+    margin-top: 5px;
 }
 
-.car-info h2 {
-  font-style: normal;
-  font-weight: 500;
-  font-size: 24px;
-  line-height: 175%;
-  display: flex;
-  align-items: center;
-  color: #000000;
-}
+    .car-info h2 {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 24px;
+        line-height: 175%;
+        display: flex;
+        align-items: center;
+        color: #000000;
+    }
 
 .car-info-available {
-  font-style: italic;
-  font-weight: 200;
-  font-size: 16px;
-  line-height: 150%;
-  color: #161616;
-  margin-top: 2px;
+    font-style: italic;
+    font-weight: 200;
+    font-size: 16px;
+    line-height: 150%;
+    color: #161616;
+    margin-top: 2px;
 }
 
 .car-price-details {
-  font-style: normal;
-  font-weight: 700;
-  font-size: 24px;
-  line-height: 150%;
-  display: flex;
-  align-items: center;
-
-  color: #031428;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 150%;
+    display: flex;
+    align-items: center;
+    color: #031428;
 }
 
 .modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.9);
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.9);
 }
 
 .modal-content {
-  margin: auto;
-  display: block;
-  max-width: calc(65vw - 100px);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+    margin: auto;
+    display: block;
+    max-width: calc(65vw - 100px);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .close {
-  position: absolute;
-  top: 50px;
-  right: 150px;
-  color: #fff;
-  font-size: 50px;
-  font-weight: bold;
-  cursor: pointer;
+    position: absolute;
+    top: 50px;
+    right: 150px;
+    color: #fff;
+    font-size: 50px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 .details-red-button {
-  background-color: #FF0000;
-  color: white;
-  border: none;
-  position: absolute;
-  left: 50%;
-  top: 140px;
-  transform: translateX(-50%);
-  padding: 7px 7px;
-  text-transform: uppercase;
-  font-weight: bold;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: background-color 0.2s, transform 0.2s;
-  z-index: 10;
+    background-color: #FF0000;
+    color: white;
+    border: none;
+    position: absolute;
+    left: 50%;
+    top: 140px;
+    transform: translateX(-50%);
+    padding: 7px 7px;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+    z-index: 10;
 }
 
-.details-red-button:hover {
-  background-color: #E60000;
-  transform: translate(-50%, -5px);
-}
+    .details-red-button:hover {
+        background-color: #E60000;
+        transform: translate(-50%, -5px);
+    }
 
-.details-red-button:active {
-  background-color: #CC0000;
-  transform: translateY(1px);
-}
+    .details-red-button:active {
+        background-color: #CC0000;
+        transform: translateY(1px);
+    }
 
-.details-red-button a {
-  text-decoration: none;
-  color: white;
-}
-
-
+    .details-red-button a {
+        text-decoration: none;
+        color: white;
+    }
 
 /* -------- CAR CREATION ---------- */
 
 h2 {
-  position: relative;
-  font-size: 36px;
-  text-align: center;
-  justify-content: center;
-  color: #031428;
-  margin: 25px;
-  margin-bottom: 35px;
-  font-weight: bold;
-  font-style: italic;
-  font-variant: small-caps;
+    position: relative;
+    font-size: 36px;
+    text-align: center;
+    justify-content: center;
+    color: #031428;
+    margin: 25px;
+    margin-bottom: 35px;
+    font-weight: bold;
+    font-style: italic;
+    font-variant: small-caps;
 }
 
 .calc-selling-price {
-  color: #031428;
-  font-style: italic;
-  font-variant: small-caps;
-  font-size: 16px;
-  margin-top: 20px;
-  font-weight: 600;
+    color: #031428;
+    font-style: italic;
+    font-variant: small-caps;
+    font-size: 16px;
+    margin-top: 20px;
+    font-weight: 600;
 }
 
 .btn-primary {
-  background-color: #031428;
-  border-color: white;
-  border-radius: 9px;
-  justify-items: center;
-  font-variant: normal;
-  padding: 2px;
-  width: 26%;
-  font-size: 14px;
-  height: 27px;
+    background-color: #031428;
+    border-color: white;
+    border-radius: 9px;
+    justify-items: center;
+    font-variant: normal;
+    padding: 2px;
+    width: 26%;
+    font-size: 14px;
+    height: 27px;
 }
 
 .btn-validate.btn-primary {
-  width: 25%;
-  position: relative;
-  left: 50%;
-  background-color: rgba(255, 0, 0, 0.75);
-  transform: translateX(-50%);
-  margin-top: 25px;
-  border-color: white;
-  border-radius: 9px;
-  align-items: center;
-  justify-items: center;
-  font-weight: bold;
-  font-variant: small-caps;
-  height: 40px;
+    width: 25%;
+    position: relative;
+    left: 50%;
+    background-color: rgba(255, 0, 0, 0.75);
+    transform: translateX(-50%);
+    margin-top: 25px;
+    border-color: white;
+    border-radius: 9px;
+    align-items: center;
+    justify-items: center;
+    font-weight: bold;
+    font-variant: small-caps;
+    height: 40px;
 }
 
 .btn-login.btn-primary {
-  width: 25%;
-  position: absolute;
-  left: 50%;
-  background-color: rgba(255, 0, 0, 0.75);
-  transform: translateX(-50%);
-  margin-top: 25px;
-  border-color: white;
-  border-radius: 9px;
-  align-items: center;
-  justify-items: center;
-  font-weight: bold;
-  font-variant: small-caps;
-  height: 40px;
+    width: 25%;
+    position: absolute;
+    left: 50%;
+    background-color: rgba(255, 0, 0, 0.75);
+    transform: translateX(-50%);
+    margin-top: 25px;
+    border-color: white;
+    border-radius: 9px;
+    align-items: center;
+    justify-items: center;
+    font-weight: bold;
+    font-variant: small-caps;
+    height: 40px;
 }
 
 .form-control {
-  display: inline-block;
-  margin-bottom: 10px;
-  margin-top: 5px;
-  border-radius: 9px;
-  width: 45%;
+    display: inline-block;
+    margin-bottom: 10px;
+    margin-top: 5px;
+    border-radius: 9px;
+    width: 45%;
 }
 
 .btn-validate.btn-primary:hover {
-  background-color: red;
-  color: white;
+    background-color: red;
+    color: white;
 }
 
 .car-register-description {
-  width: 100%;
-  margin-top: 10px;
-  resize: both;
+    width: 100%;
+    margin-top: 10px;
+    resize: both;
 }
 
 select.form-control {
-  -webkit-appearance: menulist-button;
+    -webkit-appearance: menulist-button;
 }
 
 .image-list {
-  list-style-type: none;
-  padding: 0;
+    list-style-type: none;
+    padding: 0;
 }
 
 .image-item {
-  position: relative;
-  display: inline-block;
-  margin-right: 10px;
+    position: relative;
+    display: inline-block;
+    margin-right: 10px;
 }
 
 .car-img {
-  width: 150px;
-  height: auto;
+    width: 150px;
+    height: auto;
 }
 
 .btn-delete-image {
-  position: absolute;
-  top: 0;
-  right: 0;
-  border: none;
-  background: transparent;
-  color: red;
-  font-size: 20px;
-  padding: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: none;
+    background: transparent;
+    color: red;
+    font-size: 20px;
+    padding: 0;
 }
 
-.btn-delete-image:hover,
-.btn-delete-image:focus {
-  background: transparent;
-  outline: none;
-}
+    .btn-delete-image:hover,
+    .btn-delete-image:focus {
+        background: transparent;
+        outline: none;
+    }
 
 .close.deleteRepair {
-  position: relative;
-  top: -2%;
-  right: -70%;
-  border: none;
-  color: red;
-  background: transparent;
-  font-size: 30px;
-  padding: -5px;
-  margin: -10px;
+    position: relative;
+    top: -2%;
+    right: -70%;
+    border: none;
+    color: red;
+    background: transparent;
+    font-size: 30px;
+    padding: -5px;
+    margin: -10px;
 }
 
 .deleteRepair:hover,
 .deleteRepair:focus {
-  background: transparent;
-  outline: none;
+    background: transparent;
+    outline: none;
 }
 
-
 .car-repair-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  word-wrap: break-word;
-  background-color: #fff;
-  background-clip: border-box;
-  border: 1px solid rgba(0, 0, 0, .125);
-  border-radius: .25rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, .125);
+    border-radius: .25rem;
 }
 
 .car-repair-card-body {
-  flex: auto;
-  padding: 0.25em;
-  margin: 0.5em;
-  padding-top: 0.015em;
-  margin-top: 0.015em;
-  padding-bottom: 0.015em;
-  margin-bottom: 0.015em;
+    flex: auto;
+    padding: 0.25em;
+    margin: 0.5em;
+    padding-top: 0.015em;
+    margin-top: 0.015em;
+    padding-bottom: 0.015em;
+    margin-bottom: 0.015em;
 }
 
 .car-repair-header {
-  padding: 0.25em;
-  margin: 0.5em;
-  padding-top: 0.015em;
-  margin-top: 0.015em;
-  /* height: 1em; */
-  background-color: rgba(0, 0, 0, .03);
-  border-bottom: 1px solid rgba(0, 0, 0, .125);
+    padding: 0.25em;
+    margin: 0.5em;
+    padding-top: 0.015em;
+    margin-top: 0.015em;
+    /* height: 1em; */
+    background-color: rgba(0, 0, 0, .03);
+    border-bottom: 1px solid rgba(0, 0, 0, .125);
 }

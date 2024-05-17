@@ -1,11 +1,11 @@
-﻿using ExpressVoitures.Controllers;
+﻿using System.Globalization;
+using ExpressVoitures.Controllers;
 using ExpressVoitures.Data;
 using ExpressVoitures.Models.Repositories;
 using ExpressVoitures.Models.Services;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System.Globalization;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);

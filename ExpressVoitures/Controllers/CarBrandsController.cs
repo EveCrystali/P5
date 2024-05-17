@@ -36,8 +36,7 @@ namespace ExpressVoitures.Controllers
             {
                 if (_context.CarBrand.Any(cb => cb.CarBrandName == carBrand.CarBrandName))
                 {
-                   ModelState.AddModelError("CarBrandName", "La marque existe déjà !");
-                   
+                    ModelState.AddModelError("CarBrandName", "La marque existe déjà !");
                 }
                 else
                 {
@@ -148,6 +147,7 @@ namespace ExpressVoitures.Controllers
         {
             return View(await _context.CarBrand.ToListAsync());
         }
+
         private bool CarBrandExists(int id)
         {
             return _context.CarBrand.Any(e => e.Id == id);

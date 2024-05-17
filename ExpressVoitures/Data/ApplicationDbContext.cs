@@ -15,6 +15,7 @@ namespace ExpressVoitures.Data
         public DbSet<ExpressVoitures.Data.CarRepair> CarRepair { get; set; } = default!;
 
         public DbSet<ExpressVoitures.Data.CarTrim> CarTrim { get; set; } = default!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
